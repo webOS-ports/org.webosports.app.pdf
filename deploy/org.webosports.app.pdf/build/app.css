@@ -1,0 +1,2962 @@
+
+/* D://Development/webOS Apps/org.webosports.app.pdf/enyo/../lib/layout/fittable/source/FittableLayout.css */
+
+.enyo-fittable-rows-layout {
+	position: relative;
+}
+
+.enyo-fittable-rows-layout > * {
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	/* float when not stretched */
+	float: left;
+	clear: both;
+}
+
+/* non-floating when stretched */
+.enyo-fittable-rows-layout.enyo-stretch > * {
+	float: none;
+	clear: none;
+}
+
+/* setting to enforce margin collapsing */
+/* NOTE: rows cannot have margin left/right */
+.enyo-fittable-rows-layout.enyo-stretch.enyo-margin-expand > * {
+	float: left;
+	clear: both;
+	width: 100%;
+	/* note: harsh resets */
+	margin-left: 0 !important;
+	margin-right: 0 !important;
+}
+
+.enyo-fittable-columns-layout {
+	position: relative;
+	text-align: left;
+	white-space: nowrap;
+}
+
+.enyo-fittable-columns-layout.enyo-center {
+	text-align: center;
+}
+
+.enyo-fittable-columns-layout > * {
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	vertical-align: top;
+	display: inline-block;
+	white-space: normal;
+}
+
+.enyo-fittable-columns-layout.enyo-tool-decorator > * {
+	vertical-align: middle;
+}
+
+/* repair clobbered white-space setting for pre, code */
+.enyo-fittable-columns-layout > pre, .enyo-fittable-columns-layout > code {
+	white-space: pre;
+}
+
+.enyo-fittable-columns-layout > .enyo-fittable-columns-layout, .enyo-fittable-columns-layout > .onyx-toolbar-inline {
+	white-space: nowrap;
+}
+
+/* NOTE: columns cannot have margin top/bottom */
+.enyo-fittable-columns-layout.enyo-stretch > * {
+	height: 100%;
+	/* note: harsh resets */
+	margin-top: 0 !important;
+	margin-bottom: 0 !important;
+}
+
+/* D://Development/webOS Apps/org.webosports.app.pdf/enyo/../lib/layout/list/source/List.css */
+
+.enyo-list {
+	position: relative;
+}
+
+.enyo-list-port {
+	overflow: hidden;
+	position: relative;
+	height: 1000000px;
+}
+
+.enyo-list-page, .enyo-list-holdingarea {
+	position: absolute;
+	left: 0;
+	right: 0;
+}
+
+.enyo-list-holdingarea {
+	top: -10000px;
+}
+
+.enyo-pinned-list-placeholder {
+	border: 1px solid red;
+	position: absolute;
+	top: 0; left: 0;
+	z-index: 1000;
+	background: transparent;
+	overflow: hidden;
+}
+
+.enyo-pinned-list-placeholder button {
+	width: 100px; height: 100%;
+	position: absolute;
+	top: 0; right: 0;
+}
+
+.enyo-list-reorder-container {
+	position: absolute;
+	top: 0; left: 0;
+	z-index: 1000;
+	background: transparent;
+	overflow: hidden;
+}
+
+.enyo-animatedTopAndLeft {
+	-webkit-transition: top 0.1s linear, left 0.1s linear;
+	-moz-transition: top 0.1s linear, left 0.1s linear;
+	-o-transition: top 0.1s linear, left 0.1s linear;
+	transition: top 0.1s linear, left 0.1s linear;
+}
+
+/* D://Development/webOS Apps/org.webosports.app.pdf/enyo/../lib/layout/list/source/PulldownList.css */
+
+.enyo-list-pulldown {
+	position: absolute;
+	bottom: 100%;
+	left: 0;
+	right: 0;
+}
+
+.enyo-puller {
+	position: relative;
+	height: 50px;
+	font-size: 22px;
+	color: #444;
+	padding: 20px 0 0px 34px;
+}
+
+.enyo-puller-text {
+	position: absolute;
+	left: 80px;
+	top: 22px;
+}
+
+.enyo-puller-arrow {
+	position: relative;
+	background: #444;
+	width: 7px;
+	height: 28px;
+	transition: transform 0.3s;
+	-webkit-transition: -webkit-transform 0.3s;
+	-moz-transition: -moz-transform 0.3s;
+	-o-transition: -o-transform 0.3s;
+	-ms-transition: -ms-transform 0.3s;
+}
+
+.enyo-puller-arrow:after {
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	border: 10px solid transparent;
+	border-bottom-color: #444;
+	bottom: 100%;
+	left: 50%;
+	margin-left: -10px;
+}
+
+.enyo-puller-arrow-up {
+	transform: rotate(0deg);
+	-webkit-transform: rotate(0deg);
+	-moz-transform: rotate(0deg);
+	-o-transform: rotate(0deg);
+	-ms-transform: rotate(0deg);
+}
+
+.enyo-puller-arrow-down {
+	transform: rotate(180deg);
+	-webkit-transform: rotate(180deg);
+	-moz-transform: rotate(180deg);
+	-o-transform: rotate(180deg);
+	-ms-transform: rotate(180deg);
+}
+
+/* D://Development/webOS Apps/org.webosports.app.pdf/enyo/../lib/layout/panels/source/arrangers/Arranger.css */
+
+.enyo-arranger {
+	position: relative;
+	overflow: hidden;
+}
+
+.enyo-arranger.enyo-fit {
+	position: absolute;
+}
+
+.enyo-arranger > * {
+	position: absolute;
+	left: 0;
+	top: 0;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.enyo-arranger-fit > * {
+	/* override any width/height set on panels */
+	width: 100% !important;
+	height: 100% !important;
+	min-width: 0 !important;
+	min-height: 0 !important;
+}
+
+
+/* D://Development/webOS Apps/org.webosports.app.pdf/enyo/../lib/layout/panels/source/Panels.css */
+
+.enyo-panels {
+}
+
+.enyo-panels-fit-narrow {
+}
+
+@media all and (max-width: 800px) {
+	.enyo-panels-fit-narrow > * {
+		min-width: 100%;
+		max-width: 100%;
+	}
+}
+
+/* D://Development/webOS Apps/org.webosports.app.pdf/enyo/../lib/layout/tree/source/Node.css */
+
+.enyo-node {
+	cursor: default;
+	padding: 4px;
+}
+
+.enyo-node img {
+	vertical-align: middle;
+	padding-right: 6px;
+}
+
+.enyo-node-box {
+	overflow: hidden;
+}
+
+.enyo-node-client {
+	position: relative;
+}
+
+.enyo-animate .enyo-node-box, .enyo-animate .enyo-node-client {
+	-ms-transition-property: height, top;
+	-ms-transition-duration: 0.2s, 0.2s;
+	-moz-transition-property: height, top;
+	-moz-transition-duration: 0.2s, 0.2s;
+	-o-transition-property: height, top;
+	-o-transition-duration: 0.2s, 0.2s;
+	-webkit-transition-property: height, top;
+	-webkit-transition-duration: 0.2s, 0.2s;
+	transition-property: height, top;
+	transition-duration: 0.2s, 0.2s;
+}
+
+
+/* D://Development/webOS Apps/org.webosports.app.pdf/enyo/../lib/layout/imageview/source/ImageViewPin.css */
+
+
+.pinDebug {
+	background:yellow;
+	border:1px solid yellow;
+}
+
+/* D://Development/webOS Apps/org.webosports.app.pdf/enyo/../lib/onyx/css/onyx.less */
+
+/* Onyx default parameters defined here */
+/* Fonts */
+/* ---------------------------------------*/
+/* Text Colors */
+/* ---------------------------------------*/
+/* Background Colors */
+/* ---------------------------------------*/
+/* Border Radius */
+/* ---------------------------------------*/
+/* Padding */
+/* ---------------------------------------*/
+/* Icon Sizes */
+/* ---------------------------------------*/
+/* Disabled Opacity */
+/* ---------------------------------------*/
+/* Gradient Overlays */
+/* ---------------------------------------*/
+/* Images */
+/* ---------------------------------------*/
+/* Onyx rules defined here */
+/* onyx-classes.less - combined CSS (less) files for all released Onyx controls
+   into single onyx.less file to avoid IE bug that allows
+   a maximum of 31 style sheets to be loaded before silently failing */
+.onyx {
+  color: #333333;
+  font-family: 'Helvetica Neue', 'Nimbus Sans L', Arial, sans-serif;
+  font-size: 20px;
+  cursor: default;
+  background-color: #eaeaea;
+  /* remove automatic tap highlight color */
+
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+/* prevent IE from inheriting line-height for these elements */
+.onyx button,
+.onyx label,
+.onyx input {
+  line-height: normal;
+}
+.onyx-selected {
+  background-color: #c4e3fe;
+}
+/* LESS pre-calculations */
+/* Individual Widget CSS */
+/* Icon.css */
+.onyx-icon,
+.onyx-icon-toggle {
+  width: 32px;
+  height: 32px;
+  background-repeat: no-repeat;
+  display: inline-block;
+  vertical-align: middle;
+}
+.onyx-icon.onyx-icon-button.active,
+.onyx-icon.onyx-icon-button.pressed,
+.onyx-icon.onyx-icon-button:active:hover,
+.onyx-icon-toggle.active {
+  background-position: 0 -32px;
+}
+.onyx-icon.disabled {
+  opacity: 0.4;
+  filter: alpha(opacity=40);
+}
+.onyx-icon.disabled:active:hover {
+  background-position: 0 0px;
+}
+/* Button.css */
+.onyx-button {
+  outline: 0;
+  color: #292929;
+  font-size: 16px;
+  text-align: center;
+  white-space: nowrap;
+  margin: 0;
+  padding: 6px 18px;
+  overflow: hidden;
+  border-radius: 3px;
+  /* for IE8 */
+
+  border: 1px solid #707070;
+  border: 1px solid rgba(15, 15, 15, 0.2);
+  /*
+		The border and the gradient interact in a strange way that
+		causes the bottom-border (top if the gradient is aligned top)
+		to be lighter than other borders.
+		We can fix it by using the darker bottom border below, but
+		then there are a few rogue pixels that end up very dark.
+	*/
+
+  /* border-bottom: 1px solid rgba(15, 15, 15, 0.5); */
+
+  box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.2);
+  background: #e1e1e1 url(../lib/onyx/images/gradient.png) repeat-x bottom;
+  background-size: contain;
+  /**/
+
+  text-overflow: ellipsis;
+  /* the following cause arcane problems on IE */
+
+  /*
+	min-width: 14px;
+	min-height: 20px;
+	*/
+
+}
+/*
+	IE8 can't handle these selectors in tandem:
+	.onyx-button.active, .onyx-button:active:not([disabled]) {
+
+	the effect is as if .onyx-button.active doesn't exist
+*/
+.onyx-button.active,
+.onyx-button.pressed {
+  background-image: url(../lib/onyx/images/gradient-invert.png);
+  background-position: top;
+  border-top: 1px solid rgba(15, 15, 15, 0.6);
+  box-shadow: inset 0px 1px 0px rgba(0, 0, 0, 0.1);
+}
+.onyx-button:active:hover:not([disabled]) {
+  background-image: url(../lib/onyx/images/gradient-invert.png);
+  background-position: top;
+  border-top: 1px solid rgba(15, 15, 15, 0.6);
+  box-shadow: inset 0px 1px 0px rgba(0, 0, 0, 0.1);
+}
+.onyx-button[disabled] {
+  opacity: 0.4;
+  filter: alpha(opacity=40);
+}
+.onyx-button > img {
+  padding: 0px 3px;
+}
+/* Remove the focused inner-border style in Firefox (Windows) */
+.onyx-button::-moz-focus-inner {
+  border: 0;
+}
+/* Checkbox.css */
+.onyx-checkbox {
+  cursor: pointer;
+  height: 32px;
+  width: 32px;
+  background: url(../lib/onyx/images/checkbox.png) no-repeat;
+  /* reset for ? */
+
+  margin: 0px;
+  /* these entries cause toggle-button and checkbox to line up properly*/
+
+  display: inline-block;
+  vertical-align: middle;
+}
+.onyx-checkbox[checked] {
+  background-position: 0px -32px;
+}
+.onyx-checkbox[disabled] {
+  opacity: 0.4;
+}
+/* Grabber.css */
+.onyx-grabber {
+  background: url(../lib/onyx/images/grabbutton.png) no-repeat center;
+  width: 23px;
+  height: 27px;
+}
+/* Popup.css */
+.onyx-popup {
+  font-size: 16px;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 6px;
+  color: #ffffff;
+  background: #4c4c4c url(../lib/onyx/images/gradient.png) repeat-x 0 bottom;
+}
+.onyx-popup-decorator {
+  position: relative;
+}
+/* Groupbox.css */
+.onyx-groupbox > * {
+  display: block;
+  /*box-shadow: inset 0px 1px 1px rgba(255,255,255,0.5);*/
+
+  border-color: #aaaaaa;
+  border-style: solid;
+  border-width: 0 1px 1px 1px;
+  /*padding: 10px;*/
+
+  /* reset styles that make 'item' look bad if they happen to be there */
+
+  border-radius: 0;
+  margin: 0;
+  font-size: 16px;
+}
+.onyx-groupbox > *:first-child {
+  border-top-color: #aaaaaa;
+  border-width: 1px;
+  border-radius: 4px 4px 0 0;
+}
+.onyx-groupbox > *:last-child {
+  border-radius: 0 0 4px 4px;
+}
+.onyx-groupbox > *:first-child:last-child {
+  border-radius: 4px;
+}
+.onyx-groupbox-header {
+  padding: 2px 10px;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  /**/
+
+  background-color: #4c4c4c;
+  border: none;
+  background: #4c4c4c url(../lib/onyx/images/gradient.png) repeat-x 0 10px;
+}
+.onyx-groupbox .onyx-input-decorator {
+  display: block;
+}
+.onyx-groupbox > .onyx-input-decorator {
+  border-color: #aaaaaa;
+  border-width: 0 1px 1px 1px;
+  border-radius: 0;
+}
+.onyx-groupbox > .onyx-input-decorator:first-child {
+  border-width: 1px;
+  border-radius: 4px 4px 0 0;
+}
+.onyx-groupbox > .onyx-input-decorator:last-child {
+  border-radius: 0 0 4px 4px;
+}
+.onyx-groupbox > .onyx-input-decorator:first-child:last-child {
+  border-radius: 4px;
+}
+/* Input.css */
+.onyx-input-decorator {
+  padding: 6px 8px 10px 8px;
+  border-radius: 3px;
+  border: 1px solid;
+  border-color: rgba(0, 0, 0, 0.1);
+  margin: 0;
+}
+.onyx-input-decorator.onyx-focused {
+  box-shadow: inset 0px 1px 4px rgba(0, 0, 0, 0.3);
+  border-color: rgba(0, 0, 0, 0.3);
+  background-color: #ffffff;
+}
+.onyx-input-decorator.onyx-disabled {
+  /* FIXME: needed to color a disabled input placeholder. */
+
+  /*-webkit-text-fill-color: #888;*/
+
+  opacity: 0.4;
+  filter: alpha(opacity=40);
+}
+.onyx-input-decorator > input {
+  /* reset */
+
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background-color: transparent;
+  background-image: none;
+  font-size: 16px;
+  box-shadow: none;
+  /* FIXME: hack for styling reset on Android */
+
+  /* -webkit-appearance: caret;*/
+
+}
+.onyx-input-decorator.onyx-focused > input {
+  cursor: text;
+}
+.onyx-input-decorator.onyx-disabled > input {
+  cursor: default;
+}
+/* Menu.css */
+.onyx-menu,
+.onyx.onyx-menu {
+  min-width: 160px;
+  top: 100%;
+  left: 0;
+  margin-top: 2px;
+  padding: 3px 0;
+  border-radius: 3px;
+}
+.onyx-menu.onyx-menu-up {
+  top: auto;
+  bottom: 100%;
+  margin-top: 0;
+  margin-bottom: 2px;
+}
+.onyx-toolbar .onyx-menu {
+  margin-top: 11px;
+  border-radius: 0 0 3px 3px;
+}
+.onyx-toolbar .onyx-menu.onyx-menu-up {
+  margin-top: 0;
+  margin-bottom: 10px;
+  border-radius: 3px 3px 0 0;
+}
+.onyx-menu-item {
+  display: block;
+  padding: 10px;
+}
+.onyx-menu-item:hover {
+  background: #284152;
+}
+.onyx-menu-divider,
+.onyx-menu-divider:hover {
+  margin: 6px 0;
+  padding: 0;
+  border-bottom: 1px solid #aaa;
+}
+.onyx-menu-label {
+  cursor: default;
+  -webkit-user-select: none;
+  -moz-user-select: -moz-none;
+  user-select: none;
+  opacity: 0.4;
+  filter: alpha(opacity=40);
+}
+.onyx-menu-label:hover {
+  background: none;
+}
+/* customize a toolbar to support menus */
+.onyx-menu-toolbar,
+.onyx-toolbar.onyx-menu-toolbar {
+  position: relative;
+  z-index: 10;
+  overflow: visible;
+}
+/* Picker.css */
+.onyx-picker-decorator .onyx-button {
+  padding: 10px 18px;
+}
+.onyx-picker {
+  top: 0;
+  margin-top: -3px;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  color: black;
+  background: #e1e1e1;
+}
+.onyx-picker.onyx-menu-up {
+  top: auto;
+  bottom: 0;
+  margin-top: 3px;
+  margin-bottom: -3px;
+}
+.onyx-picker .onyx-menu-item {
+  text-align: center;
+}
+.onyx-picker .onyx-menu-item:hover {
+  background-color: transparent;
+}
+.onyx-picker .onyx-menu-item.selected,
+.onyx-picker .onyx-menu-item.active,
+.onyx-picker .onyx-menu-item:active:hover {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: #cde7fe;
+  box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.2);
+}
+.onyx-picker .onyx-menu-item {
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+.onyx-picker:not(.onyx-flyweight-picker) .onyx-menu-item:first-child,
+.onyx-flyweight-picker :first-child > .onyx-menu-item {
+  border-top: none;
+}
+.onyx-picker:not(.onyx-flyweight-picker) .onyx-menu-item:last-child,
+.onyx-flyweight-picker :last-child > .onyx-menu-item {
+  border-bottom: none;
+}
+/* TextArea.css */
+.onyx-input-decorator > textarea {
+  /* reset */
+
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background-color: transparent;
+  background-image: none;
+  font-size: 16px;
+  box-shadow: none;
+  /* Remove scrollbars and resize handle */
+
+  resize: none;
+  overflow: auto;
+  /* FIXME: hack for styling reset on Android */
+
+  /* -webkit-appearance: caret;*/
+
+}
+.onyx-input-decorator.onyx-focused > textarea {
+  cursor: text;
+}
+.onyx-input-decorator.onyx-disabled > textarea {
+  cursor: default;
+}
+.onyx-textarea {
+  /* need >=50px for scrollbar to be usable on mac */
+
+  min-height: 50px;
+}
+/* RichText.css */
+.onyx-input-decorator > .onyx-richtext {
+  /* reset */
+
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background-color: transparent;
+  background-image: none;
+  font-size: 16px;
+  min-height: 20px;
+  min-width: 100px;
+  box-shadow: none;
+  /* FIXME: hack for styling reset on Android */
+
+  /* -webkit-appearance: caret;*/
+
+}
+.onyx-input-decorator.onyx-focused > .onyx-richtext {
+  cursor: text;
+}
+.onyx-input-decorator.onyx-disabled > .onyx-richtext {
+  cursor: default;
+}
+/* RadioButton.css */
+.onyx-radiobutton {
+  padding: 8px 12px;
+  margin: 0;
+  outline: 0;
+  font-size: 16px;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  /**/
+
+  background: #e7e7e7 url(../lib/onyx/images/gradient.png) repeat-x bottom;
+  /* IE8 */
+
+  border: 1px solid #333333;
+  border: 1px solid rgba(15, 15, 15, 0.2);
+  /* turn off right-border in a way IE8 ignores, because IE8 does not support :last-child */
+
+  border-right-color: rgba(0, 0, 0, 0);
+  box-shadow: inset 1px 1px 0px rgba(255, 255, 255, 0.2);
+}
+.onyx-radiobutton:first-child {
+  border-radius: 3px 0 0 3px;
+}
+.onyx-radiobutton:last-child {
+  border-radius: 0px 3px 3px 0px;
+  /* IE8 */
+
+  border-right: 1px solid #333333;
+  border-right: 1px solid rgba(15, 15, 15, 0.2);
+}
+.onyx-radiobutton.active {
+  color: #ffffff;
+  background: #0091f2 url(../lib/onyx/images/gradient-invert.png) repeat-x top;
+  border-top: 1px solid rgba(15, 15, 15, 0.6);
+  box-shadow: inset 1px 2px 2px rgba(0, 0, 0, 0.2);
+}
+/* Scrim.css */
+.onyx-scrim {
+  z-index: 1;
+  /*
+		note: by using pointer-events we allow tapping on scrim
+		while it is fading out; however, this requires any showing classes
+		to set pointer events to auto or scrim will not function as expected.
+	*/
+
+  pointer-events: none;
+}
+.onyx-scrim.onyx-scrim-translucent {
+  pointer-events: auto;
+  background-color: #000000;
+  opacity: 0.65;
+  filter: alpha(opacity=65);
+}
+.onyx-scrim.onyx-scrim-transparent {
+  pointer-events: auto;
+  background: transparent;
+}
+/* TabButton.css */
+.onyx-radiobutton.onyx-tabbutton {
+  padding: 8px 34px;
+  font-size: 20px;
+  border-radius: 0px;
+}
+/* ToggleButton.css */
+.onyx-toggle-button {
+  display: inline-block;
+  height: 32px;
+  line-height: 32px;
+  min-width: 64px;
+  vertical-align: middle;
+  text-align: center;
+  /* */
+
+  border-radius: 3px;
+  box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.4);
+  background: #8bba3d url(../lib/onyx/images/gradient-invert.png) repeat-x bottom;
+  background-size: auto 100%;
+  /* label */
+
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.onyx-toggle-button.off {
+  background-color: #b1b1b1 !important;
+}
+.onyx-toggle-button-knob {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  margin: 1px;
+  border-radius: 3px;
+  background: #f6f6f6 url(../lib/onyx/images/gradient.png) repeat-x;
+  background-size: auto 100%;
+}
+.onyx-toggle-button .onyx-toggle-button-knob {
+  box-shadow: -1px 0px 4px rgba(0, 0, 0, 0.35), inset 0 -1px 0 rgba(0, 0, 0, 0.4);
+  float: right;
+}
+.onyx-toggle-button.off .onyx-toggle-button-knob {
+  box-shadow: 1px 0px 4px rgba(0, 0, 0, 0.35), inset 0 -1px 0 rgba(0, 0, 0, 0.4);
+  float: left;
+}
+.onyx-toggle-button.disabled,
+.onyx-icon-button.disabled {
+  opacity: 0.4;
+  filter: alpha(opacity=40);
+}
+.onyx-toggle-content {
+  min-width: 32px;
+  padding: 0 6px;
+}
+.onyx-toggle-content.empty {
+  padding: 0;
+}
+.onyx-toggle-content.off {
+  float: right;
+}
+.onyx-toggle-content.on {
+  float: left;
+}
+/* Toolbar.css */
+.onyx-toolbar {
+  /*
+		line-height is unreliable for centering, instead
+		use vertical-align: middle to align
+		elements along a common centerline and use
+		padding to fill out the space.
+	*/
+
+  padding: 9px 8px 10px 8px;
+  border: 1px solid #3A3A3A;
+  background: #4c4c4c url(../lib/onyx/images/gradient.png) repeat-x 0 bottom;
+  background-size: contain;
+  color: #ffffff;
+  /**/
+
+  white-space: nowrap;
+  overflow-y: visible;
+  font-size: 20px;
+}
+.onyx-toolbar-inline > *,
+.enyo-fittable-columns-layout.onyx-toolbar-inline > * {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 4px 6px 5px;
+  box-sizing: border-box;
+}
+.onyx-toolbar .onyx-icon-button {
+  margin: 3px 2px 1px;
+}
+.onyx-toolbar .onyx-button {
+  color: #f2f2f2;
+  background-color: #555656;
+  border-color: rgba(15, 15, 15, 0.5);
+  margin-top: 0;
+  margin-bottom: 0;
+  height: 36px;
+}
+.onyx-toolbar .onyx-input-decorator {
+  margin: 1px 3px;
+  box-shadow: inset 0px 1px 4px rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.1);
+  padding: 0px 6px 5px 6px;
+}
+.onyx-toolbar .onyx-input-decorator.onyx-focused {
+  box-shadow: inset 0px 1px 4px rgba(0, 0, 0, 0.3);
+  background-color: #ffffff;
+}
+.onyx-toolbar .onyx-input-decorator .onyx-input {
+  color: #e5e5e5;
+  font-size: 14px;
+}
+.onyx-toolbar .onyx-input-decorator .onyx-input:focus {
+  color: #000000;
+}
+.onyx-toolbar .onyx-input-decorator .onyx-input:focus::-webkit-input-placeholder {
+  color: #dddddd;
+}
+/* Tooltip.css */
+.onyx-tooltip {
+  z-index: 20;
+  left: 0;
+  padding: 4px 6px;
+  margin-top: 4px;
+  margin-left: -6px;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  color: #ffffff;
+  background: #216593 url(../lib/onyx/images/gradient.png) repeat-x 0 bottom;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+/*move the tooltip over to the right when displaying the right arrow so it aligns better with the decorator*/
+.onyx-tooltip.right-arrow {
+  left: 30px;
+}
+/*prep the left & right arrows using before & after - left arrow uses before & right arrow uses after*/
+.onyx-tooltip::before {
+  content: '';
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  position: absolute;
+  top: -6px;
+  left: 16px;
+}
+.onyx-tooltip::after {
+  content: '';
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  position: absolute;
+  top: -6px;
+  margin-left: -12px;
+}
+/*The following 3 rules handle the left & right arrows when the tooltip is displayed below the activator*/
+.onyx-tooltip.below {
+  top: 100%;
+}
+.onyx-tooltip.below.right-arrow::after {
+  border-bottom: 6px solid #1D587F;
+  top: -6px;
+}
+.onyx-tooltip.below.left-arrow::before {
+  border-bottom: 6px solid #1D587F;
+  top: -6px;
+}
+/*The following 3 rules handle the left & right arrows when the tooltip is displayed above the activator*/
+.onyx-tooltip.above {
+  top: -100%;
+}
+.onyx-tooltip.above.right-arrow::after {
+  content: '';
+  border-top: 6px solid #1D587F;
+  top: 100%;
+}
+.onyx-tooltip.above.left-arrow::before {
+  content: '';
+  border-top: 6px solid #1D587F;
+  top: 100%;
+}
+/* ProgressBar.css */
+.onyx-progress-bar {
+  margin: 8px;
+  height: 8px;
+  border: 1px solid rgba(15, 15, 15, 0.2);
+  border-radius: 3px;
+  background: #b8b8b8 url(../lib/onyx/images/gradient-invert.png) repeat-x;
+  background-size: auto 100%;
+}
+.onyx-progress-bar-bar {
+  height: 100%;
+  border-radius: 3px;
+  background: #58abef url(../lib/onyx/images/gradient.png) repeat-x;
+  background-size: auto 100%;
+}
+.onyx-progress-bar-bar.striped {
+  background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent));
+  background-image: -webkit-linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+  background-image: -moz-linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+  background-image: -ms-linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+  background-image: -o-linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+  background-image: linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+  background-size: 40px 40px;
+}
+.onyx-progress-bar-bar.striped.animated {
+  -webkit-animation: progress-bar-stripes 2s linear infinite;
+  -moz-animation: progress-bar-stripes 2s linear infinite;
+  -o-animation: progress-bar-stripes 2s linear infinite;
+  animation: progress-bar-stripes 2s linear infinite;
+}
+@-webkit-keyframes progress-bar-stripes {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 40px 0;
+  }
+}
+@-moz-keyframes progress-bar-stripes {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 40px 0;
+  }
+}
+@-o-keyframes progress-bar-stripes {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 40px 0;
+  }
+}
+@keyframes progress-bar-stripes {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 40px 0;
+  }
+}
+/* ProgressButton.css */
+.onyx-progress-button {
+  position: relative;
+  height: 36px;
+  line-height: 36px;
+  color: #f1f1f1;
+  font-size: 16px;
+  text-overflow: ellipsis;
+}
+.onyx-progress-button-bar {
+  height: 36px;
+}
+.onyx-progress-button-icon {
+  display: inline-block;
+  position: absolute;
+  top: 2px;
+  right: 0;
+}
+.onyx-progress-button-client {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 36px;
+  margin-left: 8px;
+}
+.onyx-progress-button-client > * {
+  display: inline-block;
+}
+/* Slider.css */
+.onyx-slider {
+  position: relative;
+  margin: 8px 20px;
+}
+.onyx-slider-taparea {
+  position: absolute;
+  top: -11px;
+  height: 28px;
+  width: 100%;
+}
+.onyx-slider-knob {
+  position: relative;
+  height: 40px;
+  width: 40px;
+  background: url(../lib/onyx/images/slider-handle.png) left top no-repeat;
+  margin: -23px -20px;
+}
+.onyx-slider-knob.active,
+.onyx-slider-knob.pressed,
+.onyx-slider-knob:active:hover {
+  background-position: 0 -40px;
+}
+/* RangeSlider.css */
+.onyx-range-slider-knob {
+  top: -17px;
+}
+.onyx-range-slider-label {
+  position: relative;
+  top: -18px;
+  text-align: center;
+  white-space: nowrap;
+}
+/* Item.css */
+.onyx-item {
+  padding: 14px;
+}
+.onyx-highlight,
+.onyx-highlight.onyx-swipeable-item-content {
+  background-color: #dedfdf;
+}
+.enyo-selected,
+.enyo-selected.onyx-swipeable-item-content {
+  background-color: #c4e3fe;
+}
+.onyx-item.onyx-swipeable-item {
+  overflow: hidden;
+  padding: 0;
+}
+.onyx-swipeable-item-content {
+  background-color: #eaeaea;
+  box-sizing: border-box;
+  padding: 18px 6px;
+  min-height: 40px;
+}
+/* Spinner.css */
+.onyx-spinner {
+  width: 59px;
+  height: 58px;
+  display: inline-block;
+  background: url(../lib/onyx/images/spinner-dark.gif) no-repeat 0 0;
+}
+.onyx-spinner.onyx-light {
+  background: url(../lib/onyx/images/spinner-light.gif) no-repeat 0 0;
+}
+/* MoreToolbar.css */
+.onyx-more-toolbar {
+  overflow: visible;
+  position: relative;
+  z-index: 10;
+}
+.onyx-more-toolbar.active {
+  z-index: 11;
+}
+.onyx-more-menu {
+  left: auto;
+  right: 0px;
+  min-width: 0;
+}
+.onyx-more-toolbar .onyx-more-menu > * {
+  float: right;
+  clear: both;
+  margin: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.onyx-more-button {
+  background-image: url(../lib/onyx/images/more.png);
+  width: 32px;
+  height: 32px;
+}
+/* DatePicker.css */
+.onyx-datepicker-month {
+  min-width: 75px;
+}
+.onyx-datepicker-day {
+  min-width: 60px;
+}
+.onyx-datepicker-year {
+  min-width: 70px;
+}
+/* TimePicker.css */
+.onyx-timepicker-hour {
+  min-width: 60px;
+}
+.onyx-timepicker-minute {
+  min-width: 60px;
+}
+.onyx-timepicker-ampm {
+  min-width: 60px;
+}
+/* ButtonColors.css */
+.onyx-button.onyx-blue {
+  background-color: #35A8EE;
+  color: #F2F2F2;
+}
+.onyx-button.onyx-affirmative {
+  background-color: #91BA07;
+  color: #F2F2F2;
+}
+.onyx-button.onyx-negative {
+  background-color: #C51616;
+  color: #F2F2F2;
+}
+.onyx-button.onyx-dark {
+  background-color: #555656;
+  color: #F2F2F2;
+}
+.onyx-button.onyx-light {
+  background-color: #cacaca;
+  color: #2F2F2F;
+}
+/* ContextualPopup.css */
+.onyx-contextual-popup-title {
+  font-weight: bold;
+  padding: 24px 32px 0px;
+}
+.onyx-contextual-popup-scroller {
+  padding: 24px 32px;
+}
+.onyx-contextual-popup-action-buttons {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+}
+.onyx-contextual-popup-action-button {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+.onyx-contextual-popup,
+.onyx.onyx-contextual-popup {
+  font-size: 16px;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 6px;
+  color: #ffffff;
+  background: #4c4c4c;
+}
+/*setup the nub*/
+.onyx-contextual-popup::after {
+  content: '';
+  position: absolute;
+  top: -10px;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+}
+/*for popups above activator*/
+.onyx-contextual-popup.vertical.above {
+  top: auto;
+  margin-top: -10px;
+  bottom: 100%;
+  margin-bottom: 10px;
+}
+/*for popups below activator*/
+.onyx-contextual-popup.vertical.below {
+  margin-top: 10px;
+}
+/*for popups on the left of the activator*/
+.onyx-contextual-popup.right.horizontal {
+  margin-left: -11px;
+}
+/*for popups on the right of the activator*/
+.onyx-contextual-popup.left.horizontal {
+  margin-left: 10px;
+}
+/*nub positioning*/
+/*horizontally centered nub*/
+.onyx-contextual-popup.vertical::after {
+  position: absolute;
+  left: 45%;
+  border-bottom: 10px solid #4c4c4c;
+  border-top: none;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+}
+/*nub near horizontal left*/
+.onyx-contextual-popup.vertical.right::after {
+  left: 0%;
+  margin-left: 20px;
+}
+/*nub near horizontal right*/
+.onyx-contextual-popup.vertical.left::after {
+  left: 100%;
+  margin-left: -55px;
+}
+/*downward facing nub*/
+.onyx-contextual-popup.vertical.above::after {
+  top: 100%;
+  border-top: 10px solid #4c4c4c;
+  border-bottom: none;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+}
+.onyx-contextual-popup.vertical.below.right::after {
+  top: 0%;
+  margin-top: -10px;
+  border-bottom: 10px solid #4c4c4c;
+  border-left: 10px solid transparent;
+}
+.onyx-contextual-popup.vertical.below.left::after {
+  top: 0%;
+  margin-top: -10px;
+  border-right: 10px solid transparent;
+}
+/*nub positioning for left/right popups*/
+/*vertically centered nub for popups on left of activator*/
+.onyx-contextual-popup.right::after {
+  left: 100%;
+  top: 47%;
+  margin-right: 20px;
+  border-left: 10px solid #4C4C4C;
+}
+/*nub near vertical top for popups on left of activator*/
+.onyx-contextual-popup.right.high::after {
+  top: 35px;
+  border-left: 10px solid #4C4C4C;
+}
+/*nub near vertical bottom for popups on left of activator*/
+.onyx-contextual-popup.right.low::after {
+  top: 100%;
+  margin-top: -55px;
+  border-left: 10px solid #4C4C4C;
+}
+/*vertically centered nub for popups on right of activator*/
+.onyx-contextual-popup.left::after {
+  left: 0%;
+  margin-left: -20px;
+  top: 45%;
+  border-right: 10px solid #4C4C4C;
+}
+/*nub near vertical top for popups on right of activator*/
+.onyx-contextual-popup.left.high::after {
+  top: 35px;
+  border-right: 10px solid #4C4C4C;
+}
+/*nub near vertical bottom for popups on right of activator*/
+.onyx-contextual-popup.left.low::after {
+  top: 100%;
+  margin-top: -55px;
+  border-right: 10px solid #4C4C4C;
+}
+/*corners*/
+/*vertical top corners*/
+/*for popups on the left of the activator*/
+.onyx-contextual-popup.vertical.right.corner {
+  margin-left: 0px;
+}
+/*for popups on the right of the activator*/
+.onyx-contextual-popup.vertical.left.corner {
+  margin-left: 0px;
+}
+.onyx-contextual-popup.vertical.below.left.corner {
+  border-top-right-radius: 0px;
+}
+.onyx-contextual-popup.vertical.below.right.corner {
+  border-top-left-radius: 0px;
+}
+.onyx-contextual-popup.vertical.below.left.corner::after {
+  top: 0%;
+  left: 100%;
+  margin-top: -10px;
+  margin-left: -19px;
+  border-right: 10px solid #4c4c4c;
+  border-top: 10px solid transparent;
+}
+.onyx-contextual-popup.vertical.below.right.corner::after {
+  top: 0%;
+  left: 0%;
+  margin-left: -1px;
+  border-left: 10px solid #4c4c4c;
+  border-top: 10px solid transparent;
+}
+/*vertical bottom corners*/
+.onyx-contextual-popup.left.above.corner {
+  border-bottom-right-radius: 0px;
+}
+.onyx-contextual-popup.right.above.corner {
+  border-bottom-left-radius: 0px;
+}
+.onyx-contextual-popup.vertical.left.above.corner::after {
+  top: 100%;
+  margin-left: -19px;
+  border-right: 10px solid #4C4C4C;
+  border-bottom: 10px solid transparent;
+  border-top: none;
+}
+.onyx-contextual-popup.vertical.right.above.corner::after {
+  top: 100%;
+  left: 0%;
+  margin-left: -1px;
+  border-left: 10px solid #4c4c4c;
+  border-bottom: 10px solid transparent;
+  border-top: none;
+}
+/*horizontal bottom corners*/
+.onyx-contextual-popup.left.low.corner {
+  border-bottom-left-radius: 0px;
+}
+.onyx-contextual-popup.right.low.corner {
+  border-bottom-right-radius: 0px;
+}
+.onyx-contextual-popup.left.low.corner::after {
+  top: 100%;
+  left: 0%;
+  margin-top: -19px;
+  margin-left: -12px;
+  border-bottom: 10px solid #4c4c4c;
+  border-right: 10px solid #4c4c4c;
+}
+.onyx-contextual-popup.right.low.corner::after {
+  top: 100%;
+  left: 100%;
+  margin-top: -19px;
+  border-bottom: 10px solid#4c4c4c;
+  border-left: none;
+}
+/*horizontal top corners*/
+.onyx-contextual-popup.left.high.corner {
+  border-top-left-radius: 0px;
+}
+.onyx-contextual-popup.right.high.corner {
+  border-top-right-radius: 0px;
+}
+.onyx-contextual-popup.left.high.corner::after {
+  top: 0%;
+  left: 0%;
+  margin-top: -1px;
+  margin-left: -12px;
+  border-top: 10px solid #4C4C4C;
+  border-bottom: none;
+}
+.onyx-contextual-popup.right.high.corner::after {
+  top: 0%;
+  left: 100%;
+  margin-top: -1px;
+  margin-left: -9px;
+  border-top: 10px solid #4C4C4C;
+  border-bottom: none;
+}
+/* some default colors */
+.onyx-dark {
+  background-color: #555656;
+}
+.onyx-light {
+  background-color: #cacaca;
+}
+.onyx-green {
+  background-color: #91BA07;
+}
+.onyx-red {
+  background-color: #C51616;
+}
+.onyx-blue {
+  background-color: #35A8EE;
+}
+
+
+/* D://Development/webOS Apps/org.webosports.app.pdf/enyo/../lib/pdfjs/external/jasmine/jasmine.css */
+
+body { background-color: #eeeeee; padding: 0; margin: 5px; overflow-y: scroll; }
+
+#HTMLReporter { font-size: 11px; font-family: Monaco, "Lucida Console", monospace; line-height: 14px; color: #333333; }
+#HTMLReporter a { text-decoration: none; }
+#HTMLReporter a:hover { text-decoration: underline; }
+#HTMLReporter p, #HTMLReporter h1, #HTMLReporter h2, #HTMLReporter h3, #HTMLReporter h4, #HTMLReporter h5, #HTMLReporter h6 { margin: 0; line-height: 14px; }
+#HTMLReporter .banner, #HTMLReporter .symbolSummary, #HTMLReporter .summary, #HTMLReporter .resultMessage, #HTMLReporter .specDetail .description, #HTMLReporter .alert .bar, #HTMLReporter .stackTrace { padding-left: 9px; padding-right: 9px; }
+#HTMLReporter #jasmine_content { position: fixed; right: 100%; }
+#HTMLReporter .version { color: #aaaaaa; }
+#HTMLReporter .banner { margin-top: 14px; }
+#HTMLReporter .duration { color: #aaaaaa; float: right; }
+#HTMLReporter .symbolSummary { overflow: hidden; *zoom: 1; margin: 14px 0; }
+#HTMLReporter .symbolSummary li { display: block; float: left; height: 7px; width: 14px; margin-bottom: 7px; font-size: 16px; }
+#HTMLReporter .symbolSummary li.passed { font-size: 14px; }
+#HTMLReporter .symbolSummary li.passed:before { color: #5e7d00; content: "\02022"; }
+#HTMLReporter .symbolSummary li.failed { line-height: 9px; }
+#HTMLReporter .symbolSummary li.failed:before { color: #b03911; content: "x"; font-weight: bold; margin-left: -1px; }
+#HTMLReporter .symbolSummary li.skipped { font-size: 14px; }
+#HTMLReporter .symbolSummary li.skipped:before { color: #bababa; content: "\02022"; }
+#HTMLReporter .symbolSummary li.pending { line-height: 11px; }
+#HTMLReporter .symbolSummary li.pending:before { color: #aaaaaa; content: "-"; }
+#HTMLReporter .bar { line-height: 28px; font-size: 14px; display: block; color: #eee; }
+#HTMLReporter .runningAlert { background-color: #666666; }
+#HTMLReporter .skippedAlert { background-color: #aaaaaa; }
+#HTMLReporter .skippedAlert:first-child { background-color: #333333; }
+#HTMLReporter .skippedAlert:hover { text-decoration: none; color: white; text-decoration: underline; }
+#HTMLReporter .passingAlert { background-color: #a6b779; }
+#HTMLReporter .passingAlert:first-child { background-color: #5e7d00; }
+#HTMLReporter .failingAlert { background-color: #cf867e; }
+#HTMLReporter .failingAlert:first-child { background-color: #b03911; }
+#HTMLReporter .results { margin-top: 14px; }
+#HTMLReporter #details { display: none; }
+#HTMLReporter .resultsMenu, #HTMLReporter .resultsMenu a { background-color: #fff; color: #333333; }
+#HTMLReporter.showDetails .summaryMenuItem { font-weight: normal; text-decoration: inherit; }
+#HTMLReporter.showDetails .summaryMenuItem:hover { text-decoration: underline; }
+#HTMLReporter.showDetails .detailsMenuItem { font-weight: bold; text-decoration: underline; }
+#HTMLReporter.showDetails .summary { display: none; }
+#HTMLReporter.showDetails #details { display: block; }
+#HTMLReporter .summaryMenuItem { font-weight: bold; text-decoration: underline; }
+#HTMLReporter .summary { margin-top: 14px; }
+#HTMLReporter .summary .suite .suite, #HTMLReporter .summary .specSummary { margin-left: 14px; }
+#HTMLReporter .summary .specSummary.passed a { color: #5e7d00; }
+#HTMLReporter .summary .specSummary.failed a { color: #b03911; }
+#HTMLReporter .description + .suite { margin-top: 0; }
+#HTMLReporter .suite { margin-top: 14px; }
+#HTMLReporter .suite a { color: #333333; }
+#HTMLReporter #details .specDetail { margin-bottom: 28px; }
+#HTMLReporter #details .specDetail .description { display: block; color: white; background-color: #b03911; }
+#HTMLReporter .resultMessage { padding-top: 14px; color: #333333; }
+#HTMLReporter .resultMessage span.result { display: block; }
+#HTMLReporter .stackTrace { margin: 5px 0 0 0; max-height: 224px; overflow: auto; line-height: 18px; color: #666666; border: 1px solid #ddd; background: white; white-space: pre; }
+
+#TrivialReporter { padding: 8px 13px; position: absolute; top: 0; bottom: 0; left: 0; right: 0; overflow-y: scroll; background-color: white; font-family: "Helvetica Neue Light", "Lucida Grande", "Calibri", "Arial", sans-serif; /*.resultMessage {*/ /*white-space: pre;*/ /*}*/ }
+#TrivialReporter a:visited, #TrivialReporter a { color: #303; }
+#TrivialReporter a:hover, #TrivialReporter a:active { color: blue; }
+#TrivialReporter .run_spec { float: right; padding-right: 5px; font-size: .8em; text-decoration: none; }
+#TrivialReporter .banner { color: #303; background-color: #fef; padding: 5px; }
+#TrivialReporter .logo { float: left; font-size: 1.1em; padding-left: 5px; }
+#TrivialReporter .logo .version { font-size: .6em; padding-left: 1em; }
+#TrivialReporter .runner.running { background-color: yellow; }
+#TrivialReporter .options { text-align: right; font-size: .8em; }
+#TrivialReporter .suite { border: 1px outset gray; margin: 5px 0; padding-left: 1em; }
+#TrivialReporter .suite .suite { margin: 5px; }
+#TrivialReporter .suite.passed { background-color: #dfd; }
+#TrivialReporter .suite.failed { background-color: #fdd; }
+#TrivialReporter .spec { margin: 5px; padding-left: 1em; clear: both; }
+#TrivialReporter .spec.failed, #TrivialReporter .spec.passed, #TrivialReporter .spec.skipped { padding-bottom: 5px; border: 1px solid gray; }
+#TrivialReporter .spec.failed { background-color: #fbb; border-color: red; }
+#TrivialReporter .spec.passed { background-color: #bfb; border-color: green; }
+#TrivialReporter .spec.skipped { background-color: #bbb; }
+#TrivialReporter .messages { border-left: 1px dashed gray; padding-left: 1em; padding-right: 1em; }
+#TrivialReporter .passed { background-color: #cfc; display: none; }
+#TrivialReporter .failed { background-color: #fbb; }
+#TrivialReporter .skipped { color: #777; background-color: #eee; display: none; }
+#TrivialReporter .resultMessage span.result { display: block; line-height: 2em; color: black; }
+#TrivialReporter .resultMessage .mismatch { color: black; }
+#TrivialReporter .stackTrace { white-space: pre; font-size: .8em; margin-left: 10px; max-height: 5em; overflow: auto; border: 1px inset red; padding: 1em; background: #eef; }
+#TrivialReporter .finished-at { padding-left: 1em; font-size: .6em; }
+#TrivialReporter.show-passed .passed, #TrivialReporter.show-skipped .skipped { display: block; }
+#TrivialReporter #jasmine_content { position: fixed; right: 100%; }
+#TrivialReporter .runner { border: 1px solid gray; display: block; margin: 5px 0; padding: 2px 0 2px 10px; }
+
+
+/* source/../css/viewer.css */
+
+/* Copyright 2012 Mozilla Foundation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  background-color: #404040;
+  background-image: url(../images/texture.png);
+}
+
+body,
+input,
+button,
+select {
+  font: message-box;
+}
+
+.hidden {
+  display: none;
+}
+[hidden] {
+  display: none !important;
+}
+
+#viewerContainer:-webkit-full-screen {
+  top: 0px;
+  border-top: 2px solid transparent;
+  background-color: #404040;
+  background-image: url(../images/texture.png);
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  cursor: none;
+}
+
+#viewerContainer:-moz-full-screen {
+  top: 0px;
+  border-top: 2px solid transparent;
+  background-color: #404040;
+  background-image: url(../images/texture.png);
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  cursor: none;
+}
+
+#viewerContainer:fullscreen {
+  top: 0px;
+  border-top: 2px solid transparent;
+  background-color: #404040;
+  background-image: url(../images/texture.png);
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  cursor: none;
+}
+
+
+:-webkit-full-screen .page {
+  margin-bottom: 100%;
+}
+
+:-moz-full-screen .page {
+  margin-bottom: 100%;
+}
+
+:fullscreen .page {
+  margin-bottom: 100%;
+}
+
+#viewerContainer.presentationControls {
+  cursor: default;
+}
+
+/* outer/inner center provides horizontal center */
+html[dir='ltr'] .outerCenter {
+  float: right;
+  position: relative;
+  right: 50%;
+}
+html[dir='rtl'] .outerCenter {
+  float: left;
+  position: relative;
+  left: 50%;
+}
+html[dir='ltr'] .innerCenter {
+  float: right;
+  position: relative;
+  right: -50%;
+}
+html[dir='rtl'] .innerCenter {
+  float: left;
+  position: relative;
+  left: -50%;
+}
+
+#outerContainer {
+  width: 100%;
+  height: 100%;
+}
+
+#sidebarContainer {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 200px;
+  visibility: hidden;
+  -webkit-transition-duration: 200ms;
+  -webkit-transition-timing-function: ease;
+  -moz-transition-duration: 200ms;
+  -moz-transition-timing-function: ease;
+  -ms-transition-duration: 200ms;
+  -ms-transition-timing-function: ease;
+  -o-transition-duration: 200ms;
+  -o-transition-timing-function: ease;
+  transition-duration: 200ms;
+  transition-timing-function: ease;
+
+}
+html[dir='ltr'] #sidebarContainer {
+  -webkit-transition-property: left;
+  -moz-transition-property: left;
+  -ms-transition-property: left;
+  -o-transition-property: left;
+  transition-property: left;
+  left: -200px;
+}
+html[dir='rtl'] #sidebarContainer {
+  -webkit-transition-property: right;
+  -ms-transition-property: right;
+  -o-transition-property: right;
+  transition-property: right;
+  right: -200px;
+}
+
+#outerContainer.sidebarMoving > #sidebarContainer,
+#outerContainer.sidebarOpen > #sidebarContainer {
+  visibility: visible;
+}
+html[dir='ltr'] #outerContainer.sidebarOpen > #sidebarContainer {
+  left: 0px;
+}
+html[dir='rtl'] #outerContainer.sidebarOpen > #sidebarContainer {
+  right: 0px;
+}
+
+#mainContainer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  min-width: 320px;
+  -webkit-transition-duration: 200ms;
+  -webkit-transition-timing-function: ease;
+  -moz-transition-duration: 200ms;
+  -moz-transition-timing-function: ease;
+  -ms-transition-duration: 200ms;
+  -ms-transition-timing-function: ease;
+  -o-transition-duration: 200ms;
+  -o-transition-timing-function: ease;
+  transition-duration: 200ms;
+  transition-timing-function: ease;
+}
+html[dir='ltr'] #outerContainer.sidebarOpen > #mainContainer {
+  -webkit-transition-property: left;
+  -moz-transition-property: left;
+  -ms-transition-property: left;
+  -o-transition-property: left;
+  transition-property: left;
+  left: 200px;
+}
+html[dir='rtl'] #outerContainer.sidebarOpen > #mainContainer {
+  -webkit-transition-property: right;
+  -moz-transition-property: right;
+  -ms-transition-property: right;
+  -o-transition-property: right;
+  transition-property: right;
+  right: 200px;
+}
+
+#sidebarContent {
+  top: 32px;
+  bottom: 0;
+  overflow: auto;
+  position: absolute;
+  width: 200px;
+
+  background-color: hsla(0,0%,0%,.1);
+  box-shadow: inset -1px 0 0 hsla(0,0%,0%,.25);
+}
+html[dir='ltr'] #sidebarContent {
+  left: 0;
+}
+html[dir='rtl'] #sidebarContent {
+  right: 0;
+}
+
+#viewerContainer {
+  overflow: auto;
+  box-shadow: inset 1px 0 0 hsla(0,0%,100%,.05);
+  position: absolute;
+  top: 32px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.toolbar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 32px;
+  z-index: 9999;
+  cursor: default;
+}
+
+#toolbarContainer {
+  width: 100%;
+}
+
+#toolbarSidebar {
+  width: 200px;
+  height: 32px;
+  background-image: url(../images/texture.png),
+                    -webkit-linear-gradient(hsla(0,0%,30%,.99), hsla(0,0%,25%,.95));
+  background-image: url(../images/texture.png),
+                    -moz-linear-gradient(hsla(0,0%,30%,.99), hsla(0,0%,25%,.95));
+  background-image: url(../images/texture.png),
+                    -ms-linear-gradient(hsla(0,0%,30%,.99), hsla(0,0%,25%,.95));
+  background-image: url(../images/texture.png),
+                    -o-linear-gradient(hsla(0,0%,30%,.99), hsla(0,0%,25%,.95));
+  background-image: url(../images/texture.png),
+                    linear-gradient(hsla(0,0%,30%,.99), hsla(0,0%,25%,.95));
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.25),
+
+              inset 0 -1px 0 hsla(0,0%,100%,.05),
+              0 1px 0 hsla(0,0%,0%,.15),
+              0 0 1px hsla(0,0%,0%,.1);
+}
+
+#toolbarViewer, .findbar {
+  position: relative;
+  height: 32px;
+  background-color: #474747; /* IE9 */
+  background-image: url(../images/texture.png),
+                    -webkit-linear-gradient(hsla(0,0%,32%,.99), hsla(0,0%,27%,.95));
+  background-image: url(../images/texture.png),
+                    -moz-linear-gradient(hsla(0,0%,32%,.99), hsla(0,0%,27%,.95));
+  background-image: url(../images/texture.png),
+                    -ms-linear-gradient(hsla(0,0%,32%,.99), hsla(0,0%,27%,.95));
+  background-image: url(../images/texture.png),
+                    -o-linear-gradient(hsla(0,0%,32%,.99), hsla(0,0%,27%,.95));
+  background-image: url(../images/texture.png),
+                    linear-gradient(hsla(0,0%,32%,.99), hsla(0,0%,27%,.95));
+  box-shadow: inset 1px 0 0 hsla(0,0%,100%,.08),
+              inset 0 1px 1px hsla(0,0%,0%,.15),
+              inset 0 -1px 0 hsla(0,0%,100%,.05),
+              0 1px 0 hsla(0,0%,0%,.15),
+              0 1px 1px hsla(0,0%,0%,.1);
+}
+
+.findbar {
+  top: 32px;
+  position: absolute;
+  z-index: 10000;
+  height: 32px;
+
+  min-width: 16px;
+  padding: 0px 6px 0px 6px;
+  margin: 4px 2px 4px 2px;
+  color: hsl(0,0%,85%);
+  font-size: 12px;
+  line-height: 14px;
+  text-align: left;
+  cursor: default;
+}
+
+html[dir='ltr'] .findbar {
+  left: 68px;
+}
+
+html[dir='rtl'] .findbar {
+  right: 68px;
+}
+
+.findbar label {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+}
+
+#findInput[data-status="pending"] {
+  background-image: url(../images/loading-small.png);
+  background-repeat: no-repeat;
+  background-position: right;
+}
+
+.doorHanger {
+  border: 1px solid hsla(0,0%,0%,.5);
+  border-radius: 2px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+.doorHanger:after, .doorHanger:before {
+  bottom: 100%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+.doorHanger:after {
+  border-bottom-color: hsla(0,0%,32%,.99);
+  border-width: 8px;
+}
+.doorHanger:before {
+  border-bottom-color: hsla(0,0%,0%,.5);
+  border-width: 9px;
+}
+
+html[dir='ltr'] .doorHanger:after {
+  left: 13px;
+  margin-left: -8px;
+}
+
+html[dir='ltr'] .doorHanger:before {
+  left: 13px;
+  margin-left: -9px;
+}
+
+html[dir='rtl'] .doorHanger:after {
+  right: 13px;
+  margin-right: -8px;
+}
+
+html[dir='rtl'] .doorHanger:before {
+  right: 13px;
+  margin-right: -9px;
+}
+
+#findMsg {
+  font-style: italic;
+  color: #A6B7D0;
+}
+
+.notFound {
+  background-color: rgb(255, 137, 153);
+}
+
+html[dir='ltr'] #toolbarViewerLeft {
+  margin-left: -1px;
+}
+html[dir='rtl'] #toolbarViewerRight {
+  margin-left: -1px;
+}
+
+
+html[dir='ltr'] #toolbarViewerLeft,
+html[dir='rtl'] #toolbarViewerRight {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+html[dir='ltr'] #toolbarViewerRight,
+html[dir='rtl'] #toolbarViewerLeft {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+html[dir='ltr'] #toolbarViewerLeft > *,
+html[dir='ltr'] #toolbarViewerMiddle > *,
+html[dir='ltr'] #toolbarViewerRight > *,
+html[dir='ltr'] .findbar > * {
+  float: left;
+}
+html[dir='rtl'] #toolbarViewerLeft > *,
+html[dir='rtl'] #toolbarViewerMiddle > *,
+html[dir='rtl'] #toolbarViewerRight > *,
+html[dir='rtl'] .findbar > * {
+  float: right;
+}
+
+html[dir='ltr'] .splitToolbarButton {
+  margin: 3px 2px 4px 0;
+  display: inline-block;
+}
+html[dir='rtl'] .splitToolbarButton {
+  margin: 3px 0 4px 2px;
+  display: inline-block;
+}
+html[dir='ltr'] .splitToolbarButton > .toolbarButton {
+  border-radius: 0;
+  float: left;
+}
+html[dir='rtl'] .splitToolbarButton > .toolbarButton {
+  border-radius: 0;
+  float: right;
+}
+
+.toolbarButton {
+  border: 0 none;
+  background-color: rgba(0, 0, 0, 0);
+  width: 32px;
+  height: 25px;
+}
+
+.toolbarButton > span {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.toolbarButton[disabled] {
+  opacity: .5;
+}
+
+.toolbarButton.group {
+  margin-right: 0;
+}
+
+.splitToolbarButton.toggled .toolbarButton {
+  margin: 0;
+}
+
+.splitToolbarButton:hover > .toolbarButton,
+.splitToolbarButton:focus > .toolbarButton,
+.splitToolbarButton.toggled > .toolbarButton,
+.toolbarButton.textButton {
+  background-color: hsla(0,0%,0%,.12);
+  background-image: -webkit-linear-gradient(hsla(0,0%,100%,.05), hsla(0,0%,100%,0));
+  background-image: -moz-linear-gradient(hsla(0,0%,100%,.05), hsla(0,0%,100%,0));
+  background-image: -ms-linear-gradient(hsla(0,0%,100%,.05), hsla(0,0%,100%,0));
+  background-image: -o-linear-gradient(hsla(0,0%,100%,.05), hsla(0,0%,100%,0));
+  background-image: linear-gradient(hsla(0,0%,100%,.05), hsla(0,0%,100%,0));
+  background-clip: padding-box;
+  border: 1px solid hsla(0,0%,0%,.35);
+  border-color: hsla(0,0%,0%,.32) hsla(0,0%,0%,.38) hsla(0,0%,0%,.42);
+  box-shadow: 0 1px 0 hsla(0,0%,100%,.05) inset,
+              0 0 1px hsla(0,0%,100%,.15) inset,
+              0 1px 0 hsla(0,0%,100%,.05);
+  -webkit-transition-property: background-color, border-color, box-shadow;
+  -webkit-transition-duration: 150ms;
+  -webkit-transition-timing-function: ease;
+  -moz-transition-property: background-color, border-color, box-shadow;
+  -moz-transition-duration: 150ms;
+  -moz-transition-timing-function: ease;
+  -ms-transition-property: background-color, border-color, box-shadow;
+  -ms-transition-duration: 150ms;
+  -ms-transition-timing-function: ease;
+  -o-transition-property: background-color, border-color, box-shadow;
+  -o-transition-duration: 150ms;
+  -o-transition-timing-function: ease;
+  transition-property: background-color, border-color, box-shadow;
+  transition-duration: 150ms;
+  transition-timing-function: ease;
+
+}
+.splitToolbarButton > .toolbarButton:hover,
+.splitToolbarButton > .toolbarButton:focus,
+.dropdownToolbarButton:hover,
+.toolbarButton.textButton:hover,
+.toolbarButton.textButton:focus {
+  background-color: hsla(0,0%,0%,.2);
+  box-shadow: 0 1px 0 hsla(0,0%,100%,.05) inset,
+              0 0 1px hsla(0,0%,100%,.15) inset,
+              0 0 1px hsla(0,0%,0%,.05);
+  z-index: 199;
+}
+html[dir='ltr'] .splitToolbarButton > .toolbarButton:first-child,
+html[dir='rtl'] .splitToolbarButton > .toolbarButton:last-child {
+  position: relative;
+  margin: 0;
+  margin-right: -1px;
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+  border-right-color: transparent;
+}
+html[dir='ltr'] .splitToolbarButton > .toolbarButton:last-child,
+html[dir='rtl'] .splitToolbarButton > .toolbarButton:first-child {
+  position: relative;
+  margin: 0;
+  margin-left: -1px;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+  border-left-color: transparent;
+}
+.splitToolbarButtonSeparator {
+  padding: 8px 0;
+  width: 1px;
+  background-color: hsla(0,0%,00%,.5);
+  z-index: 99;
+  box-shadow: 0 0 0 1px hsla(0,0%,100%,.08);
+  display: inline-block;
+  margin: 5px 0;
+}
+html[dir='ltr'] .splitToolbarButtonSeparator {
+  float: left;
+}
+html[dir='rtl'] .splitToolbarButtonSeparator {
+  float: right;
+}
+.splitToolbarButton:hover > .splitToolbarButtonSeparator,
+.splitToolbarButton.toggled > .splitToolbarButtonSeparator {
+  padding: 12px 0;
+  margin: 1px 0;
+  box-shadow: 0 0 0 1px hsla(0,0%,100%,.03);
+  -webkit-transition-property: padding;
+  -webkit-transition-duration: 10ms;
+  -webkit-transition-timing-function: ease;
+  -moz-transition-property: padding;
+  -moz-transition-duration: 10ms;
+  -moz-transition-timing-function: ease;
+  -ms-transition-property: padding;
+  -ms-transition-duration: 10ms;
+  -ms-transition-timing-function: ease;
+  -o-transition-property: padding;
+  -o-transition-duration: 10ms;
+  -o-transition-timing-function: ease;
+  transition-property: padding;
+  transition-duration: 10ms;
+  transition-timing-function: ease;
+}
+
+.toolbarButton,
+.dropdownToolbarButton {
+  min-width: 16px;
+  padding: 2px 6px 0;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  color: hsl(0,0%,95%);
+  font-size: 12px;
+  line-height: 14px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  /* Opera does not support user-select, use <... unselectable="on"> instead */
+  cursor: default;
+  -webkit-transition-property: background-color, border-color, box-shadow;
+  -webkit-transition-duration: 150ms;
+  -webkit-transition-timing-function: ease;
+  -moz-transition-property: background-color, border-color, box-shadow;
+  -moz-transition-duration: 150ms;
+  -moz-transition-timing-function: ease;
+  -ms-transition-property: background-color, border-color, box-shadow;
+  -ms-transition-duration: 150ms;
+  -ms-transition-timing-function: ease;
+  -o-transition-property: background-color, border-color, box-shadow;
+  -o-transition-duration: 150ms;
+  -o-transition-timing-function: ease;
+  transition-property: background-color, border-color, box-shadow;
+  transition-duration: 150ms;
+  transition-timing-function: ease;
+}
+
+html[dir='ltr'] .toolbarButton,
+html[dir='ltr'] .dropdownToolbarButton {
+  margin: 3px 2px 4px 0;
+}
+html[dir='rtl'] .toolbarButton,
+html[dir='rtl'] .dropdownToolbarButton {
+  margin: 3px 0 4px 2px;
+}
+
+.toolbarButton:hover,
+.toolbarButton:focus,
+.dropdownToolbarButton {
+  background-color: hsla(0,0%,0%,.12);
+  background-image: -webkit-linear-gradient(hsla(0,0%,100%,.05), hsla(0,0%,100%,0));
+  background-image: -moz-linear-gradient(hsla(0,0%,100%,.05), hsla(0,0%,100%,0));
+  background-image: -ms-linear-gradient(hsla(0,0%,100%,.05), hsla(0,0%,100%,0));
+  background-image: -o-linear-gradient(hsla(0,0%,100%,.05), hsla(0,0%,100%,0));
+  background-image: linear-gradient(hsla(0,0%,100%,.05), hsla(0,0%,100%,0));
+  background-clip: padding-box;
+  border: 1px solid hsla(0,0%,0%,.35);
+  border-color: hsla(0,0%,0%,.32) hsla(0,0%,0%,.38) hsla(0,0%,0%,.42);
+  box-shadow: 0 1px 0 hsla(0,0%,100%,.05) inset,
+              0 0 1px hsla(0,0%,100%,.15) inset,
+              0 1px 0 hsla(0,0%,100%,.05);
+}
+
+.toolbarButton:hover:active,
+.dropdownToolbarButton:hover:active {
+  background-color: hsla(0,0%,0%,.2);
+  background-image: -webkit-linear-gradient(hsla(0,0%,100%,.05), hsla(0,0%,100%,0));
+  background-image: -moz-linear-gradient(hsla(0,0%,100%,.05), hsla(0,0%,100%,0));
+  background-image: -ms-linear-gradient(hsla(0,0%,100%,.05), hsla(0,0%,100%,0));
+  background-image: -o-linear-gradient(hsla(0,0%,100%,.05), hsla(0,0%,100%,0));
+  background-image: linear-gradient(hsla(0,0%,100%,.05), hsla(0,0%,100%,0));
+  border-color: hsla(0,0%,0%,.35) hsla(0,0%,0%,.4) hsla(0,0%,0%,.45);
+  box-shadow: 0 1px 1px hsla(0,0%,0%,.1) inset,
+              0 0 1px hsla(0,0%,0%,.2) inset,
+              0 1px 0 hsla(0,0%,100%,.05);
+  -webkit-transition-property: background-color, border-color, box-shadow;
+  -webkit-transition-duration: 10ms;
+  -webkit-transition-timing-function: linear;
+  -moz-transition-property: background-color, border-color, box-shadow;
+  -moz-transition-duration: 10ms;
+  -moz-transition-timing-function: linear;
+  -ms-transition-property: background-color, border-color, box-shadow;
+  -ms-transition-duration: 10ms;
+  -ms-transition-timing-function: linear;
+  -o-transition-property: background-color, border-color, box-shadow;
+  -o-transition-duration: 10ms;
+  -o-transition-timing-function: linear;
+  transition-property: background-color, border-color, box-shadow;
+  transition-duration: 10ms;
+  transition-timing-function: linear;
+}
+
+.toolbarButton.toggled,
+.splitToolbarButton.toggled > .toolbarButton.toggled {
+  background-color: hsla(0,0%,0%,.3);
+  background-image: -webkit-linear-gradient(hsla(0,0%,100%,.05), hsla(0,0%,100%,0));
+  background-image: -moz-linear-gradient(hsla(0,0%,100%,.05), hsla(0,0%,100%,0));
+  background-image: -ms-linear-gradient(hsla(0,0%,100%,.05), hsla(0,0%,100%,0));
+  background-image: -o-linear-gradient(hsla(0,0%,100%,.05), hsla(0,0%,100%,0));
+  background-image: linear-gradient(hsla(0,0%,100%,.05), hsla(0,0%,100%,0));
+  border-color: hsla(0,0%,0%,.4) hsla(0,0%,0%,.45) hsla(0,0%,0%,.5);
+  box-shadow: 0 1px 1px hsla(0,0%,0%,.1) inset,
+              0 0 1px hsla(0,0%,0%,.2) inset,
+              0 1px 0 hsla(0,0%,100%,.05);
+  -webkit-transition-property: background-color, border-color, box-shadow;
+  -webkit-transition-duration: 10ms;
+  -webkit-transition-timing-function: linear;
+  -moz-transition-property: background-color, border-color, box-shadow;
+  -moz-transition-duration: 10ms;
+  -moz-transition-timing-function: linear;
+  -ms-transition-property: background-color, border-color, box-shadow;
+  -ms-transition-duration: 10ms;
+  -ms-transition-timing-function: linear;
+  -o-transition-property: background-color, border-color, box-shadow;
+  -o-transition-duration: 10ms;
+  -o-transition-timing-function: linear;
+  transition-property: background-color, border-color, box-shadow;
+  transition-duration: 10ms;
+  transition-timing-function: linear;
+}
+
+.toolbarButton.toggled:hover:active,
+.splitToolbarButton.toggled > .toolbarButton.toggled:hover:active {
+  background-color: hsla(0,0%,0%,.4);
+  border-color: hsla(0,0%,0%,.4) hsla(0,0%,0%,.5) hsla(0,0%,0%,.55);
+  box-shadow: 0 1px 1px hsla(0,0%,0%,.2) inset,
+              0 0 1px hsla(0,0%,0%,.3) inset,
+              0 1px 0 hsla(0,0%,100%,.05);
+}
+
+.dropdownToolbarButton {
+  width: 120px;
+  max-width: 120px;
+  padding: 3px 2px 2px;
+  overflow: hidden;
+  background: url(../images/toolbarButton-menuArrows.png) no-repeat;
+}
+html[dir='ltr'] .dropdownToolbarButton {
+  background-position: 95%;
+}
+html[dir='rtl'] .dropdownToolbarButton {
+  background-position: 5%;
+}
+
+.dropdownToolbarButton > select {
+  -webkit-appearance: none;
+  -moz-appearance: none; /* in the future this might matter, see bugzilla bug #649849 */
+  min-width: 140px;
+  font-size: 12px;
+  color: hsl(0,0%,95%);
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: rgba(0,0,0,0); /* Opera does not support 'transparent' <select> background */
+}
+
+.dropdownToolbarButton > select > option {
+  background: hsl(0,0%,24%);
+}
+
+#customScaleOption {
+  display: none;
+}
+
+#pageWidthOption {
+  border-bottom: 1px rgba(255, 255, 255, .5) solid;
+}
+
+html[dir='ltr'] .splitToolbarButton:first-child,
+html[dir='ltr'] .toolbarButton:first-child,
+html[dir='rtl'] .splitToolbarButton:last-child,
+html[dir='rtl'] .toolbarButton:last-child {
+  margin-left: 4px;
+}
+html[dir='ltr'] .splitToolbarButton:last-child,
+html[dir='ltr'] .toolbarButton:last-child,
+html[dir='rtl'] .splitToolbarButton:first-child,
+html[dir='rtl'] .toolbarButton:first-child {
+  margin-right: 4px;
+}
+
+.toolbarButtonSpacer {
+  width: 30px;
+  display: inline-block;
+  height: 1px;
+}
+
+.toolbarButtonFlexibleSpacer {
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  min-width: 30px;
+}
+
+.toolbarButton#sidebarToggle::before {
+  display: inline-block;
+  content: url(../images/toolbarButton-sidebarToggle.png);
+}
+
+html[dir='ltr'] #findPrevious {
+  margin-left: 3px;
+}
+html[dir='ltr'] #findNext {
+  margin-right: 3px;
+}
+
+html[dir='rtl'] #findPrevious {
+  margin-right: 3px;
+}
+html[dir='rtl'] #findNext {
+  margin-left: 3px;
+}
+
+html[dir='ltr'] .toolbarButton.findPrevious::before {
+  display: inline-block;
+  content: url(../images/findbarButton-previous.png);
+}
+
+html[dir='rtl'] .toolbarButton.findPrevious::before {
+  display: inline-block;
+  content: url(../images/findbarButton-previous-rtl.png);
+}
+
+html[dir='ltr'] .toolbarButton.findNext::before {
+  display: inline-block;
+  content: url(../images/findbarButton-next.png);
+}
+
+html[dir='rtl'] .toolbarButton.findNext::before {
+  display: inline-block;
+  content: url(../images/findbarButton-next-rtl.png);
+}
+
+html[dir='ltr'] .toolbarButton.pageUp::before {
+  display: inline-block;
+  content: url(../images/toolbarButton-pageUp.png);
+}
+
+html[dir='rtl'] .toolbarButton.pageUp::before {
+  display: inline-block;
+  content: url(../images/toolbarButton-pageUp-rtl.png);
+}
+
+html[dir='ltr'] .toolbarButton.pageDown::before {
+  display: inline-block;
+  content: url(../images/toolbarButton-pageDown.png);
+}
+
+html[dir='rtl'] .toolbarButton.pageDown::before {
+  display: inline-block;
+  content: url(../images/toolbarButton-pageDown-rtl.png);
+}
+
+.toolbarButton.zoomOut::before {
+  display: inline-block;
+  content: url(../images/toolbarButton-zoomOut.png);
+}
+
+.toolbarButton.zoomIn::before {
+  display: inline-block;
+  content: url(../images/toolbarButton-zoomIn.png);
+}
+
+.toolbarButton.fullscreen::before {
+  display: inline-block;
+  content: url(../images/toolbarButton-fullscreen.png);
+}
+
+.toolbarButton.print::before {
+  display: inline-block;
+  content: url(../images/toolbarButton-print.png);
+}
+
+.toolbarButton.openFile::before {
+  display: inline-block;
+  content: url(../images/toolbarButton-openFile.png);
+}
+
+.toolbarButton.download::before {
+  display: inline-block;
+  content: url(../images/toolbarButton-download.png);
+}
+
+.toolbarButton.bookmark {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-top: 3px;
+  padding-top: 4px;
+}
+
+.toolbarButton.bookmark::before {
+  content: url(../images/toolbarButton-bookmark.png);
+}
+
+#viewThumbnail.toolbarButton::before {
+  display: inline-block;
+  content: url(../images/toolbarButton-viewThumbnail.png);
+}
+
+#viewOutline.toolbarButton::before {
+  display: inline-block;
+  content: url(../images/toolbarButton-viewOutline.png);
+}
+
+#viewFind.toolbarButton::before {
+  display: inline-block;
+  content: url(../images/toolbarButton-search.png);
+}
+
+
+.toolbarField {
+  padding: 3px 6px;
+  margin: 4px 0 4px 0;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  background-color: hsla(0,0%,100%,.09);
+  background-image: -moz-linear-gradient(hsla(0,0%,100%,.05), hsla(0,0%,100%,0));
+  background-clip: padding-box;
+  border: 1px solid hsla(0,0%,0%,.35);
+  border-color: hsla(0,0%,0%,.32) hsla(0,0%,0%,.38) hsla(0,0%,0%,.42);
+  box-shadow: 0 1px 0 hsla(0,0%,0%,.05) inset,
+              0 1px 0 hsla(0,0%,100%,.05);
+  color: hsl(0,0%,95%);
+  font-size: 12px;
+  line-height: 14px;
+  outline-style: none;
+  -moz-transition-property: background-color, border-color, box-shadow;
+  -moz-transition-duration: 150ms;
+  -moz-transition-timing-function: ease;
+}
+
+.toolbarField[type=checkbox] {
+  display: inline-block;
+  margin: 8px 0px;
+}
+
+.toolbarField.pageNumber {
+  min-width: 16px;
+  text-align: right;
+  width: 40px;
+}
+
+.toolbarField.pageNumber::-webkit-inner-spin-button,
+.toolbarField.pageNumber::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.toolbarField:hover {
+  background-color: hsla(0,0%,100%,.11);
+  border-color: hsla(0,0%,0%,.4) hsla(0,0%,0%,.43) hsla(0,0%,0%,.45);
+}
+
+.toolbarField:focus {
+  background-color: hsla(0,0%,100%,.15);
+  border-color: hsla(204,100%,65%,.8) hsla(204,100%,65%,.85) hsla(204,100%,65%,.9);
+}
+
+.toolbarLabel {
+  min-width: 16px;
+  padding: 3px 6px 3px 2px;
+  margin: 4px 2px 4px 0;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  color: hsl(0,0%,85%);
+  font-size: 12px;
+  line-height: 14px;
+  text-align: left;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  cursor: default;
+}
+
+#thumbnailView {
+  position: absolute;
+  width: 120px;
+  top: 0;
+  bottom: 0;
+  padding: 10px 40px 0;
+  overflow: auto;
+}
+
+.thumbnail {
+  float: left;
+}
+
+.thumbnail:not([data-loaded]) {
+  border: 1px dashed rgba(255, 255, 255, 0.5);
+  margin-bottom: 10px;
+}
+
+.thumbnailImage {
+  -moz-transition-duration: 150ms;
+  border: 1px solid transparent;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
+  opacity: 0.8;
+  z-index: 99;
+}
+
+.thumbnailSelectionRing {
+  border-radius: 2px;
+  padding: 7px;
+  -moz-transition-duration: 150ms;
+}
+
+a:focus > .thumbnail > .thumbnailSelectionRing > .thumbnailImage,
+.thumbnail:hover > .thumbnailSelectionRing > .thumbnailImage {
+  opacity: .9;
+}
+
+a:focus > .thumbnail > .thumbnailSelectionRing,
+.thumbnail:hover > .thumbnailSelectionRing {
+  background-color: hsla(0,0%,100%,.15);
+  background-image: -moz-linear-gradient(hsla(0,0%,100%,.05), hsla(0,0%,100%,0));
+  background-clip: padding-box;
+  box-shadow: 0 1px 0 hsla(0,0%,100%,.05) inset,
+              0 0 1px hsla(0,0%,100%,.2) inset,
+              0 0 1px hsla(0,0%,0%,.2);
+  color: hsla(0,0%,100%,.9);
+}
+
+.thumbnail.selected > .thumbnailSelectionRing > .thumbnailImage {
+  box-shadow: 0 0 0 1px hsla(0,0%,0%,.5);
+  opacity: 1;
+}
+
+.thumbnail.selected > .thumbnailSelectionRing {
+  background-color: hsla(0,0%,100%,.3);
+  background-image: -moz-linear-gradient(hsla(0,0%,100%,.05), hsla(0,0%,100%,0));
+  background-clip: padding-box;
+  box-shadow: 0 1px 0 hsla(0,0%,100%,.05) inset,
+              0 0 1px hsla(0,0%,100%,.1) inset,
+              0 0 1px hsla(0,0%,0%,.2);
+  color: hsla(0,0%,100%,1);
+}
+
+#outlineView {
+  position: absolute;
+  width: 192px;
+  top: 0;
+  bottom: 0;
+  padding: 4px 4px 0;
+  overflow: auto;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+}
+
+html[dir='ltr'] .outlineItem > .outlineItems {
+  margin-left: 20px;
+}
+
+html[dir='rtl'] .outlineItem > .outlineItems {
+  margin-right: 20px;
+}
+
+.outlineItem > a {
+  text-decoration: none;
+  display: inline-block;
+  min-width: 95%;
+  height: auto;
+  margin-bottom: 1px;
+  border-radius: 2px;
+  color: hsla(0,0%,100%,.8);
+  font-size: 13px;
+  line-height: 15px;
+  -moz-user-select: none;
+  white-space: normal;
+}
+
+html[dir='ltr'] .outlineItem > a {
+  padding: 2px 0 5px 10px;
+}
+
+html[dir='rtl'] .outlineItem > a {
+  padding: 2px 10px 5px 0;
+}
+
+.outlineItem > a:hover {
+  background-color: hsla(0,0%,100%,.02);
+  background-image: -moz-linear-gradient(hsla(0,0%,100%,.05), hsla(0,0%,100%,0));
+  background-clip: padding-box;
+  box-shadow: 0 1px 0 hsla(0,0%,100%,.05) inset,
+              0 0 1px hsla(0,0%,100%,.2) inset,
+              0 0 1px hsla(0,0%,0%,.2);
+  color: hsla(0,0%,100%,.9);
+}
+
+.outlineItem.selected {
+  background-color: hsla(0,0%,100%,.08);
+  background-image: -moz-linear-gradient(hsla(0,0%,100%,.05), hsla(0,0%,100%,0));
+  background-clip: padding-box;
+  box-shadow: 0 1px 0 hsla(0,0%,100%,.05) inset,
+              0 0 1px hsla(0,0%,100%,.1) inset,
+              0 0 1px hsla(0,0%,0%,.2);
+  color: hsla(0,0%,100%,1);
+}
+
+.noOutline,
+.noResults {
+  font-size: 12px;
+  color: hsla(0,0%,100%,.8);
+  font-style: italic;
+  cursor: default;
+}
+
+#findScrollView {
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 10px;
+  width: 280px;
+}
+
+#sidebarControls {
+  position:absolute;
+  width: 180px;
+  height: 32px;
+  left: 15px;
+  bottom: 35px;
+}
+
+canvas {
+  margin: auto;
+  display: block;
+}
+
+.page {
+  direction: ltr;
+  width: 816px;
+  height: 1056px;
+  margin: 1px auto -8px auto;
+  position: relative;
+  overflow: visible;
+  border: 9px solid transparent;
+  background-clip: content-box;
+  border-image: url(../images/shadow.png) 9 9 repeat;
+  background-color: white;
+}
+
+.page > a {
+  display: block;
+  position: absolute;
+}
+
+.page > a:hover {
+  opacity: 0.2;
+  background: #ff0;
+  box-shadow: 0px 2px 10px #ff0;
+}
+
+.loadingIcon {
+  position: absolute;
+  display: block;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: url(../css/images/loading-icon.gif) center no-repeat;
+}
+
+#loadingBox {
+  position: absolute;
+  top: 50%;
+  margin-top: -25px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: #ddd;
+  font-size: 14px;
+}
+
+#loadingBar {
+  display: inline-block;
+  clear: both;
+  margin: 0px;
+  margin-top: 5px;
+  line-height: 0;
+  border-radius: 2px;
+  width: 200px;
+  height: 25px;
+
+  background-color: hsla(0,0%,0%,.3);
+  background-image: -moz-linear-gradient(hsla(0,0%,100%,.05), hsla(0,0%,100%,0));
+  background-image: -webkit-linear-gradient(hsla(0,0%,100%,.05), hsla(0,0%,100%,0));
+  border: 1px solid #000;
+  box-shadow: 0 1px 1px hsla(0,0%,0%,.1) inset,
+              0 0 1px hsla(0,0%,0%,.2) inset,
+              0 0 1px 1px rgba(255, 255, 255, 0.1);
+}
+
+#loadingBar .progress {
+  display: inline-block;
+  float: left;
+
+  background: #666;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#b2b2b2), color-stop(100%,#898989));
+  background: -webkit-linear-gradient(top, #b2b2b2 0%,#898989 100%);
+  background: -moz-linear-gradient(top, #b2b2b2 0%,#898989 100%);
+  background: -ms-linear-gradient(top, #b2b2b2 0%,#898989 100%);
+  background: -o-linear-gradient(top, #b2b2b2 0%,#898989 100%);
+  background: linear-gradient(top, #b2b2b2 0%,#898989 100%);
+
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+
+  width: 0%;
+  height: 100%;
+}
+
+#loadingBar .progress.full {
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+}
+
+#loadingBar .progress.indeterminate {
+  width: 100%;
+  height: 25px;
+  background-image: -moz-linear-gradient( 30deg, #404040, #404040 15%, #898989, #404040 85%, #404040);
+  background-image: -webkit-linear-gradient( 30deg, #404040, #404040 15%, #898989, #404040 85%, #404040);
+  background-image: -ms-linear-gradient( 30deg, #404040, #404040 15%, #898989, #404040 85%, #404040);
+  background-image: -o-linear-gradient( 30deg, #404040, #404040 15%, #898989, #404040 85%, #404040);
+  background-size: 75px 25px;
+  -moz-animation: progressIndeterminate 1s linear infinite;
+  -webkit-animation: progressIndeterminate 1s linear infinite;
+}
+
+@-moz-keyframes progressIndeterminate {
+  from { background-position: 0px 0px; }
+  to { background-position: 75px 0px; }
+}
+
+@-webkit-keyframes progressIndeterminate {
+  from { background-position: 0px 0px; }
+  to { background-position: 75px 0px; }
+}
+
+.textLayer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  color: #000;
+  font-family: sans-serif;
+  overflow: hidden;
+}
+
+.textLayer > div {
+  color: transparent;
+  position: absolute;
+  line-height: 1;
+  white-space: pre;
+  cursor: text;
+}
+
+.textLayer .highlight {
+  margin: -1px;
+  padding: 1px;
+
+  background-color: rgba(180, 0, 170, 0.2);
+  border-radius: 4px;
+}
+
+.textLayer .highlight.begin {
+  border-radius: 4px 0px 0px 4px;
+}
+
+.textLayer .highlight.end {
+  border-radius: 0px 4px 4px 0px;
+}
+
+.textLayer .highlight.middle {
+  border-radius: 0px;
+}
+
+.textLayer .highlight.selected {
+  background-color: rgba(0, 100, 0, 0.2);
+}
+
+/* TODO: file FF bug to support ::-moz-selection:window-inactive
+   so we can override the opaque grey background when the window is inactive;
+   see https://bugzilla.mozilla.org/show_bug.cgi?id=706209 */
+::selection { background:rgba(0,0,255,0.3); }
+::-moz-selection { background:rgba(0,0,255,0.3); }
+
+.annotText > div {
+  z-index: 200;
+  position: absolute;
+  padding: 0.6em;
+  max-width: 20em;
+  background-color: #FFFF99;
+  box-shadow: 0px 2px 10px #333;
+  border-radius: 7px;
+}
+
+.annotText > img {
+  position: absolute;
+  opacity: 0.6;
+}
+
+.annotText > img:hover {
+  cursor: pointer;
+  opacity: 1;
+}
+
+.annotText > div > h1 {
+  font-size: 1.2em;
+  border-bottom: 1px solid #000000;
+  margin: 0px;
+}
+
+#errorWrapper {
+  background: none repeat scroll 0 0 #FF5555;
+  color: white;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 32px;
+  z-index: 1000;
+  padding: 3px;
+  font-size: 0.8em;
+}
+
+#errorMessageLeft {
+  float: left;
+}
+
+#errorMessageRight {
+  float: right;
+}
+
+#errorMoreInfo {
+  background-color: #FFFFFF;
+  color: black;
+  padding: 3px;
+  margin: 3px;
+  width: 98%;
+}
+
+.clearBoth {
+  clear: both;
+}
+
+.fileInput {
+  background: white;
+  color: black;
+  margin-top: 5px;
+}
+
+#PDFBug {
+  background: none repeat scroll 0 0 white;
+  border: 1px solid #666666;
+  position: fixed;
+  top: 32px;
+  right: 0;
+  bottom: 0;
+  font-size: 10px;
+  padding: 0;
+  width: 300px;
+}
+#PDFBug .controls {
+    background:#EEEEEE;
+    border-bottom: 1px solid #666666;
+    padding: 3px;
+}
+#PDFBug .panels {
+  bottom: 0;
+  left: 0;
+  overflow: auto;
+  position: absolute;
+  right: 0;
+  top: 27px;
+}
+#PDFBug button.active {
+  font-weight: bold;
+}
+.debuggerShowText {
+  background: none repeat scroll 0 0 yellow;
+  color: blue;
+  opacity: 0.3;
+}
+.debuggerHideText:hover {
+  background: none repeat scroll 0 0 yellow;
+  opacity: 0.3;
+}
+#PDFBug .stats {
+  font-family: courier;
+  font-size: 10px;
+  white-space: pre;
+}
+#PDFBug .stats .title {
+    font-weight: bold;
+}
+#PDFBug table {
+  font-size: 10px;
+}
+
+#viewer.textLayer-visible .textLayer > div,
+#viewer.textLayer-hover .textLayer > div:hover {
+  background-color: white;
+  color: black;
+}
+
+#viewer.textLayer-shadow .textLayer > div {
+  background-color: rgba(255,255,255, .6);
+  color: black;
+}
+
+@page {
+  margin: 0;
+}
+
+#printContainer {
+  display: none;
+}
+
+@media print {
+  /* Rules for browsers that don't support mozPrintCallback. */
+  #sidebarContainer, .toolbar, #loadingBox, #errorWrapper, .textLayer {
+    display: none;
+  }
+
+  #mainContainer, #viewerContainer, .page, .page canvas {
+    position: static;
+    padding: 0;
+    margin: 0;
+  }
+
+  .page {
+    float: left;
+    display: none;
+    box-shadow: none;
+  }
+
+  .page[data-loaded] {
+    display: block;
+  }
+
+  /* Rules for browsers that support mozPrintCallback */
+  body[data-mozPrintCallback] #outerContainer {
+    display: none;
+  }
+  body[data-mozPrintCallback] #printContainer {
+    display: block;
+  }
+  #printContainer canvas {
+    position: relative;
+    top: 0;
+    left: 0;
+  }
+}
+
+@media all and (max-width: 950px) {
+  html[dir='ltr'] #outerContainer.sidebarMoving .outerCenter,
+  html[dir='ltr'] #outerContainer.sidebarOpen .outerCenter {
+    float: left;
+    left: 180px;
+  }
+  html[dir='rtl'] #outerContainer.sidebarMoving .outerCenter,
+  html[dir='rtl'] #outerContainer.sidebarOpen .outerCenter {
+    float: right;
+    right: 180px;
+  }
+}
+
+@media all and (max-width: 770px) {
+  #sidebarContainer {
+    top: 33px;
+    z-index: 100;
+  }
+  #sidebarContent {
+    top: 32px;
+    background-color: hsla(0,0%,0%,.7);
+  }
+
+  html[dir='ltr'] #outerContainer.sidebarOpen > #mainContainer {
+    left: 0px;
+  }
+  html[dir='rtl'] #outerContainer.sidebarOpen > #mainContainer {
+    right: 0px;
+  }
+
+  html[dir='ltr'] .outerCenter {
+    float: left;
+    left: 180px;
+  }
+  html[dir='rtl'] .outerCenter {
+    float: right;
+    right: 180px;
+  }
+}
+
+@media all and (max-width: 600px) {
+  .hiddenSmallView {
+    display: none;
+  }
+  html[dir='ltr'] .outerCenter {
+    left: 156px;
+  }
+  html[dir='rtr'] .outerCenter {
+    right: 156px;
+  }
+  .toolbarButtonSpacer {
+    width: 0;
+  }
+}
+
+@media all and (max-width: 500px) {
+  #scaleSelectContainer, #pageNumberLabel {
+    display: none;
+  }
+}
+
+

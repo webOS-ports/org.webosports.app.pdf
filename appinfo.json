@@ -1,0 +1,12 @@
+{
+	"title": "PDF.js viewer for webOS",
+	"id": "org.webosports.pdfjs",
+	"version": "1.0.0",
+	"vendor": "WebOS Ports",
+	"vendor_url": "",
+	"type": "web",
+	"main": "index.html",
+	"icon": "icon.png",
+	"uiRevision": "2"
+}
+
