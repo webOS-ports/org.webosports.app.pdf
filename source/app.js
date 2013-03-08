@@ -4,41 +4,6 @@ enyo.kind({
     kind: "FittableRows",
     classes: "enyo-fit dark-scene",
     components: [
-    /*{
-        kind: "onyx.MoreToolbar",
-        style: "text-align: center; padding: 3px 8px 0px 8px;",
-        layoutKind: "FittableColumnsLayout",
-        components: [{
-            kind: "Group",
-            defaultKind: "onyx.IconButton",
-            fit: !0,
-            components: [{
-                src: "assets/menu-icon-search2.png",
-                ontap: "search",
-                active: !0
-            }, {
-                src: ""
-            }, {
-                src: "assets/menu-icon-featured.png",
-                ontap: "featured"
-            }, {
-                src: ""
-            }, {
-                src: "assets/menu-icon-settings2.png",
-                ontap: "settings"
-            }, {
-                src: ""
-            }, {
-                src: "assets/menu-icon-more2.png",
-                ontap: "about"
-            }]
-        }]
-    },*/
-    /*{
-        name: "enyo.Canvas",
-        kind: enyo.Control,
-		tag: "canvas",
-        components: [*/
 {
         tag: "div",
         id: "outerContainer",
