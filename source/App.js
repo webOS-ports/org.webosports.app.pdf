@@ -1,12 +1,6 @@
-//PDFJS.disableFontFace  = true;
-//PDFJS.disableWorker = true;
-//PDFJS.workerSrc = 'pdf.worker.js';
-
 info = {
-	//url: 'http://cdn.mozilla.net/pdfjs/helloworld.pdf',
-	url: 'assets/compressed.tracemonkey-pldi-09.pdf',
-	//url: 'http://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf',
-	//url: 'https://github.com/mozilla/pdf.js/blob/master/examples/text-selection/pdf/TestDocument.pdf?raw=true',
+	//url: 'assets/compressed.tracemonkey-pldi-09.pdf',
+	url: 'assets/helloworld.pdf',
 	page: 1,
 	totalPages: 1,
 	scale: 1.0
@@ -17,12 +11,21 @@ enyo.kind({
 	kind: "FittableRows",
 	components: [
 		{kind: "enyo.Signals", onNumPagesChanged: "numPagesChanged"},
+		{kind: "enyo.Signals", onPageLoadStart: "pageLoadStart"},
+		{kind: "enyo.Signals", onPageLoadEnd: "pageLoadEnd"},
 
-		{kind: "onyx.Toolbar"},
+		{name: "header", kind: "onyx.Toolbar", components:[
+			{ name: "busySpinner", kind: "Image", src: "assets/spinner.gif", showing: false, style: "float: right;"},
+			{name: "fileInput", kind: "enyo.Input", value: "assets/compressed.tracemonkey-pldi-09.pdf"},
+			{ kind: "onyx.Icon", src: "assets/open-external.png", style: "margin-top:-5px;", ontap: "openFile" }
+			/*  WebOS Ports filePicker is not quite ready yet  */
+			//{name: "filePicker", kind: "enyo.FilePicker", fileType:["pdf"], onPickFile: "fileSelected"}
+			
+		]},
 		{name: "CanvasContainer", fit: true, components: [
 			{kind: "enyo.Scroller", touch: true, style: "width: 100%; height: 100%;", components: [
-				{kind: "enyo.Canvas", components: [
-					{kind: "PDFViewer"}
+				{name: "canvas", kind: "enyo.Canvas", ontap: "zoomIn", components: [
+					{name: "pdfViewer", kind: "PDFViewer"}
 				]}
 			]}
 		]},
@@ -42,7 +45,14 @@ enyo.kind({
 				{name: "PageNumber", content: info.page},
 				{content: "of"},
 				{name: "TotalPages", content: info.totalPages}
-			]}
+			]},
+			{name: "ZoomButtons",
+			defaultKind: "onyx.Button",
+			style: "margin: 0; float: left;",
+			components: [
+				{name: "ZoomOutButton", content: "-", ontap: "zoomOut"},
+				{name: "ZoomInNextPageButton", content: "+", ontap: "zoomIn"}
+			]},
 		]}
 	],
 
@@ -51,6 +61,24 @@ enyo.kind({
 
 		this.$.canvas.attributes.width = window.innerWidth;
 		this.$.canvas.attributes.height = window.innerHeight;
+	},
+
+	openFile: function(inSender, inEvent){
+		var v = this.$.fileInput.getValue();
+		enyo.log("Opening file: " + v);
+		if(v) {
+
+			if(info.pdf) {
+				enyo.log("Cleaning up existing PDF Doc");
+				info.pdf.cleanup();
+				info.pdf.destroy();
+			}
+
+			info.url = 	v;
+			enyo.Signals.send('onPageLoadStart', {});
+			PDFJS.getDocument(info.url).then(this.getPdf, this.getDocumentError);
+		}
+		
 	},
 
 	pageChanged: function(inSender, inEvent) {
@@ -64,6 +92,14 @@ enyo.kind({
 		this.$.TotalPages.setContent(inEvent.numPages);
 		this.pageChanged(this, {page: info.page});
 		this.$.canvas.update();
+	},
+
+	pageLoadStart: function(inSender, inEvent){
+		this.$.busySpinner.show();
+	},
+
+	pageLoadEnd: function(inSender, inEvent){
+		this.$.busySpinner.hide();
 	},
 
 	prevPage: function() {
@@ -80,7 +116,44 @@ enyo.kind({
 			this.pageChanged(this, {page: info.page});
 			this.$.canvas.update();
 		}
+	},
+
+	zoomOut: function() {
+		if(info.scale > 0.25) {
+			info.scale -= 0.25;
+			this.$.canvas.update();
+		}
+	},
+
+	zoomIn: function() {
+		if(info.scale < 5) {
+			info.scale += 0.25;
+			this.$.canvas.update();
+		}
+	},
+
+	getPdf: function(pdf) {
+		info.numPages = pdf.pdfInfo.numPages;
+		info.pdf = pdf;
+		enyo.log(JSON.stringify(pdf.getMetadata()));
+		enyo.Signals.send('onNumPagesChanged', {numPages: info.numPages});
+	},
+
+
+	getDocumentError: function(message, exception) {
+		var loadingErrorMessage = 'An error occurred while loading the PDF.';
+
+        if (exception && exception.name === 'InvalidPDFException') {
+          var loadingErrorMessage = 'Invalid or corrupted PDF file.';
+        }
+
+        if (exception && exception.name === 'MissingPDFException') {
+          var loadingErrorMessage = 'Missing PDF file.';
+        }
+
+        enyo.log("Error Loading PDF: " + loadingErrorMessage);
 	}
+
 });
 
 enyo.kind({
@@ -89,19 +162,18 @@ enyo.kind({
 	
 	create: function() {
 		this.inherited(arguments);
-		PDFJS.getDocument(info.url).then(this.getPdf);
 	},
 
 	render: function(){
 		this.inherited(arguments);
-		//enyo.log("render="  + JSON.stringify(info));
 		this.renderPage();
 
 	},
 
 	renderPage: function(){
 		if(info.pdf){
-			info.pdf.getPage(info.page).then(function getPageHelloWorld(page) {
+			enyo.Signals.send('onPageLoadStart', {});
+			info.pdf.getPage(info.page).then(function drawPage(page) {
 
 				var scale = info.scale;
 				var viewport = page.getViewport(scale);
@@ -110,17 +182,16 @@ enyo.kind({
 				var context = canvas.getContext('2d');
 				canvas.height = viewport.height;
 				canvas.width = viewport.width;
-
-				page.render({canvasContext: context, viewport: viewport});
+				
+				page.render({canvasContext: context, viewport: viewport}).then(function renderComplete(){
+					enyo.Signals.send('onPageLoadEnd', {});
+				});
+				
 			});
 		}
-	},
-
-	getPdf: function(pdf) {
-		enyo.log("Loading PDF file: "  + JSON.stringify(info));
-
-		info.numPages = pdf.pdfInfo.numPages;
-		info.pdf = pdf;
-		enyo.Signals.send('onNumPagesChanged', {numPages: info.numPages});
 	}
+
+	
 });
+
+
