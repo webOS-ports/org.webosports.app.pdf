@@ -1,3 +1,14 @@
 .onyx-toolbar {
 	height: 54px;
 }
+
+
+.item {
+	border-top: 1px solid silver;
+	padding: 5px 5px;
+}
+
+.item > * {
+	display: inline-block;
+	vertical-align: middle;
+}

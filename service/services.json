@@ -1,0 +1,15 @@
+{
+"id": "org.webosports.app.pdf.service",
+"description": "PDF Viewer Service",
+"engine":"node",
+"activityTimeout" : 300,
+"services": [{
+	"name": "org.webosports.app.pdf.service",
+	"description": "PDF File Scanner",
+	"commands": [{
+	    "name" : "find",
+	    "assistant" : "PDFFileScannerService",
+	    "public" : true
+	    }]
+	 }]
+}
