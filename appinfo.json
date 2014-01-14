@@ -6,7 +6,7 @@
 	"vendor_url": "",
 	"type": "web",
 	"main": "index.html",
-	"icon": "icon-128x128.png",
+	"icon": "icon.png",
 	"uiRevision": "2"
 }
 

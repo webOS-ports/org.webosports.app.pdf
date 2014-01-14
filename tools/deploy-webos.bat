@@ -20,5 +20,4 @@ SET BIN=%TOOLS%\..\bin
 mkdir %BIN%
 
 copy appinfo.json deploy\org.webosports.app.pdf
-copy icon-128x128.png deploy\org.webosports.app.pdf
 call palm-package deploy\org.webosports.app.pdf service package -o %BIN%

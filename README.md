@@ -26,3 +26,7 @@ This App uses Mozilla [pdf.js](https://github.com/mozilla/pdf.js) library to ren
 
 - Legacy WebOS does not support loading custom fonts. So it will fallback to default font. This means if your PDF uses some special font that does not translate well into the default font you will get garbage.
  	
+### TODO
+
+- Make the Services work on Ports Emulator
+- Make the Busy Spinner hide after loading page on Ports Emulator

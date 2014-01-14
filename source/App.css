@@ -12,3 +12,12 @@
 	display: inline-block;
 	vertical-align: middle;
 }
+
+.popup {
+	width: 300px;
+}
+
+.popup > * {
+	display: block;
+	margin: 10px 10px;
+}

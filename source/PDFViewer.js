@@ -24,8 +24,7 @@ enyo.kind({
 			{kind: "onyx.PickerDecorator", style: "float: right; margin-top: 0px;", components: [
 				{style: "min-width: 40px;"},
 				{kind: "onyx.IntegerPicker", min: 1, max: 1, value: 1, onSelect: "pageSelected"}
-			]},
-			{ name: "busySpinner", kind: "Image", src: "assets/spinner.gif", showing: false, style: "float: right;"},
+			]}
 		]},
 		{name: "CanvasContainer", fit: true, components: [
 			{kind: "enyo.Scroller", touch: true, style: "width: 100%; height: 100%;", gesturechange: "zoomChanged", gestureend: "zoomChanged", components: [
@@ -52,15 +51,8 @@ enyo.kind({
 				{name: "ZoomInNextPageButton", content: "+", ontap: "zoomIn"}
 			]},
 		]},
-		{name:"filePicker", kind: "enyo.ModalDialog", style: "width: 300px; height: 100px;", autoDismiss: true, components: [
-			{kind: "onyx.Groupbox", components: [
-				/*  WebOS Ports filePicker kind is not quite ready yet  */
-				//{name: "filePicker", kind: "enyo.FilePicker", fileType:["pdf"], onPickFile: "fileSelected"}
-				{kind: "onyx.InputDecorator", components:[
-					{name: "fileInput", kind: "enyo.Input", value: "assets/sample.pdf", onchange: "openFile"},
-					{ kind: "onyx.Button", content: "Open", ontap: "openFile"}	
-				]}
-			]}
+		{name: "busyPopup", kind: "onyx.Popup", centered: true, floating: true, scrim: true, components: [
+			{kind: "onyx.Spinner"},
 		]}
 	],
 
@@ -73,10 +65,8 @@ enyo.kind({
 
 		this.$.canvas.attributes.width = window.innerWidth;
 		this.$.canvas.attributes.height = window.innerHeight;
-	},
 
-	showFilePicker: function(inSender, inEvent){
-		this.$.filePicker.openAtCenter();
+		this.$.title.applyStyle("width", (window.innerWidth - 160) + "px");
 	},
 
 	goBack: function(inSender, inEvent){
@@ -121,11 +111,11 @@ enyo.kind({
 	},
 
 	pageLoadStart: function(inSender, inEvent){
-		this.$.busySpinner.show();
+		this.$.busyPopup.show();
 	},
 
 	pageLoadEnd: function(inSender, inEvent){
-		this.$.busySpinner.hide();
+		this.$.busyPopup.hide();
 	},
 
 	prevPage: function() {
@@ -210,6 +200,7 @@ enyo.kind({
         }
 
         enyo.log("Error Loading PDF: " + loadingErrorMessage);
+        enyo.Signals.send('onError', "Error Loading PDF: " + loadingErrorMessage);
 	}
 	
 });
