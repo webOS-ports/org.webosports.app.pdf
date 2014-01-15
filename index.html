@@ -12,11 +12,23 @@
 		<link href="build/enyo.css" rel="stylesheet"/>
 		<link href="build/app.css" rel="stylesheet"/>
 		<!-- js -->
+
+		<script type="text/javascript" src="lib/pdf.js/compatibility.js"></script>
+		<script type="text/javascript" src="lib/pdf.js/pdf.js"></script>
+
+		<script type="text/javascript">
+		    // Specify the main script used to create a new PDF.JS web worker.
+		    // In production, leave this undefined or change it to point to the
+		    // combined `pdf.worker.js` file.
+		    PDFJS.workerSrc = 'lib/pdf.js/pdf.worker.js';
+		</script>
 		<script src="build/enyo.js"></script>
 		<script src="build/app.js"></script>
 	</head>
+	<body class="enyo-unselectable">
 	<script>
 		new App().renderInto(document.body);
-		PalmSystem.stageReady();
+		PalmSystem.stageReady();	
 	</script>
+	</body>
 </html>
