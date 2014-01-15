@@ -2,8 +2,10 @@ enyo.depends(
 	"$lib/layout",	
 	"$lib/onyx",	
 	"$lib/canvas",	
-	"$lib/pdf.js/",
-	"$lib/webos-lib",	
+	"$lib/webos-lib",
+	"PDFPage.js",
+	"PDFViewer.js",
+	"PDFScanner.js",
 	"App.js",
 	"App.css"
 	);
