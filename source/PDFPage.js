@@ -15,7 +15,7 @@ enyo.kind({
 	renderPage: function(){
 		if(info.pdf){
 			enyo.Signals.send('onPageLoadStart', {});
-			//enyo.log("renderPage: " + info.page);
+			enyo.log("renderPage: " + info.page);
 			info.pdf.getPage(info.page).then(function drawPage(page) {
 
 				var scale = info.scale;
@@ -26,7 +26,7 @@ enyo.kind({
 				canvas.height = viewport.height;
 				canvas.width = viewport.width;
 				
-				page.render({canvasContext: context, viewport: viewport}).then(function renderComplete(){
+				page.render({canvasContext: context, viewport: viewport}).promise.then(function renderComplete(){
 					enyo.Signals.send('onPageLoadEnd', {});
 				});
 				

@@ -28,7 +28,10 @@ function findPDFFiles(dir, future){
 	    		var f = ff[i];
 	    		var d = path.dirname(f);
 	    		var n = path.basename(f);
-	    		fileList.push({d: d, n: n});
+	    		if(d && n) {
+	    			fileList.push({d: d, n: n});	
+	    		}
+	    		
 	    	}
 
 	    	future.result = {code: code, files: fileList};	

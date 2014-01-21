@@ -13,7 +13,7 @@ A PDF Viewer App for WebOS.
 
 ### Updating PDF Lib
 
-This App uses Mozilla [pdf.js](https://github.com/mozilla/pdf.js) library to render the PDF document. You can update it to the latest version using following steps (testted with pdf.js version 0.8.797)
+This App uses Mozilla [pdf.js](https://github.com/mozilla/pdf.js) library to render the PDF document. You can update it to the latest version using following steps (testted with pdf.js version 0.8.894)
 
     $ git clone git://github.com/mozilla/pdf.js.git pdfjs
     $ cd pdfjs

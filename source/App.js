@@ -8,7 +8,7 @@ enyo.kind({
 		{kind: "enyo.Signals", onError: "showError"},
 		{ 	kind: "Panels",  
 			fit: true,
-			draggable: true, 
+			draggable: false, 
 			classes: "panels enyo-border-box", 
 			//arrangerKind: "enyo.CardSlideInArranger", 
 			components: [
