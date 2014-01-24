@@ -1,0 +1,12 @@
+{
+  "id": "org.webosports.app.pdf",
+  "package_format_version": 2,
+  "loc_name": "WebOS Ports PDF Viewer",
+  "version": "1.0.2",
+  "icon": "icon-128x128.png",
+  "miniicon": "icon.png",
+  "vendor": "WebOS Ports",
+  "vendorurl": "",
+  "app": "org.webosports.app.pdf.app",
+  "services": ["org.webosports.app.pdf.service"]
+}
