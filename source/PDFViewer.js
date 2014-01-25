@@ -3,7 +3,9 @@ info = {
 	url: 'assets/helloworld.pdf',
 	page: 1,
 	totalPages: 1,
-	scale: 1.0
+	scale: null,
+	defaultScale: null
+
 };
 
 enyo.kind({
@@ -31,17 +33,22 @@ enyo.kind({
 					//ongesturestart: "zoomChanged",
 					ongesturechange: "zoomChanged",
 					//ongestureend: "zoomChanged",
+					ontap: "onTapped",
 					components: [
 					{name: "pdfPage", kind: "PDFPage"}
 				]}
 			]}
 		]},
-		{kind: "onyx.Toolbar", style: "height: 54px;", components: [
+		{name: "footer", kind: "onyx.Toolbar", style: "height: 54px;", components: [
 			{kind: "onyx.Grabber", ontap: "goBack"},
 			//{name: "PageButtons", defaultKind: "onyx.Button", style: "margin: 0; float: right;", components: [
 			//	{name: "PrevPageButton", content: "<", ontap: "prevPage"},
 			//	{name: "NextPageButton", content: ">", ontap: "nextPage"}
 			//]},
+			{name: "ZoomButtons", defaultKind: "onyx.Button", style: "margin-left: 30;", components: [
+				{name: "ZoomOutButton", content: "-", ontap: "zoomOut"},
+				{name: "ZoomInNextPageButton", content: "+", ontap: "zoomIn"}
+			]},
 			{name: "PageCounter",
 			defaultKind: enyo.kind({style: "display: inline-block; margin-right: 4px;"}),
 			style: "float: right;",
@@ -49,11 +56,7 @@ enyo.kind({
 				{name: "PageNumber", content: info.page},
 				{content: "/"},
 				{name: "TotalPages", content: info.totalPages}
-			]},
-			//{name: "ZoomButtons", defaultKind: "onyx.Button", style: "margin: 0; float: left;", components: [
-			//	{name: "ZoomOutButton", content: "-", ontap: "zoomOut"},
-			//	{name: "ZoomInNextPageButton", content: "+", ontap: "zoomIn"}
-			//]},
+			]}
 		]},
 		{name: "busyPopup", kind: "onyx.Popup", centered: true, floating: true, scrim: true, components: [
 			{kind: "onyx.Spinner"},
@@ -62,6 +65,9 @@ enyo.kind({
 
 	create: function() {
 		this.inherited(arguments);
+		if(enyo.platform.touch) {
+			this.$.ZoomButtons.hide();
+		}
 	},
 	
 	reflow: function() {
@@ -90,7 +96,8 @@ enyo.kind({
 
 			this.$.title.setContent(inEvent.name);
 
-			info.scale = 1.0;
+			info.scale = null;
+			info.defaultScale = null;
 			info.page = 1;
 			info.url = 	v;
 			enyo.Signals.send('onPageLoadStart', {});
@@ -101,7 +108,7 @@ enyo.kind({
 
 	pageChanged: function(inSender, inEvent) {
 		// reset the zooming when page changes.
-		info.scale = 1.0;
+		info.scale = null;
 		this.$.integerPicker.setValue(info.page);
 		this.$.PageNumber.setContent(info.page);
 	},
@@ -119,6 +126,8 @@ enyo.kind({
 	},
 
 	pageLoadEnd: function(inSender, inEvent){
+		this.$.scroller.stabilize();
+		this.$.scroller.scrollToTop();
 		this.$.busyPopup.hide();
 	},
 
@@ -142,6 +151,21 @@ enyo.kind({
 		info.page = inEvent.content;
 		this.pageChanged(this, {page: info.page});
 		this.$.canvas.update();
+	},
+
+	onTapped: function(inSender, inEvent){
+		
+		if(!this.$.header.getShowing()){
+			enyo.log("Showing Header");
+			this.$.header.show();
+			this.$.footer.show();
+			this.reflow();
+		} else{
+			enyo.log("Hidding Header");
+			this.$.header.hide();
+			this.$.footer.hide();
+			this.reflow();	
+		}
 	},
 
 	zoomOut: function() {
@@ -209,18 +233,23 @@ enyo.kind({
 
 
 	scrollStart: function(inSender, inEvent) {
-		enyo.log("scrollStart");
+		//enyo.log("scrollStart");
+		this.overScrollCount  = 0;
 		this.checkForOverScroll = true;
+		//this.scrollStartPos = -1*this.$.scroller.getScrollTop();
+
 	},
 
 	scrollStop: function(inSender, inEvent) {
-		enyo.log("scrollStop");
+		//enyo.log("scrollStop");
 		this.checkForOverScroll = false;
 	},
 
 	scroll: function(inSender, inEvent) {
+
 		if(this.checkForOverScroll){
-			enyo.job("checkOverScroll", enyo.bind(this, "checkOverScroll"), 20);	
+			// throttle the events
+			enyo.job("checkOverScroll", enyo.bind(this, "checkOverScroll"), 25);	
 		}
 		
 	},
@@ -228,15 +257,24 @@ enyo.kind({
 	checkOverScroll: function(inSender, inEvent) {
 		var s = this.$.scroller.getStrategy().$.scrollMath
 		var over = -1*this.$.scroller.getScrollTop();
-		//enyo.log("Overscroll: " + over);
+
 		if (s.isInOverScroll()) {
-			//enyo.log("Overscroll");
-			if(over > 0){
-				this.prevPage()	;
+
+			//enyo.log("Overscroll: " + over);
+			//enyo.log("overScrollCount: " + this.overScrollCount);
+
+			// Add a bit of resistance before triggering page navigation to prevent accidental navigation
+			if(this.overScrollCount > 15) {
+				if(over > 0){
+					this.prevPage()	;
+				} else {
+					this.nextPage();
+				}
+				this.checkForOverScroll = false;
+				this.overScrollCount = 0;
 			} else {
-				this.nextPage();
+				this.overScrollCount = this.overScrollCount + 1;
 			}
-			this.checkForOverScroll = false;
 		}
 		
 	}
