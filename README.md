@@ -8,12 +8,19 @@ A PDF Viewer App for WebOS.
 - Clone the git repository
 - cd org.webosports.app.pdf
 - tools\deploy-webos.bat
-- palm-install bin\org.webosports.app.pdf_1.0.1_all.ipk
+- palm-install bin\*.ipk
+
+
+### Installing on Ports Emulator
+
+tools\ports-install.bat bin\*.ipk
+ssh localhost:5522
+source /usr/palm/services/org.webosports.app.pdf.service/install_service.sh
 
 
 ### Updating PDF Lib
 
-This App uses Mozilla [pdf.js](https://github.com/mozilla/pdf.js) library to render the PDF document. You can update it to the latest version using following steps (testted with pdf.js version 0.8.797)
+This App uses Mozilla [pdf.js](https://github.com/mozilla/pdf.js) library to render the PDF document. You can update it to the latest version using following steps (testted with pdf.js version 0.8.894)
 
     $ git clone git://github.com/mozilla/pdf.js.git pdfjs
     $ cd pdfjs
@@ -28,5 +35,6 @@ This App uses Mozilla [pdf.js](https://github.com/mozilla/pdf.js) library to ren
  	
 ### TODO
 
-- Make the Services work on Ports Emulator
 - Make the Busy Spinner hide after loading page on Ports Emulator
+- Look at https://github.com/jviereck/node-pdfreader to see if we can move the rendering part to a Node.js service
+
