@@ -1,6 +1,6 @@
 {
 	"title": "PDF Viewer",
-	"id": "org.webosports.app.pdf.app",
+	"id": "org.webosports.app.pdf",
 	"version": "1.0.1",
 	"vendor": "WebOS Ports",
 	"vendor_url": "",

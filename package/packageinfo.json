@@ -7,6 +7,6 @@
   "miniicon": "icon.png",
   "vendor": "WebOS Ports",
   "vendorurl": "",
-  "app": "org.webosports.app.pdf.app",
+  "app": "org.webosports.app.pdf",
   "services": ["org.webosports.app.pdf.service"]
 }
