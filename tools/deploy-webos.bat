@@ -20,4 +20,5 @@ SET BIN=%TOOLS%\..\bin
 mkdir %BIN%
 
 copy appinfo.json deploy\org.webosports.app.pdf
-call palm-package deploy\org.webosports.app.pdf service package -o %BIN%
+@REM call palm-package deploy\org.webosports.app.pdf service package -o %BIN%
+call palm-package deploy\org.webosports.app.pdf -o %BIN%
