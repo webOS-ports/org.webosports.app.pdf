@@ -14,9 +14,6 @@ A PDF Viewer App for WebOS.
 ### Installing on Ports Emulator
 
 tools\ports-install.bat bin\*.ipk
-ssh localhost:5522
-source /usr/palm/services/org.webosports.app.pdf.service/install_service.sh
-
 
 ### Updating PDF Lib
 
