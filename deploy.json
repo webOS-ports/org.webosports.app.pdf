@@ -1,0 +1,18 @@
+{
+  "enyo": "./enyo",
+  "packagejs": "./package.js",
+  "assets": [
+    "./icon.png",
+    "./index.html",
+    "./assets",
+    "./appinfo.json"
+  ],
+  "libs": [
+    "./lib/canvas",
+	"./lib/onyx",
+    "./lib/layout",
+    "./lib/more-arrangers",
+    "./lib/pdf.js",
+    "./lib/webos-lib"
+  ]
+}
