@@ -4,6 +4,7 @@ info = {
 	page: 1,
 	totalPages: 1,
 	scale: null,
+	rotation: 0,
 	defaultScale: null
 
 };
@@ -48,6 +49,10 @@ enyo.kind({
 			{name: "ZoomButtons", defaultKind: "onyx.Button", style: "margin-left: 30;", components: [
 				{name: "ZoomOutButton", content: "-", ontap: "zoomOut"},
 				{name: "ZoomInNextPageButton", content: "+", ontap: "zoomIn"}
+			]},
+			{name: "RotateButtons", defaultKind: "onyx.Button", style: "margin-left: 30;", components: [
+				{name: "RotateCounterclockwiseButton", content: "↶", ontap: "rotateCounterclockwise"},
+				{name: "RotateClockwiseButton", content: "↷", ontap: "rotateClockwise"}
 			]},
 			{name: "PageCounter",
 			defaultKind: enyo.kind({style: "display: inline-block; margin-right: 4px;"}),
@@ -191,6 +196,16 @@ enyo.kind({
 		}
        return true;
 		
+	},
+
+	rotateCounterclockwise: function() {
+		info.rotation = (info.rotation - 90) % 360;
+		this.$.canvas.update();
+	},
+
+	rotateClockwise: function() {
+		info.rotation = (info.rotation + 90) % 360;
+		this.$.canvas.update();
 	},
 
 	updateCanvas: function(inSender, inEvent) {
