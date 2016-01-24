@@ -85,8 +85,8 @@ enyo.kind({
 
 			this.fileScanComplete({},	
 				{data: {
-						code: 0, 
-						files: []
+						returnValue: true,
+						results: [ { name: "helloworld.pdf", path: "assets/helloworld.pdf", size: 678, modifiedtime: 1388620800, d: "Description of Hello World file", n: "Merchant?" } ]
 						}
 				}
 			);	
