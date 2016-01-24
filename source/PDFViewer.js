@@ -42,13 +42,9 @@ enyo.kind({
 		]},
 		{name: "footer", kind: "onyx.Toolbar", style: "height: 54px;", components: [
 			{kind: "onyx.Grabber", ontap: "goBack"},
-			//{name: "PageButtons", defaultKind: "onyx.Button", style: "margin: 0; float: right;", components: [
-			//	{name: "PrevPageButton", content: "<", ontap: "prevPage"},
-			//	{name: "NextPageButton", content: ">", ontap: "nextPage"}
-			//]},
 			{name: "ZoomButtons", defaultKind: "onyx.Button", style: "margin-left: 30;", components: [
 				{name: "ZoomOutButton", content: "-", ontap: "zoomOut"},
-				{name: "ZoomInNextPageButton", content: "+", ontap: "zoomIn"}
+				{name: "ZoomInButton", content: "+", ontap: "zoomIn"}
 			]},
 			{name: "RotateButtons", defaultKind: "onyx.Button", style: "margin-left: 30;", components: [
 				{name: "RotateCounterclockwiseButton", content: "↶", ontap: "rotateCounterclockwise"},
@@ -58,9 +54,11 @@ enyo.kind({
 			defaultKind: enyo.kind({style: "display: inline-block; margin-right: 4px;"}),
 			style: "float: right;",
 			components: [
+				{name: "PrevPageButton", content: "◂", ontap: "prevPage", style: "margin-right: 0.5em;"},
 				{name: "PageNumber", content: info.page},
 				{content: "/"},
-				{name: "TotalPages", content: info.totalPages}
+				{name: "TotalPages", content: info.totalPages},
+				{name: "NextPageButton", content: "▸", ontap: "nextPage", style: "margin-left: 0.5em;"}
 			]}
 		]},
 		{name: "busyPopup", kind: "onyx.Popup", centered: true, floating: true, scrim: true, components: [
@@ -116,6 +114,18 @@ enyo.kind({
 		info.scale = null;
 		this.$.integerPicker.setValue(info.page);
 		this.$.PageNumber.setContent(info.page);
+		if(info.page <= 1) {
+			this.$.PrevPageButton.applyStyle("visibility", "hidden");
+		}
+		else {
+			this.$.PrevPageButton.applyStyle("visibility", "visible");
+		}
+		if(info.page >= info.totalPages) {
+			this.$.NextPageButton.applyStyle("visibility", "hidden");
+		}
+		else {
+			this.$.NextPageButton.applyStyle("visibility", "visible");
+		}
 	},
 
 	numPagesChanged: function(inSender, inEvent) {
