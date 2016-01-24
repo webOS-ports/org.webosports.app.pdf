@@ -35,7 +35,7 @@ enyo.kind({
 				}
 
 				
-				var viewport = page.getViewport(info.scale);
+				var viewport = page.getViewport(info.scale, info.rotation);
 
 				//enyo.log("viewport: (" + viewport.height + "," + viewport.width + ")");
 				
