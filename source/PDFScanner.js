@@ -85,8 +85,11 @@ enyo.kind({
 
 			this.fileScanComplete({},	
 				{data: {
-						code: 0, 
-						files: []
+						returnValue: true,
+						results: [
+								{ name: "helloworld.pdf", path: "assets/helloworld.pdf", size: 678, modifiedtime: 1388620800, d: "Description of Hello World file", n: "Merchant?" },
+								{ name: "compressed.tracemonkey-pldi-09.pdf", path: "assets/compressed.tracemonkey-pldi-09.pdf", size: 1016315, modifiedtime: 1362700800, d: "Description of Tracemonkey file", n: "Merchant?" }
+							]
 						}
 				}
 			);	
