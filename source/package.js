@@ -4,7 +4,7 @@ enyo.depends(
 	"$lib/canvas",	
 	"$lib/webos-lib",
 	"PDFPage.js",
-	"PDFViewer.js",
+	"PDFAppViewer.js",
 	"PDFScanner.js",
 	"App.js",
 	"App.css"

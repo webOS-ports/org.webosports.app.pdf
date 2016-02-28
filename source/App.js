@@ -13,7 +13,7 @@ enyo.kind({
 			//arrangerKind: "enyo.CardSlideInArranger", 
 			components: [
 				{kind: "PDFScanner"},
-				{kind: "PDFViewer", name: "pdfViewer"}
+				{kind: "PDFAppViewer", name: "pdfViewer"}
 		]},
 		{name: "errorDialog", kind: "onyx.Popup", modal: true, centered: true, classes: "popup", autoDismiss: false, components: [
 			{ name: "errorDescription", classes: "errorDialogDescription", content: ""},
