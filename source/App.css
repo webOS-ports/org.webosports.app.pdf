@@ -21,3 +21,8 @@
 	display: block;
 	margin: 10px 10px;
 }
+
+.textLayer {
+	display: none;
+}
+
