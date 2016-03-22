@@ -37,15 +37,11 @@ enyo.kind({
 			{ id: "mainContainer", components: [
 				{name: "CanvasContainer", id: "viewerContainer", fit: true, components: [
 					{name: "thumbnailView", id: "thumbnailView", style: "display: none;" },
-					{name: "scroller", kind: "enyo.Scroller", touch: true, /*style: "width: 100%; height: 100%;",*/ onScrollStart: "scrollStart", onScrollStop: "scrollStop", onScroll: "scroll", components: [
-						{name: "canvas", id: "viewer", //kind: "enyo.Canvas", 
-							//ongesturestart: "zoomChanged",
+					{name: "scroller", kind: "enyo.Scroller", touch: true, onScroll: "scroll", components: [
+						{name: "canvas", id: "viewer",
 							ongesturechange: "zoomChanged",
-							//ongestureend: "zoomChanged",
-							ontap: "onTapped",
-							/*components: [
-							{name: "pdfPage", id: "viewer", kind: "enyo.Control"}
-						]*/}
+							ontap: "onTapped"
+						}
 					]}
 				]}
 			]},
@@ -147,6 +143,25 @@ enyo.kind({
 		if(enyo.platform.touch) {
 			this.$.ZoomButtons.hide();
 		}
+		
+		// Patch getVisibleElements to work with our scrollers.
+		this.pseudoScrollElement = {
+				scrollLeft: 0,
+				scrollTop: 0,
+				actualScrollDataSource() {
+						return document.getElementById("viewer").parentNode.parentNode;
+					},
+				get clientWidth() {
+						return this.actualScrollDataSource().clientWidth;
+					},
+				get clientHeight() {
+						return this.actualScrollDataSource().clientHeight;
+					}
+			};
+		var oldGetVisibleElements = window.getVisibleElements;
+		window.getVisibleElements = function(pseudoScrollElement) { return function(scrollEl, views, sortByVisibility) {
+				return oldGetVisibleElements(pseudoScrollElement, views, sortByVisibility);
+			}; }(this.pseudoScrollElement);
 	},
 	
 	reflow: function() {
@@ -213,7 +228,7 @@ enyo.kind({
 		}
 		
 		// Hide the PDF.js pages which should not be visible.
-		var canvas = document.getElementById("viewer");
+		/*var canvas = document.getElementById("viewer");
 		for(var c = 0; c < canvas.children.length; ++c) {
 			if(canvas.children[c].hasAttribute("id") && canvas.children[c].id.substring(0, 13) == "pageContainer") {
 				if(canvas.children[c].id == "pageContainer" + info.page) {
@@ -224,8 +239,9 @@ enyo.kind({
 				}
 				canvas.children[c].style.marginBottom = canvas.parentNode.clientHeight - canvas.children[c].clientHeight;
 			}
-		}
-		PDFViewerApplication.forceRendering();
+		}*/
+		PDFViewerApplication.page = info.page;
+		//PDFViewerApplication.forceRendering();
 	},
 
 	numPagesChanged: function(inSender, inEvent) {
@@ -240,8 +256,8 @@ enyo.kind({
 	},
 
 	pageLoadEnd: function(inSender, inEvent){
-		this.$.scroller.stabilize();
-		this.$.scroller.scrollToTop();
+		//this.$.scroller.stabilize();
+		//this.$.scroller.scrollToTop();
 		this.$.busyPopup.hide();
 		this.pageChanged(this, {page: info.page});
 	},
@@ -350,54 +366,11 @@ enyo.kind({
         enyo.Signals.send('onError', "Error Loading PDF: " + loadingErrorMessage);
 	},
 
-
-	scrollStart: function(inSender, inEvent) {
-		//enyo.log("scrollStart");
-		this.overScrollCount  = 0;
-		this.checkForOverScroll = true;
-		//this.scrollStartPos = -1*this.$.scroller.getScrollTop();
-
-	},
-
-	scrollStop: function(inSender, inEvent) {
-		//enyo.log("scrollStop");
-		this.checkForOverScroll = false;
-	},
-
 	scroll: function(inSender, inEvent) {
-
-		if(this.checkForOverScroll){
-			// throttle the events
-			enyo.job("checkOverScroll", enyo.bind(this, "checkOverScroll"), 25);	
-		}
-		
+		this.pseudoScrollElement.scrollTop = inEvent.scrollBounds.top;
+		this.pseudoScrollElement.scrollLeft = inEvent.scrollBounds.left;
 	},
 
-	checkOverScroll: function(inSender, inEvent) {
-		var s = this.$.scroller.getStrategy().$.scrollMath
-		var over = -1*this.$.scroller.getScrollTop();
-
-		if (s.isInOverScroll()) {
-
-			//enyo.log("Overscroll: " + over);
-			//enyo.log("overScrollCount: " + this.overScrollCount);
-
-			// Add a bit of resistance before triggering page navigation to prevent accidental navigation
-			if(this.overScrollCount > 15) {
-				if(over > 0){
-					this.prevPage()	;
-				} else {
-					this.nextPage();
-				}
-				this.checkForOverScroll = false;
-				this.overScrollCount = 0;
-			} else {
-				this.overScrollCount = this.overScrollCount + 1;
-			}
-		}
-		
-	},
-	
 	searchOpen: function(inSender, inEvent) {
 	}
 	
