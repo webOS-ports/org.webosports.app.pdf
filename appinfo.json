@@ -8,6 +8,6 @@
 	"main": "index.html",
 	"icon": "icon.png",
 	"uiRevision": "2",
-	"requiredPermissions": ["services", "database.internal"]
+	"requiredPermissions": ["database.operation", "database.management", "mediapermissions-service.operation", "tempdatabase.operation"]
 }
 
