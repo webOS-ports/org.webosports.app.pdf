@@ -424,8 +424,6 @@ Page {
             title: page.displayTitle
             icon: appWindow.appIcon
             compact: appWindow.compact
-            showBack: true
-            onBackClicked: appWindow.pageStack.pop()
 
             actionComponent: Row {
                 spacing: Units.gu(0.5)

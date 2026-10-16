@@ -191,8 +191,8 @@ Features
 - **Links:** to a page (with "Back to page …" to return), and to the web
   (asked first, then opened by the browser).
 - The back gesture closes what is open first (the selection, the contents,
-  find), then goes back to the library. The header's Back does the same for
-  devices without a gesture area.
+  find), then goes back to the library; there is no Back key in the
+  header.
 
 ### And
 

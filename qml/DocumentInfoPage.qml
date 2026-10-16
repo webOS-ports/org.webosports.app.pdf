@@ -72,8 +72,6 @@ Page {
         title: "Document Info"
         icon: appWindow.appIcon
         compact: appWindow.compact
-        showBack: true
-        onBackClicked: appWindow.pageStack.pop()
     }
 
     Flickable {

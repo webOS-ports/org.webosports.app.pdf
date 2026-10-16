@@ -159,6 +159,9 @@ TestCase {
         var bar = findChild(v, "commandBar");
         verify(bar.y < v.height, "the bars show at first");
         shot("viewer");
+        // Going back is the back gesture's: no Back key in the header, and
+        // so room for the app's icon on a phone too.
+        verify(!findChild(v, "viewerHeader").showBack, "no Back key");
 
         // A tap on the page (not a link) hides the bars; another brings them back.
         var view = findChild(v, "documentView");
