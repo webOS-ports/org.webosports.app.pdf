@@ -13,8 +13,9 @@ add_library(pdfviewer-qml MODULE
 # So the plugin can be found next to its qmldir when running from the build tree.
 file(COPY qmldir DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
-# A missing library shows when linking, not when the app loads the plugin.
-target_link_options(pdfviewer-qml PRIVATE -Wl,--no-undefined)
+# A missing library shows when linking, not when the app loads the plugin;
+# and only what it calls is linked (not GL, which Qt Quick brings along).
+target_link_options(pdfviewer-qml PRIVATE -Wl,--no-undefined -Wl,--as-needed)
 target_link_libraries(pdfviewer-qml PRIVATE Qt6::Gui Qt6::Qml Qt6::Quick Qt6::Concurrent PkgConfig::POPPLER)
 
 install(TARGETS pdfviewer-qml DESTINATION ${PLUGIN_DIR})

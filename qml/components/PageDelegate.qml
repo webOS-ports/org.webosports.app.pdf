@@ -35,7 +35,7 @@ Item {
 
     property int page: 0
     property string documentId
-    property int rotation: 0
+    property int pageRotation: 0
     property bool night: false
     property real devicePixelRatio: 1
     // The most pixels the whole page is drawn with (see Geometry.renderWidth).
@@ -50,14 +50,16 @@ Item {
     readonly property int renderWidth: Geometry.renderWidth(width * devicePixelRatio, height * devicePixelRatio,
                                                             pixelBudget)
     readonly property bool reduced: renderWidth < Math.floor(width * devicePixelRatio)
-    readonly property bool drawn: base.status === Image.Ready
+    readonly property bool drawn: base.status === Image.Ready || preview.status === Image.Ready
+    // Drawn whole once: the quick preview is not wanted again.
+    property bool everDrawn: false
 
     signal tapped(real x, real y)
     signal doubleTapped(real x, real y)
     signal held(real x, real y)
 
     function pageUrl(widthPx, crop) {
-        return "image://pdfpage/" + documentId + "/" + page + "/" + widthPx + "/" + rotation + "/"
+        return "image://pdfpage/" + documentId + "/" + page + "/" + widthPx + "/" + pageRotation + "/"
                 + (night ? 1 : 0) + (crop ? "/" + crop : "");
     }
 
@@ -81,7 +83,7 @@ Item {
 
     // A new size or turn: the detail no longer fits.
     onWidthChanged: showDetail(null)
-    onRotationChanged: showDetail(null)
+    onPageRotationChanged: showDetail(null)
     onNightChanged: showDetail(null)
 
     Rectangle {
@@ -99,6 +101,20 @@ Item {
         font.pixelSize: Math.max(FontUtils.sizeToPixels("medium"), Math.min(pageItem.width, pageItem.height) / 8)
     }
 
+    // A quarter as wide, and so drawn many times sooner on a slow device:
+    // something to read while the page itself is drawn.
+    Image {
+        id: preview
+        objectName: "pagePreview"
+        anchors.fill: parent
+        asynchronous: true
+        cache: false
+        smooth: true
+        visible: base.status !== Image.Ready
+        source: !pageItem.everDrawn && pageItem.documentId !== "" && pageItem.renderWidth > 128
+                ? pageItem.pageUrl(Math.ceil(pageItem.renderWidth / 4 / 32) * 32) : ""
+    }
+
     Image {
         id: base
         objectName: "pageImage"
@@ -110,6 +126,7 @@ Item {
         source: pageItem.documentId !== "" && pageItem.renderWidth > 0 ? pageItem.pageUrl(pageItem.renderWidth) : ""
         // While a sharper one renders after a zoom, the old one stretched.
         retainWhileLoading: true
+        onStatusChanged: if (status === Image.Ready) pageItem.everDrawn = true
     }
 
     Image {
@@ -128,7 +145,7 @@ Item {
     Repeater {
         model: pageItem.matches
         delegate: Rectangle {
-            readonly property var r: Geometry.mapRect(modelData, pageItem.rotation)
+            readonly property var r: Geometry.mapRect(modelData, pageItem.pageRotation)
             x: r.x * pageItem.width - 1
             y: r.y * pageItem.height - 1
             width: r.width * pageItem.width + 2

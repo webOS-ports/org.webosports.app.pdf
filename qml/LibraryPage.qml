@@ -218,6 +218,7 @@ Page {
                         progress: model.progress
                         index: model.index
                         count: list.count
+                        showThumbnail: page.StackView.status === StackView.Active
 
                         onClicked: appWindow.openDocument(model.path)
                         onHeld: {

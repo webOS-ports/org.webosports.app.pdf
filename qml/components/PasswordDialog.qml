@@ -15,17 +15,16 @@
  */
 
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Layouts
-import QtQuick.Controls.LuneOS 2.0
 
 import LunaNext.Common 0.1
-import LuneOS.Forms 1.0
+import LuneOS.Components 1.0
 
 /*
- * The password of a protected document. Kept nowhere: asked each time.
+ * The password of a protected document, in the platform's dialog (as
+ * PromptDialog: a line to type in, then the dark key and Cancel). Kept
+ * nowhere: asked each time.
  */
-Dialog {
+KeyboardClearDialog {
     id: dialog
 
     property string fileName
@@ -33,42 +32,58 @@ Dialog {
     property bool wrong: false
 
     signal passwordEntered(string password)
+    signal rejected()
 
-    parent: Overlay.overlay
-    anchors.centerIn: parent
-    width: Math.min(parent ? parent.width - Units.gu(4) : Units.gu(45), Units.gu(45))
-    modal: true
-    focus: true
-    closePolicy: Popup.CloseOnEscape
+    function accept() {
+        close();
+        passwordEntered(field.text);
+    }
+
+    function reject() {
+        close();
+        rejected();
+    }
+
     title: "Password"
-    standardButtons: Dialog.Open | Dialog.Cancel
+    message: wrong ? "That password is not right. Try again."
+                   : "“" + fileName + "” is protected by a password."
+    dialogWidth: Units.gu(30)
+    dialogHeight: Units.gu(27)
 
     onAboutToShow: {
         field.text = "";
-        field.forceActiveFocus();
+        Qt.callLater(function() { if (field.children.length > 0) field.children[0].forceActiveFocus(); });
     }
 
-    onAccepted: passwordEntered(field.text)
-
-    ColumnLayout {
-        anchors.fill: parent
-        spacing: Units.gu(1)
-
-        Label {
-            Layout.fillWidth: true
-            wrapMode: Text.WordWrap
-            text: dialog.wrong ? "That password is not right. Try again."
-                               : "“" + dialog.fileName + "” is protected by a password."
-            color: dialog.wrong ? Colors.error : Colors.text
-        }
-
-        TextField {
+    // DialogLineInput sits 2 units above the middle of its row: a row this
+    // tall keeps it clear of the message.
+    Row {
+        height: Units.gu(5)
+        DialogLineInput {
             id: field
             objectName: "passwordField"
-            Layout.fillWidth: true
             echoMode: TextInput.Password
-            inputMethodHints: Qt.ImhSensitiveData | Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase
             onAccepted: dialog.accept()
+        }
+    }
+    Row {
+        DialogButton {
+            objectName: "passwordOpenButton"
+            text: "Open"
+            color: "#171717"
+            fontcolor: "white"
+            buttonWidth: Units.gu(26)
+            onClicked: dialog.accept()
+        }
+    }
+    Row {
+        DialogButton {
+            objectName: "passwordCancelButton"
+            text: "Cancel"
+            color: "transparent"
+            fontcolor: "#444444"
+            buttonWidth: Units.gu(26)
+            onClicked: dialog.reject()
         }
     }
 }

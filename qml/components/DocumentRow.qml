@@ -37,6 +37,13 @@ ItemDelegate {
     property real progress: -1
     property int index: 0
     property int count: 0
+    // False while the library is not on screen (a document opened from
+    // another app is read over it): its pictures wait, and do not take the
+    // CPU from the page being drawn.
+    property bool showThumbnail: true
+    property bool _thumbnailWanted: false
+    onShowThumbnailChanged: if (showThumbnail) _thumbnailWanted = true
+    Component.onCompleted: if (showThumbnail) _thumbnailWanted = true
 
     signal held()
 
@@ -78,7 +85,7 @@ ItemDelegate {
                 asynchronous: true
                 fillMode: Image.PreserveAspectFit
                 sourceSize: Qt.size(Math.ceil(Units.gu(6.5) * 2), Math.ceil(Units.gu(6.5) * 2))
-                source: row.path !== "" ? "image://pdfthumb/" + encodeURIComponent(row.path) : ""
+                source: row.path !== "" && row._thumbnailWanted ? "image://pdfthumb/" + encodeURIComponent(row.path) : ""
             }
         }
 

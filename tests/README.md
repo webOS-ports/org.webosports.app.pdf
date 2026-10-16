@@ -125,3 +125,30 @@ GCC 15 (the build's 15.3 cross compilers for armv7 and aarch64, the host's
 15.2 for x86-64) and Clang 21 for armv7, aarch64 and x86-64, with `-Wall
 -Wextra -Wpedantic -Wshadow -Wnon-virtual-dtor -Wold-style-cast -Wcast-align
 -Wformat=2`: no warnings, in the app's code or in Qt's and poppler's headers.
+
+## On a device
+
+    tools/install.sh <device build dir> <adb serial> <sysroot>
+    WAIT=<seconds> tools/device-test.sh <adb serial> <name> <cross gcc> <sysroot> [cpu flags]
+
+`install.sh` installs through com.webos.appInstallService, leaving system
+packages alone. Until the image has poppler's Qt 6 library, the sysroot's
+`libpoppler-qt6.so.3` and `libpoppler.so.155` go next to the plugin, which
+is then linked with `-Wl,--disable-new-dtags -Wl,-rpath,'$ORIGIN'`.
+
+`device-test.sh` builds `tools/touch.c` (static) to put fingers on the
+screen - multi-touch protocol A or B, whichever the touch screen has - and
+takes the app through the library, a document opened as Files opens one
+(`applicationManager/open` with a `file:` target), full screen, double tap,
+a flick, the contents, Go to Page and a password, with a screenshot of
+each in `build/test-output/device/<name>/`. The test documents are removed
+and the app's settings put back after.
+
+Passed on the mindphone (armv7, 480x800, WAIT=5) and the HP TouchPad
+(armv7, 1024x768, WAIT=9), 2026-10-16. Pinch was checked there too: two
+injected fingers reach the app only a few times per gesture, but each pinch
+that arrived zoomed and kept its zoom; how smooth it feels needs a real
+hand. Also seen there: `luna://com.palm.applicationManager/open` answers
+`returnValue: false` although it opens the document, because
+luna-appmanager hands the launch to SAM and returns no process id
+(`Src/remote/ApplicationProcessManager.cpp`, `launch()`).

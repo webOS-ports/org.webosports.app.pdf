@@ -40,7 +40,7 @@ Item {
 
     property PdfDocument document
     property DocumentSearch search
-    property int rotation: 0
+    property int pageRotation: 0
     property bool night: false
     property string fitMode: "width"
     property real customZoom: 1
@@ -76,7 +76,7 @@ Item {
             return 1;
         if (fitMode === "page")
             return document && document.status === PdfDocument.Ready
-                    ? Geometry.pageFitZoom(document.pageSize(page), rotation, fitWidth, fitHeight) : 1;
+                    ? Geometry.pageFitZoom(document.pageSize(page), pageRotation, fitWidth, fitHeight) : 1;
         return Geometry.clampZoom(customZoom);
     }
 
@@ -148,9 +148,9 @@ Item {
         if (!document || page < 0 || page >= document.pageCount)
             return;
         var fy = 0;
-        if (top !== undefined && top >= 0 && rotation % 360 === 0)
+        if (top !== undefined && top >= 0 && pageRotation % 360 === 0)
             fy = top;
-        else if (top !== undefined && top >= 0 && rotation === 180)
+        else if (top !== undefined && top >= 0 && pageRotation === 180)
             fy = 1 - top;
         restoreAnchor({ page: page, fx: 0.5, fy: fy, vx: list.width / 2, vy: topInset + margin });
     }
@@ -160,7 +160,7 @@ Item {
     function showMatch(match) {
         if (!match || match.page === undefined)
             return;
-        var r = Geometry.mapRect(match, rotation);
+        var r = Geometry.mapRect(match, pageRotation);
         var item = list.itemAtIndex(match.page);
         if (item) {
             var left = item.x + r.x * item.width - list.contentX;
@@ -223,7 +223,7 @@ Item {
     // on screen stays.
     onFitWidthChanged: Qt.callLater(_refit)
     onFitHeightChanged: if (fitMode === "page") Qt.callLater(_refit)
-    onRotationChanged: Qt.callLater(_refit)
+    onPageRotationChanged: Qt.callLater(_refit)
     function _refit() {
         if (!document || document.status !== PdfDocument.Ready)
             return;
@@ -273,7 +273,7 @@ Item {
             id: delegateItem
             objectName: "pageDelegate"
 
-            readonly property var shown: Geometry.shownSize(root.document.pageSize(index), root.rotation)
+            readonly property var shown: Geometry.shownSize(root.document.pageSize(index), root.pageRotation)
 
             x: (list.contentWidth - width) / 2
             width: Math.round(root.fitWidth * root.zoomOf(index))
@@ -281,7 +281,7 @@ Item {
             page: index
             label: root.document.pageLabel(index)
             documentId: root.document.documentId
-            rotation: root.rotation
+            pageRotation: root.pageRotation
             night: root.night
             devicePixelRatio: Screen.devicePixelRatio
             matches: root.search && root.search.revision >= 0 && root.search.count > 0
@@ -290,7 +290,7 @@ Item {
             selection: root.selectionPage === index ? root.selection : null
 
             onTapped: function(x, y) {
-                var stored = Geometry.unmapPoint(x, y, root.rotation);
+                var stored = Geometry.unmapPoint(x, y, root.pageRotation);
                 var link = Geometry.linkAt(root.document.links(index), stored.x, stored.y);
                 if (link) {
                     root.linkActivated(link, index);

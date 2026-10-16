@@ -173,7 +173,7 @@ TestCase {
         var dialog = findChild(v, "goToDialog");
         mouseClick(findChild(v, "pageButton"));
         tryVerify(function() { return dialog.opened; }, 2000);
-        var field = findChild(dialog.contentItem, "pageField");
+        var field = findChild(dialog, "pageField");
         field.text = "5";
         compare(dialog.chosen, 6);
         shot("goto");
@@ -277,7 +277,7 @@ TestCase {
         var view = findChild(v, "documentView");
         var widthAtFit = view.flickable.itemAtIndex(0).width;
         v.rotate(90);
-        compare(view.rotation, 90);
+        compare(view.pageRotation, 90);
         tryVerify(function() { var i = view.flickable.itemAtIndex(view.currentPage);
                                return i && Math.abs(i.width - widthAtFit) < 2 && i.height < i.width; },
                   3000, "on its side, still fitting the width");
@@ -288,7 +288,7 @@ TestCase {
         shot("turned-night");
         app.prefs.nightMode = false;
         v.rotate(-90);
-        compare(view.rotation, 0);
+        compare(view.pageRotation, 0);
 
         // Ctrl+wheel and double tap zoom about the point.
         mouseClick(findChild(v, "fitButton"));
@@ -312,7 +312,7 @@ TestCase {
         tryVerify(function() { return v.document.status === PdfDocument.Locked; }, 5000);
         var dialog = findChild(v, "passwordDialog");
         tryVerify(function() { return dialog.opened; }, 2000);
-        var field = findChild(dialog.contentItem, "passwordField");
+        var field = findChild(dialog, "passwordField");
         field.text = "wrong";
         dialog.accept();
         tryVerify(function() { return v.document.status === PdfDocument.Locked && dialog.opened; }, 5000);
@@ -350,6 +350,30 @@ TestCase {
         tryVerify(function() { return v.document.status === PdfDocument.Ready && v.document.pageCount === 12; },
                   5000);
         compare(app.pageStack.depth, 2);
+
+        // The library under the reader draws no pictures until it is shown.
+        var library = app.pageStack.get(0);
+        var list = findChild(library, "documentList");
+        // The four documents, and the two just read under Recent.
+        tryVerify(function() { return list.count === 6; }, 5000);
+        for (var i = 0; i < list.count; ++i)
+            compare(String(findChild(list.itemAtIndex(i), "thumbnail").source), "", "no picture yet, row " + i);
+        keyClick(Qt.Key_Escape);
+        tryCompare(app.pageStack, "depth", 1, 2000);
+        tryVerify(function() {
+            return String(findChild(list.itemAtIndex(0), "thumbnail").source) !== "";
+        }, 3000, "pictures once the library shows");
+    }
+
+    // The quick preview of a page goes once the page is drawn.
+    function test_preview_dropped() {
+        startApp("tp");
+        var v = openGuide();
+        var view = findChild(v, "documentView");
+        var item = view.flickable.itemAtIndex(0);
+        tryVerify(function() { return findChild(item, "pageImage").status === Image.Ready; }, 5000);
+        compare(String(findChild(item, "pagePreview").source), "");
+        verify(item.everDrawn);
     }
 
     function test_resume_where_left(data) {

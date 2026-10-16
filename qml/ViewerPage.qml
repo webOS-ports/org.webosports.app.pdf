@@ -20,6 +20,7 @@ import QtQuick.Layouts
 import QtQuick.Controls.LuneOS 2.0
 
 import LunaNext.Common 0.1
+import LuneOS.Components 1.0 as LC
 import LuneOS.Forms 1.0
 
 import PdfViewerApp 1.0
@@ -102,13 +103,13 @@ Page {
             pageCount: pdf.pageCount,
             fitMode: view.fitMode,
             zoom: view.customZoom,
-            rotation: view.rotation
+            rotation: view.pageRotation
         });
     }
 
     function restoreReading() {
         var state = appWindow.reading.stateFor(pdf.path);
-        view.rotation = state && state.rotation ? Geometry.normalRotation(state.rotation) : 0;
+        view.pageRotation = state && state.rotation ? Geometry.normalRotation(state.rotation) : 0;
         view.customZoom = state && state.zoom > 0 ? state.zoom : 1;
         view.fitMode = state && state.fitMode ? state.fitMode : appWindow.prefs.defaultFit;
         Qt.callLater(function() {
@@ -174,7 +175,7 @@ Page {
     }
 
     function rotate(by) {
-        view.rotation = Geometry.normalRotation(view.rotation + by);
+        view.pageRotation = Geometry.normalRotation(view.pageRotation + by);
         saveTimer.restart();
     }
 
@@ -201,11 +202,11 @@ Page {
             toast.show("This document does not allow copying");
             return;
         }
-        var stored = Geometry.unmapPoint(x, y, view.rotation);
+        var stored = Geometry.unmapPoint(x, y, view.pageRotation);
         var word = pdf.wordAt(index, stored.x, stored.y);
         var shown;
         if (word.width !== undefined) {
-            shown = Geometry.mapRect(word, view.rotation);
+            shown = Geometry.mapRect(word, view.pageRotation);
         } else {
             shown = { x: Math.max(0, x - 0.15), y: Math.max(0, y - 0.02), width: 0.3, height: 0.04 };
         }
@@ -225,7 +226,7 @@ Page {
         if (!view.selection)
             return "";
         var s = view.selection;
-        var r = Geometry.unmapRect(s.x, s.y, s.x + s.width, s.y + s.height, view.rotation);
+        var r = Geometry.unmapRect(s.x, s.y, s.x + s.width, s.y + s.height, view.pageRotation);
         return pdf.text(view.selectionPage, r.x, r.y, r.width, r.height);
     }
 
@@ -610,24 +611,22 @@ Page {
         onRejected: if (pdf.status === PdfDocument.Locked) appWindow.pageStack.pop()
     }
 
-    Dialog {
+    // A web link leaves the app: asked first, in the platform's dialog.
+    LC.ConfirmDialog {
         id: linkDialog
         objectName: "linkDialog"
         property string uri
-        anchors.centerIn: parent
-        width: Math.min(parent.width - Units.gu(4), Units.gu(45))
-        modal: true
+        readonly property bool opened: visible
+        function open() { visible = true; }
+        function reject() { visible = false; }
+        visible: false
         title: "Open Link?"
-        standardButtons: Dialog.Open | Dialog.Cancel
-        Label {
-            width: parent.width
-            text: linkDialog.uri
-            wrapMode: Text.WrapAnywhere
-            maximumLineCount: 4
-            elide: Text.ElideRight
-            color: Colors.text
+        message: uri
+        onAccepted: {
+            visible = false;
+            appWindow.openUrl(uri);
         }
-        onAccepted: appWindow.openUrl(uri)
+        onRejected: visible = false
     }
 
     // A word or two that goes by itself.

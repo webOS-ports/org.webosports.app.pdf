@@ -15,7 +15,15 @@ page at a time on the GUI thread, and was not registered for PDF files.
 Screenshots
 -----------
 
-From the QML tests on the build host (`tests/run-qml-tests.sh`, luneos-components'
+**On devices** (`tools/device-test.sh`): a mindphone (480x800) with a document
+opened from Files and the password dialog over the keyboard, and the
+TouchPad's contents.
+
+| Reading | Password | TouchPad, contents |
+|---|---|---|
+| ![](docs/screenshots/device-mindphone-reading.png) | ![](docs/screenshots/device-mindphone-password.png) | ![](docs/screenshots/device-touchpad-contents.png) |
+
+The rest are from the QML tests on the build host (`tests/run-qml-tests.sh`, luneos-components'
 desktop stand-ins, so the fonts are the host's rather than Prelude).
 
 **Phone, 480x800** (mindphone): the library, a page, find, the contents.
@@ -61,7 +69,7 @@ Features
   Full Screen Mode), another brings them back; scrolling hides them too.
   While they are away, a bubble says which page.
 - **Command menu:** contents, page before, which page (tap: **Go to Page**,
-  by number or by the document's own labels, "xii", with a slider), page
+  by number or by the document's own labels, "xii", or with a slider), page
   after, fit width / fit page. **App menu** (and the header's "…"): Go to
   Page, Find, Rotate Clockwise / Counterclockwise, Night Mode, Send by
   Email, Document Info.
@@ -74,6 +82,8 @@ Features
 - **Copy:** touch and hold a word; drag the handles over more; Copy. Not in
   a document that forbids it.
 - **Passwords:** asked for, and asked again when wrong. Kept nowhere.
+- **Dialogs** (password, Go to Page, opening a web link) are LuneOS.Components'
+  own, kept above the on-screen keyboard.
 - **Where the reader was** - page, how far down it, zoom, turn - is kept per
   document and restored on opening it again.
 - **Night mode:** the pages inverted, light on dark.
@@ -114,7 +124,8 @@ Tests
 See [tests/README.md](tests/README.md): unit tests for the C++ (gtest),
 QML tests for the helpers and for the app on four screens (1024x768,
 720x1280, 480x800, 720x720), static analysis, sanitizers, valgrind and the
-six builds (GCC and Clang for armv7, aarch64 and x86-64).
+six builds (GCC and Clang for armv7, aarch64 and x86-64), and the run on
+a mindphone and an HP TouchPad.
 
 License
 -------
