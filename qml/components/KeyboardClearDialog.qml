@@ -45,8 +45,32 @@ Dialog {
         visible = true;
     }
 
+    // Closed, the keyboard goes too: the field it was typing in is hidden
+    // but would keep the focus, and the keyboard with it.
+    signal closed()
+
     function close() {
         visible = false;
+        Qt.inputMethod.hide();
+        closed();
+    }
+
+    // What a DialogLineInput holds, with what the keyboard has not committed
+    // yet put in at the cursor: in T9 the last letter waits there, and a tap
+    // on the dialog's key would otherwise leave it out ("secre" for
+    // "secret").
+    function typedText(lineInput) {
+        var input = lineInput && lineInput.children.length > 0 ? lineInput.children[0] : null;
+        if (!input || input.preeditText === undefined)
+            return lineInput ? lineInput.text : "";
+        var text = input.text;
+        var at = Math.max(0, Math.min(text.length, input.cursorPosition));
+        return text.substring(0, at) + input.preeditText + text.substring(at);
+    }
+
+    // The line's own TextInput, for what DialogLineInput does not pass on.
+    function inputOf(lineInput) {
+        return lineInput && lineInput.children.length > 0 ? lineInput.children[0] : null;
     }
 
     visible: false

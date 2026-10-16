@@ -94,7 +94,7 @@ Item {
         var item = list.itemAtIndex(index);
         if (!item)
             return { page: index, fx: 0.5, fy: 0, vx: vx, vy: vy };
-        return { page: index, fx: (cx - item.x) / item.width, fy: (cy - item.y) / item.height, vx: vx, vy: vy };
+        return { page: index, fx: (cx - item.shownX) / item.width, fy: (cy - item.y) / item.height, vx: vx, vy: vy };
     }
 
     // Brings that point of that page back under (vx, vy).
@@ -104,7 +104,7 @@ Item {
         var item = list.itemAtIndex(a.page);
         if (!item)
             return;
-        list.contentX = clampX(item.x + a.fx * item.width - a.vx);
+        list.contentX = clampX(item.shownX + a.fx * item.width - a.vx);
         list.contentY = clampY(item.y + a.fy * item.height - a.vy);
         rememberTop();
         updateDetail();
@@ -163,7 +163,7 @@ Item {
         var r = Geometry.mapRect(match, pageRotation);
         var item = list.itemAtIndex(match.page);
         if (item) {
-            var left = item.x + r.x * item.width - list.contentX;
+            var left = item.shownX + r.x * item.width - list.contentX;
             var top = item.y + r.y * item.height - list.contentY;
             var right = left + r.width * item.width;
             var bottom = top + r.height * item.height;
@@ -212,7 +212,7 @@ Item {
                     item.showDetail(null);
                     continue;
                 }
-                var part = Geometry.visiblePart(item.x, item.y, item.width, item.height,
+                var part = Geometry.visiblePart(item.shownX, item.y, item.width, item.height,
                                                 list.contentX, list.contentY, list.width, list.height);
                 item.showDetail(part);
             }
@@ -275,7 +275,10 @@ Item {
 
             readonly property var shown: Geometry.shownSize(root.document.pageSize(index), root.pageRotation)
 
-            x: (list.contentWidth - width) / 2
+            // The view puts a vertical list's items at x 0 whatever they
+            // say; centred by moving the drawing instead (shownX is where
+            // the page is, for the arithmetic).
+            xShift: (list.contentWidth - width) / 2
             width: Math.round(root.fitWidth * root.zoomOf(index))
             height: shown.width > 0 ? Math.round(width * shown.height / shown.width) : width
             page: index
@@ -303,7 +306,7 @@ Item {
             }
             onDoubleTapped: function(x, y) {
                 singleTap.stop();
-                var vx = x * delegateItem.width + delegateItem.x - list.contentX;
+                var vx = x * delegateItem.width + delegateItem.shownX - list.contentX;
                 var vy = y * delegateItem.height + delegateItem.y - list.contentY;
                 if (root.zoom < 2.4)
                     root.zoomTo(2.5, vx, vy);

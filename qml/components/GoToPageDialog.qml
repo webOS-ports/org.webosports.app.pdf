@@ -34,11 +34,14 @@ KeyboardClearDialog {
     property PdfDocument document
     property int currentPage: 0
     readonly property int pageCount: document ? document.pageCount : 0
-    readonly property int chosen: document ? document.pageForLabel(field.text) : -1
+    // What is typed, an uncommitted T9 letter included.
+    property string typed: ""
+    readonly property int chosen: document ? document.pageForLabel(typed) : -1
 
     signal pageChosen(int page)
 
     function accept() {
+        typed = typedText(field);
         if (chosen < 0)
             return;
         close();
@@ -51,19 +54,25 @@ KeyboardClearDialog {
 
     title: "Go to Page (1 – " + pageCount + ")"
     // Only to say what is wrong: the line to type in sits just under it.
-    message: field.text.trim() !== "" && chosen < 0 ? "There is no page “" + field.text.trim() + "”." : ""
+    message: typed.trim() !== "" && chosen < 0 ? "There is no page “" + typed.trim() + "”." : ""
     dialogWidth: Units.gu(30)
     dialogHeight: Units.gu(31)
 
     onAboutToShow: {
         slider.value = currentPage + 1;
         field.text = document ? document.pageLabel(currentPage) : "";
-        Qt.callLater(function() {
-            if (field.children.length > 0) {
-                field.children[0].forceActiveFocus();
-                field.children[0].selectAll();
-            }
-        });
+        var input = inputOf(field);
+        if (input) {
+            // Numbers only, unless the document has labels of its own ("xii"):
+            // on a phone keypad T9 would make letters of the digits.
+            input.inputMethodHints = document && document.hasPageLabels
+                    ? Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase | Qt.ImhPreferLowercase
+                    : Qt.ImhDigitsOnly;
+            Qt.callLater(function() {
+                input.forceActiveFocus();
+                input.selectAll();
+            });
+        }
     }
 
     // DialogLineInput sits 2 units above the middle of its row: a row this
@@ -74,7 +83,11 @@ KeyboardClearDialog {
             id: field
             objectName: "pageField"
             onAccepted: dialog.accept()
-            onTextChanged: if (dialog.chosen >= 0) slider.value = dialog.chosen + 1
+            onTextChanged: {
+                dialog.typed = text;
+                if (dialog.chosen >= 0)
+                    slider.value = dialog.chosen + 1;
+            }
         }
     }
     Row {

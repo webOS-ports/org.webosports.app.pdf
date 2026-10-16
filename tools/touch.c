@@ -27,6 +27,8 @@
  *   touch <dev> <screen w> <screen h> hold X Y MS
  *   touch <dev> <screen w> <screen h> swipe X1 Y1 X2 Y2 MS
  *   touch <dev> <screen w> <screen h> pinch CX CY FROM TO MS   (finger gap, pixels)
+ *   touch <dev> 0 0 keys DIGITS        (a keypad: "7777" taps 7 four times;
+ *                                       a space waits 1.5 s, for T9)
  *
  * Static, so it runs on any image: tools/device-test.sh builds it with the
  * build's cross compiler.
@@ -158,6 +160,30 @@ int main(int argc, char **argv)
     if (argc < 5) {
         fprintf(stderr, "usage: touch <dev> <w> <h> tap|doubletap|hold|swipe|pinch ...\n");
         return 2;
+    }
+    if (strcmp(argv[4], "keys") == 0 && argc == 6) {
+        static const int codes[10] = { KEY_0, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9 };
+        fd = open(argv[1], O_WRONLY | O_CLOEXEC);
+        if (fd < 0) {
+            fprintf(stderr, "touch: %s: %s\n", argv[1], strerror(errno));
+            return 1;
+        }
+        for (const char *c = argv[5]; *c; ++c) {
+            if (*c == ' ') {
+                pause_ms(1500);
+                continue;
+            }
+            if (*c < '0' || *c > '9')
+                continue;
+            emit(EV_KEY, codes[*c - '0'], 1);
+            sync_frame();
+            pause_ms(40);
+            emit(EV_KEY, codes[*c - '0'], 0);
+            sync_frame();
+            pause_ms(c[1] == *c ? 150 : 400);
+        }
+        close(fd);
+        return 0;
     }
     fd = open(argv[1], O_WRONLY | O_CLOEXEC);
     if (fd < 0 || ioctl(fd, EVIOCGABS(ABS_MT_POSITION_X), &ax) < 0

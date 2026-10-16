@@ -149,6 +149,11 @@ TestCase {
         compare(doc.outline.length, 7);
         compare(doc.links(0).length, 2);
         compare(v.currentPage, 0);
+        // The page in the middle, with the same margin either side.
+        var first = findChild(v, "documentView").flickable.itemAtIndex(0);
+        var left = first.mapToItem(v, 0, 0).x;
+        fuzzyCompare(left, v.width - (left + first.width), 1.5, "centred: " + left);
+        verify(left > 0, "a margin on the left");
         var bar = findChild(v, "commandBar");
         verify(bar.y < v.height, "the bars show at first");
         shot("viewer");
@@ -323,6 +328,9 @@ TestCase {
         tryVerify(function() { return v.document.status === PdfDocument.Ready; }, 5000);
         compare(v.document.pageCount, 12);
         verify(v.document.encrypted);
+        // The field gives the focus back, so the keyboard does not stay up.
+        verify(!field.children[0].activeFocus, "the password field let go of the focus");
+        verify(findChild(v, "documentView").activeFocus, "the page has it");
     }
 
     function test_damaged_and_missing(data) {

@@ -36,7 +36,7 @@ KeyboardClearDialog {
 
     function accept() {
         close();
-        passwordEntered(field.text);
+        passwordEntered(typedText(field));
     }
 
     function reject() {
@@ -52,7 +52,15 @@ KeyboardClearDialog {
 
     onAboutToShow: {
         field.text = "";
-        Qt.callLater(function() { if (field.children.length > 0) field.children[0].forceActiveFocus(); });
+        var input = inputOf(field);
+        if (input) {
+            // A dot Prelude has (the default one is not in it, and nothing
+            // showed), and no capitals or guesses in a password.
+            input.passwordCharacter = "\u2022";
+            input.inputMethodHints = Qt.ImhHiddenText | Qt.ImhSensitiveData | Qt.ImhNoPredictiveText
+                    | Qt.ImhNoAutoUppercase | Qt.ImhPreferLowercase;
+            Qt.callLater(function() { input.forceActiveFocus(); });
+        }
     }
 
     // DialogLineInput sits 2 units above the middle of its row: a row this

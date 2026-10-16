@@ -479,7 +479,7 @@ Page {
             border.color: "#ffffff"
             border.width: 2
             visible: item !== null && s !== null
-            x: visible ? item.x - view.flickable.contentX + (start ? s.x : s.x + s.width) * item.width - width / 2 : 0
+            x: visible ? item.shownX - view.flickable.contentX + (start ? s.x : s.x + s.width) * item.width - width / 2 : 0
             y: visible ? item.y - view.flickable.contentY + (start ? s.y : s.y + s.height) * item.height - height / 2 : 0
 
             DragHandler {
@@ -596,6 +596,7 @@ Page {
         document: pdf
         currentPage: view.currentPage
         onPageChosen: function(index) { page.goToPage(index); }
+        onClosed: view.forceActiveFocus()
     }
 
     PasswordDialog {
@@ -609,6 +610,7 @@ Page {
             pdf.unlock(password);
         }
         onRejected: if (pdf.status === PdfDocument.Locked) appWindow.pageStack.pop()
+        onClosed: view.forceActiveFocus()
     }
 
     // A web link leaves the app: asked first, in the platform's dialog.

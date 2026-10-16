@@ -46,6 +46,12 @@ Item {
     // The selection, from 0 to 1 of the page as shown; null for none.
     property var selection: null
     property string label
+    // How far right of where the list put it the page is drawn, and so
+    // where it is in the list's content.
+    property real xShift: 0
+    readonly property real shownX: x + xShift
+
+    transform: Translate { x: pageItem.xShift }
 
     readonly property int renderWidth: Geometry.renderWidth(width * devicePixelRatio, height * devicePixelRatio,
                                                             pixelBudget)
