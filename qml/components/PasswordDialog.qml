@@ -21,7 +21,7 @@ import LuneOS.Components 1.0
 
 /*
  * The password of a protected document, in the platform's dialog (as
- * PromptDialog: a line to type in, then the dark key and Cancel). Kept
+ * PromptDialog: a line to type in, then the green key and Cancel). Kept
  * nowhere: asked each time.
  */
 KeyboardClearDialog {
@@ -78,7 +78,8 @@ KeyboardClearDialog {
         DialogButton {
             objectName: "passwordOpenButton"
             text: "Open"
-            color: "#171717"
+            // The green of an accepting key (LuneOSButton.affirmativeColor).
+            color: "#2aa100"
             fontcolor: "white"
             buttonWidth: Units.gu(26)
             onClicked: dialog.accept()

@@ -69,7 +69,7 @@ Features
   Full Screen Mode), another brings them back; scrolling hides them too.
   While they are away, a bubble says which page.
 - **Command menu:** contents, page before, which page (tap: **Go to Page**,
-  by number or by the document's own labels, "xii", or with a slider), page
+  by number, or with a slider that shows the document's own labels, "xii"), page
   after, fit width / fit page. **App menu** (and the header's "…"): Go to
   Page, Find, Rotate Clockwise / Counterclockwise, Night Mode, Send by
   Email, Document Info.

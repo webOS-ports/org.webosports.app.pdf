@@ -63,11 +63,10 @@ KeyboardClearDialog {
         field.text = document ? document.pageLabel(currentPage) : "";
         var input = inputOf(field);
         if (input) {
-            // Numbers only, unless the document has labels of its own ("xii"):
-            // on a phone keypad T9 would make letters of the digits.
-            input.inputMethodHints = document && document.hasPageLabels
-                    ? Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase | Qt.ImhPreferLowercase
-                    : Qt.ImhDigitsOnly;
+            // Numbers, even where the document has labels of its own ("xii"):
+            // on a phone keypad T9 would make letters of the digits, and a
+            // page's number always finds it. The slider shows the labels.
+            input.inputMethodHints = Qt.ImhDigitsOnly;
             Qt.callLater(function() {
                 input.forceActiveFocus();
                 input.selectAll();
@@ -107,7 +106,8 @@ KeyboardClearDialog {
         DialogButton {
             objectName: "goToButton"
             text: "Go"
-            color: "#171717"
+            // The green of an accepting key (LuneOSButton.affirmativeColor).
+            color: "#2aa100"
             fontcolor: "white"
             buttonWidth: Units.gu(26)
             opacity: dialog.chosen >= 0 ? 1 : 0.5
