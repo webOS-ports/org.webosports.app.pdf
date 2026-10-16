@@ -45,13 +45,15 @@ KeyboardClearDialog {
     }
 
     title: "Password"
-    message: wrong ? "That password is not right. Try again."
+    // Not "wrong password": the guidelines ask for no negative phrasing.
+    message: wrong ? "Try the password for “" + fileName + "” again."
                    : "“" + fileName + "” is protected by a password."
     dialogWidth: Units.gu(30)
-    dialogHeight: Units.gu(27)
+    dialogHeight: Units.gu(23.5)
 
     onAboutToShow: {
         field.text = "";
+        padField(field);
         var input = inputOf(field);
         if (input) {
             // A dot Prelude has (the default one is not in it, and nothing
@@ -63,10 +65,10 @@ KeyboardClearDialog {
         }
     }
 
-    // DialogLineInput sits 2 units above the middle of its row: a row this
-    // tall keeps it clear of the message.
+    // DialogLineInput sits 2 units above the middle of its row, so a row
+    // this short puts it just over the keys, at the same gap as between them.
     Row {
-        height: Units.gu(5)
+        height: Units.gu(2)
         DialogLineInput {
             id: field
             objectName: "passwordField"

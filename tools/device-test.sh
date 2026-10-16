@@ -54,7 +54,9 @@ W=${SIZE% *}
 H=${SIZE#* }
 rm -f "$OUT/probe.png"
 echo "   screen ${W}x${H}"
-touch_() { sh_ "/tmp/pdf-touch /dev/input/touchscreen0 $W $H $*"; }
+# The touchscreen: TOUCH=/dev/input/eventN where there is no touchscreen0 link (Q25).
+TOUCH=${TOUCH:-/dev/input/touchscreen0}
+touch_() { sh_ "/tmp/pdf-touch $TOUCH $W $H $*"; }
 
 # Closed first: the app writes its settings as it closes.
 close

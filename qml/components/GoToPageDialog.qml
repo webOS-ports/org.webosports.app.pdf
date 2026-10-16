@@ -61,6 +61,7 @@ KeyboardClearDialog {
     onAboutToShow: {
         slider.value = currentPage + 1;
         field.text = document ? document.pageLabel(currentPage) : "";
+        padField(field);
         var input = inputOf(field);
         if (input) {
             // Numbers, even where the document has labels of its own ("xii"):

@@ -73,6 +73,42 @@ Dialog {
         return lineInput && lineInput.children.length > 0 ? lineInput.children[0] : null;
     }
 
+    // The frame's title and message, which Dialog does not name. The title
+    // is the one in bold.
+    function frameText(item, bold) {
+        for (var i = 0; i < item.children.length; ++i) {
+            var child = item.children[i];
+            if (child.wrapMode !== undefined && child.font !== undefined
+                    && child.textFormat !== undefined && (child.font.weight === Font.Bold) === bold)
+                return child;
+            var found = frameText(child, bold);
+            if (found)
+                return found;
+        }
+        return null;
+    }
+
+    // Set out as a heading over its message: Dialog prints its title at a
+    // fixed 16 pixels, smaller than the 12pt message under it, and the
+    // message flush left under a centred title and centred keys.
+    Component.onCompleted: {
+        var heading = frameText(dialog, true);
+        if (heading)
+            heading.font.pixelSize = FontUtils.sizeToPixels("18pt");
+        var body = frameText(dialog, false);
+        if (body)
+            body.horizontalAlignment = Text.AlignHCenter;
+    }
+
+    // Room between the field's edge and what is typed in it.
+    function padField(lineInput) {
+        var input = inputOf(lineInput);
+        if (input) {
+            input.leftPadding = Units.gu(1);
+            input.rightPadding = Units.gu(1);
+        }
+    }
+
     visible: false
     anchors.fill: undefined
     x: 0
