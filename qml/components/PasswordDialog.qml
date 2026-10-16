@@ -49,7 +49,10 @@ KeyboardClearDialog {
     message: wrong ? "Try the password for “" + fileName + "” again."
                    : "“" + fileName + "” is protected by a password."
     dialogWidth: Units.gu(30)
-    dialogHeight: Units.gu(23.5)
+    fullHeight: Units.gu(23.5)
+    // The keys side by side: one row fewer.
+    compactHeight: Units.gu(20.5)
+    readonly property real keyWidth: compact ? Units.gu(12.75) : Units.gu(26)
 
     onAboutToShow: {
         field.text = "";
@@ -76,24 +79,28 @@ KeyboardClearDialog {
             onAccepted: dialog.accept()
         }
     }
-    Row {
+    // The keys one over the other, or, where the keyboard leaves too little
+    // room, side by side: Cancel on the left, Open on the right, as the
+    // guidelines place a confirmation's.
+    Grid {
+        columns: dialog.compact ? 2 : 1
+        layoutDirection: dialog.compact ? Qt.RightToLeft : Qt.LeftToRight
+        spacing: Units.gu(0.5)
         DialogButton {
             objectName: "passwordOpenButton"
             text: "Open"
             // The green of an accepting key (LuneOSButton.affirmativeColor).
             color: "#2aa100"
             fontcolor: "white"
-            buttonWidth: Units.gu(26)
+            buttonWidth: dialog.keyWidth
             onClicked: dialog.accept()
         }
-    }
-    Row {
         DialogButton {
             objectName: "passwordCancelButton"
             text: "Cancel"
             color: "transparent"
             fontcolor: "#444444"
-            buttonWidth: Units.gu(26)
+            buttonWidth: dialog.keyWidth
             onClicked: dialog.reject()
         }
     }

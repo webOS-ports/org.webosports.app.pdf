@@ -56,7 +56,10 @@ KeyboardClearDialog {
     // Only to say what is wrong: the line to type in sits just under it.
     message: typed.trim() !== "" && chosen < 0 ? "There is no page “" + typed.trim() + "”." : ""
     dialogWidth: Units.gu(30)
-    dialogHeight: Units.gu(31)
+    fullHeight: Units.gu(31)
+    // Without the slider (the number is typed), the keys side by side.
+    compactHeight: Units.gu(20.5)
+    readonly property real keyWidth: compact ? Units.gu(12.75) : Units.gu(26)
 
     onAboutToShow: {
         slider.value = currentPage + 1;
@@ -99,28 +102,32 @@ KeyboardClearDialog {
             to: Math.max(1, dialog.pageCount)
             stepSize: 1
             snapMode: Slider.SnapAlways
-            visible: dialog.pageCount > 1
+            visible: dialog.pageCount > 1 && !dialog.compact
             onMoved: field.text = dialog.document ? dialog.document.pageLabel(Math.round(value) - 1) : ""
         }
     }
-    Row {
+    // As the password dialog's: side by side where the keyboard leaves too
+    // little room, Cancel on the left.
+    Grid {
+        columns: dialog.compact ? 2 : 1
+        layoutDirection: dialog.compact ? Qt.RightToLeft : Qt.LeftToRight
+        spacing: Units.gu(0.5)
         DialogButton {
             objectName: "goToButton"
             text: "Go"
             // The green of an accepting key (LuneOSButton.affirmativeColor).
             color: "#2aa100"
             fontcolor: "white"
-            buttonWidth: Units.gu(26)
+            buttonWidth: dialog.keyWidth
             opacity: dialog.chosen >= 0 ? 1 : 0.5
             onClicked: dialog.accept()
         }
-    }
-    Row {
         DialogButton {
+            objectName: "goToCancelButton"
             text: "Cancel"
             color: "transparent"
             fontcolor: "#444444"
-            buttonWidth: Units.gu(26)
+            buttonWidth: dialog.keyWidth
             onClicked: dialog.reject()
         }
     }

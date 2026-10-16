@@ -31,12 +31,24 @@ Dialog {
 
     readonly property bool opened: visible
 
+    // For the tests, which have no keyboard: the height of one to lay out
+    // for, when not negative.
+    property real keyboardHeightForTest: -1
+
     // The keyboard's height as the input method gives it; where it says
     // nothing while showing, the lower 45% of the window is kept free.
-    readonly property real keyboardHeight: !Qt.inputMethod.visible || !parent ? 0
+    readonly property real keyboardHeight: keyboardHeightForTest >= 0 ? keyboardHeightForTest
+                                         : !Qt.inputMethod.visible || !parent ? 0
                                          : Qt.inputMethod.keyboardRectangle.height > 0
                                            ? Qt.inputMethod.keyboardRectangle.height
                                            : parent.height * 0.45
+
+    // The box's height, and a shorter one for when the keyboard leaves less
+    // room than that: on a square screen (the Q25) it takes nearly half.
+    property real fullHeight: Units.gu(20)
+    property real compactHeight: fullHeight
+    readonly property bool compact: !!parent && parent.height - keyboardHeight < fullHeight
+    dialogHeight: compact ? compactHeight : fullHeight
 
     signal aboutToShow()
 
@@ -114,7 +126,7 @@ Dialog {
     x: 0
     y: 0
     width: parent ? parent.width : 0
-    height: parent ? Math.max(dialogHeight + Units.gu(2), parent.height - keyboardHeight) : 0
+    height: parent ? Math.max(dialogHeight, parent.height - keyboardHeight) : 0
 
     // The rest of the page dimmed as well: the input method can say there is
     // a keyboard when none shows (one on Bluetooth, the TouchPad).

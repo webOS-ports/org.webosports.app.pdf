@@ -71,7 +71,17 @@ search not wrapping round, a test fails each time.
   counting as a tap), a password wrong then right, damaged, missing and
   remote documents, launch parameters reusing the reader, coming back where
   the reader left, copying a word (the copy bar clear of it), Document
-  Info. Each state is saved to `build/test-output/ui/<profile>-<state>.png`.
+  Info, and each dialog's keys above a keyboard as tall as the Q25's (the
+  19.5 grid units its 608-pixel card has left). Each state is saved to
+  `build/test-output/ui/<profile>-<state>.png`.
+
+  `run-qml-tests.sh` runs `tst_ui.qml` once per screen (`PROFILES`, all four
+  by default), each against a copy of luneos-components' `LunaNext.Common`
+  stand-ins whose default profile is that screen. The stand-ins take the
+  profile, and with it the grid unit, as they load, each JavaScript library
+  into its own copy: `Settings.setProfile()` in a test would move Settings
+  and leave Units and FontUtils at the desktop's 10 pixels, and every screen
+  was once drawn at that size. qmltestrunner takes no `--profile` of its own.
 
 The plugin has to be built for the host's Qt for these: a build against the
 host Qt with poppler-qt6's headers from a sysroot and the host's

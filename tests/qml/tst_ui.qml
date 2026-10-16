@@ -114,8 +114,10 @@ TestCase {
     // Every test on each device shape: a tablet, tall and small phones, and
     // the Q25's square.
     function init_data() {
-        return [{ tag: "tp 1024x768", profile: "tp" }, { tag: "gnex 720x1280", profile: "gnex" },
-                { tag: "mindphone 480x800", profile: "mindphone" }, { tag: "q25 720x720", profile: "q25" }];
+        // One screen a run, the one the stand-ins were loaded for: see
+        // tests/run-qml-tests.sh.
+        return [{ tag: Settings.profileName + " " + Settings.displayWidth + "x" + Settings.displayHeight,
+                  profile: Settings.profileName }];
     }
 
     function test_library(data) {
@@ -333,6 +335,45 @@ TestCase {
         // The field gives the focus back, so the keyboard does not stay up.
         verify(!field.children[0].activeFocus, "the password field let go of the focus");
         verify(findChild(v, "documentView").activeFocus, "the page has it");
+    }
+
+    // The keys of a dialog stay above the keyboard, in the room it leaves on
+    // the Q25: its card is 608 pixels tall and the keyboard 295 of them, so
+    // 313 are left, 19.5 grid units. Laid out for that on every screen.
+    function test_dialogs_clear_of_keyboard(data) {
+        startApp(data.profile);
+        app.openDocument(dataDir + "/locked.pdf");
+        var v = viewer();
+        tryVerify(function() { return v.document.status === PdfDocument.Locked; }, 5000);
+        var dialog = findChild(v, "passwordDialog");
+        tryVerify(function() { return dialog.opened; }, 2000);
+        clearOfKeyboard(dialog, ["passwordField", "passwordOpenButton", "passwordCancelButton"]);
+        shot("password-keyboard");
+        findChild(dialog, "passwordField").text = "secret";
+        dialog.accept();
+        tryVerify(function() { return v.document.status === PdfDocument.Ready; }, 5000);
+
+        var goTo = findChild(v, "goToDialog");
+        mouseClick(findChild(v, "pageButton"));
+        tryVerify(function() { return goTo.opened; }, 2000);
+        clearOfKeyboard(goTo, ["pageField", "goToButton", "goToCancelButton"]);
+        shot("goto-keyboard");
+        goTo.reject();
+    }
+
+    function clearOfKeyboard(dialog, names) {
+        var area = dialog.parent;
+        dialog.keyboardHeightForTest = area.height - Units.gu(19.5);
+        var keyboardTop = area.height - dialog.keyboardHeightForTest;
+        wait(50);
+        for (var i = 0; i < names.length; ++i) {
+            var item = findChild(dialog, names[i]);
+            verify(item && item.visible, names[i] + " shown");
+            var bottom = item.mapToItem(area, 0, item.height).y;
+            verify(bottom <= keyboardTop, names[i] + " ends at " + bottom + ", the keyboard starts at "
+                   + keyboardTop + " (" + area.width + "x" + area.height + ")");
+            verify(item.mapToItem(area, 0, 0).y >= 0, names[i] + " is not above the window");
+        }
     }
 
     function test_damaged_and_missing(data) {
