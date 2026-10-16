@@ -15,9 +15,11 @@ and was not registered for PDF files.
 On a device
 -----------
 
-A mindphone (480x800, a keypad) running `tools/device-test.sh`: the
-library, a paper opened from Files, its contents, and a protected document
-asking for its password over the keyboard.
+Taken by `tools/device-test.sh`: the library, a paper opened from Files,
+its contents, and a protected document asking for its password over the
+keyboard.
+
+**mindphone** (480x800, a keypad):
 
 <table>
   <tr>
@@ -34,11 +36,30 @@ asking for its password over the keyboard.
   </tr>
 </table>
 
+**Q25** (720x720, a keyboard): where the on-screen keyboard leaves little
+room, a dialog's keys go side by side.
+
+<table>
+  <tr>
+    <td align="center"><img src="docs/screenshots/device-q25-library.png" height="200" alt="Library"></td>
+    <td align="center"><img src="docs/screenshots/device-q25-opened-from-files.png" height="200" alt="Opened from Files"></td>
+    <td align="center"><img src="docs/screenshots/device-q25-contents.png" height="200" alt="Contents"></td>
+    <td align="center"><img src="docs/screenshots/device-q25-password.png" height="200" alt="Password"></td>
+  </tr>
+  <tr>
+    <td align="center"><sub>Library</sub></td>
+    <td align="center"><sub>Opened from Files</sub></td>
+    <td align="center"><sub>Contents</sub></td>
+    <td align="center"><sub>Password</sub></td>
+  </tr>
+</table>
+
 On every form factor
 --------------------
 
 The same screens on the four screens the QML tests run the app on
-(`tests/run-qml-tests.sh`, with luneos-components' desktop stand-ins, so
+(`tests/run-qml-tests.sh`, at each device's own grid unit, with
+luneos-components' desktop stand-ins, so
 the fonts are the build host's rather than Prelude).
 
 <table>
