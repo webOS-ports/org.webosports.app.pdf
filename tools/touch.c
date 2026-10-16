@@ -28,7 +28,8 @@
  *   touch <dev> <screen w> <screen h> swipe X1 Y1 X2 Y2 MS
  *   touch <dev> <screen w> <screen h> pinch CX CY FROM TO MS   (finger gap, pixels)
  *   touch <dev> 0 0 keys DIGITS        (a keypad: "7777" taps 7 four times;
- *                                       a space waits 1.5 s, for T9)
+ *                                       a space waits 1.5 s, for T9; a-z
+ *                                       type on a keyboard's letter keys)
  *
  * Static, so it runs on any image: tools/device-test.sh builds it with the
  * build's cross compiler.
@@ -163,6 +164,10 @@ int main(int argc, char **argv)
     }
     if (strcmp(argv[4], "keys") == 0 && argc == 6) {
         static const int codes[10] = { KEY_0, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9 };
+        static const int letters[26] = {
+            KEY_A, KEY_B, KEY_C, KEY_D, KEY_E, KEY_F, KEY_G, KEY_H, KEY_I, KEY_J, KEY_K, KEY_L, KEY_M,
+            KEY_N, KEY_O, KEY_P, KEY_Q, KEY_R, KEY_S, KEY_T, KEY_U, KEY_V, KEY_W, KEY_X, KEY_Y, KEY_Z
+        };
         fd = open(argv[1], O_WRONLY | O_CLOEXEC);
         if (fd < 0) {
             fprintf(stderr, "touch: %s: %s\n", argv[1], strerror(errno));
@@ -173,12 +178,17 @@ int main(int argc, char **argv)
                 pause_ms(1500);
                 continue;
             }
-            if (*c < '0' || *c > '9')
+            int code;
+            if (*c >= '0' && *c <= '9')
+                code = codes[*c - '0'];
+            else if (*c >= 'a' && *c <= 'z')
+                code = letters[*c - 'a'];
+            else
                 continue;
-            emit(EV_KEY, codes[*c - '0'], 1);
+            emit(EV_KEY, code, 1);
             sync_frame();
             pause_ms(40);
-            emit(EV_KEY, codes[*c - '0'], 0);
+            emit(EV_KEY, code, 0);
             sync_frame();
             pause_ms(c[1] == *c ? 150 : 400);
         }
