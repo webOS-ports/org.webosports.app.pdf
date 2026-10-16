@@ -1,103 +1,200 @@
 PDF Viewer
 ==========
 
-Summary
--------
 Reads the PDF documents on the device, and any that other apps hand it
-(Files, Email, the browser's downloads).
+(Files, Email, the browser's downloads), on every LuneOS form factor:
+tablet, tall phone, small phone and the square Q25.
 
-A QML app for LuneOS in the LuneOS style (LuneOS.Forms), drawing pages with
-poppler's Qt 6 library. It replaces the Enyo 2 app with pdf.js 1.3 that was
-here before: that one found no documents on a device (it asked db8 for
-`com.palm.media.misc.file`, which the media indexer never fills), drew one
-page at a time on the GUI thread, and was not registered for PDF files.
+A QML app in the LuneOS style (LuneOS.Components, LuneOS.Forms), drawing
+pages with poppler's Qt 6 library on two threads of their own. It replaces
+the Enyo 2 app with pdf.js 1.3 that was here before: that one found no
+documents on a device (it asked db8 for `com.palm.media.misc.file`, which
+the media indexer never fills), drew one page at a time on the GUI thread,
+and was not registered for PDF files.
 
-Screenshots
+On a device
 -----------
 
-**On devices** (`tools/device-test.sh`): a mindphone (480x800) with a document
-opened from Files and the password dialog over the keyboard, and the
-TouchPad's contents.
+A mindphone (480x800, a keypad) running `tools/device-test.sh`: the
+library, a paper opened from Files, its contents, and a protected document
+asking for its password over the keyboard.
 
-| Reading | Password | TouchPad, contents |
-|---|---|---|
-| ![](docs/screenshots/device-mindphone-reading.png) | ![](docs/screenshots/device-mindphone-password.png) | ![](docs/screenshots/device-touchpad-contents.png) |
+<table>
+  <tr>
+    <td align="center"><img src="docs/screenshots/device-mindphone-library.png" height="320" alt="Library"></td>
+    <td align="center"><img src="docs/screenshots/device-mindphone-opened-from-files.png" height="320" alt="Opened from Files"></td>
+    <td align="center"><img src="docs/screenshots/device-mindphone-contents.png" height="320" alt="Contents"></td>
+    <td align="center"><img src="docs/screenshots/device-mindphone-password.png" height="320" alt="Password"></td>
+  </tr>
+  <tr>
+    <td align="center"><sub>Library</sub></td>
+    <td align="center"><sub>Opened from Files</sub></td>
+    <td align="center"><sub>Contents</sub></td>
+    <td align="center"><sub>Password</sub></td>
+  </tr>
+</table>
 
-The rest are from the QML tests on the build host (`tests/run-qml-tests.sh`, luneos-components'
-desktop stand-ins, so the fonts are the host's rather than Prelude).
+On every form factor
+--------------------
 
-**Phone, 480x800** (mindphone): the library, a page, find, the contents.
+The same screens on the four screens the QML tests run the app on
+(`tests/run-qml-tests.sh`, with luneos-components' desktop stand-ins, so
+the fonts are the build host's rather than Prelude).
 
-| Library | Reading | Find | Contents |
-|---|---|---|---|
-| ![](docs/screenshots/mindphone-library.png) | ![](docs/screenshots/mindphone-viewer.png) | ![](docs/screenshots/mindphone-find.png) | ![](docs/screenshots/mindphone-contents.png) |
-
-**Square, 720x720** (Q25): reading, copying a word, go to page.
-
-| Reading | Copy | Go to Page |
-|---|---|---|
-| ![](docs/screenshots/q25-viewer.png) | ![](docs/screenshots/q25-selection.png) | ![](docs/screenshots/q25-goto.png) |
-
-**Tablet, 1024x768** (HP TouchPad): reading, every page, turned at night,
-and the library with how far a document was read.
-
-| Reading | Pages | Turned, night | Recent |
-|---|---|---|---|
-| ![](docs/screenshots/tp-viewer.png) | ![](docs/screenshots/tp-pages.png) | ![](docs/screenshots/tp-turned-night.png) | ![](docs/screenshots/tp-library-recent.png) |
+<table>
+  <tr>
+    <th></th>
+    <th>HP TouchPad<br><sub>1024×768</sub></th>
+    <th>Galaxy Nexus<br><sub>720×1280</sub></th>
+    <th>mindphone<br><sub>480×800</sub></th>
+    <th>Q25<br><sub>720×720</sub></th>
+  </tr>
+  <tr>
+    <th align="left">Library<br><sub>Every PDF on the device, the last five read with how far</sub></th>
+    <td align="center"><img src="docs/screenshots/tp-library-recent.png" height="200" alt="Library on HP TouchPad"></td>
+    <td align="center"><img src="docs/screenshots/gnex-library-recent.png" height="200" alt="Library on Galaxy Nexus"></td>
+    <td align="center"><img src="docs/screenshots/mindphone-library-recent.png" height="200" alt="Library on mindphone"></td>
+    <td align="center"><img src="docs/screenshots/q25-library-recent.png" height="200" alt="Library on Q25"></td>
+  </tr>
+  <tr>
+    <th align="left">Reading<br><sub>Pages one under the other, fit to width or to the page</sub></th>
+    <td align="center"><img src="docs/screenshots/tp-viewer.png" height="200" alt="Reading on HP TouchPad"></td>
+    <td align="center"><img src="docs/screenshots/gnex-viewer.png" height="200" alt="Reading on Galaxy Nexus"></td>
+    <td align="center"><img src="docs/screenshots/mindphone-viewer.png" height="200" alt="Reading on mindphone"></td>
+    <td align="center"><img src="docs/screenshots/q25-viewer.png" height="200" alt="Reading on Q25"></td>
+  </tr>
+  <tr>
+    <th align="left">Contents<br><sub>The document's own outline</sub></th>
+    <td align="center"><img src="docs/screenshots/tp-contents.png" height="200" alt="Contents on HP TouchPad"></td>
+    <td align="center"><img src="docs/screenshots/gnex-contents.png" height="200" alt="Contents on Galaxy Nexus"></td>
+    <td align="center"><img src="docs/screenshots/mindphone-contents.png" height="200" alt="Contents on mindphone"></td>
+    <td align="center"><img src="docs/screenshots/q25-contents.png" height="200" alt="Contents on Q25"></td>
+  </tr>
+  <tr>
+    <th align="left">Pages<br><sub>Every page small, to jump to</sub></th>
+    <td align="center"><img src="docs/screenshots/tp-pages.png" height="200" alt="Pages on HP TouchPad"></td>
+    <td align="center"><img src="docs/screenshots/gnex-pages.png" height="200" alt="Pages on Galaxy Nexus"></td>
+    <td align="center"><img src="docs/screenshots/mindphone-pages.png" height="200" alt="Pages on mindphone"></td>
+    <td align="center"><img src="docs/screenshots/q25-pages.png" height="200" alt="Pages on Q25"></td>
+  </tr>
+  <tr>
+    <th align="left">Find<br><sub>Every match marked, the current one stronger</sub></th>
+    <td align="center"><img src="docs/screenshots/tp-find.png" height="200" alt="Find on HP TouchPad"></td>
+    <td align="center"><img src="docs/screenshots/gnex-find.png" height="200" alt="Find on Galaxy Nexus"></td>
+    <td align="center"><img src="docs/screenshots/mindphone-find.png" height="200" alt="Find on mindphone"></td>
+    <td align="center"><img src="docs/screenshots/q25-find.png" height="200" alt="Find on Q25"></td>
+  </tr>
+  <tr>
+    <th align="left">Copy<br><sub>Touch and hold a word, drag the handles</sub></th>
+    <td align="center"><img src="docs/screenshots/tp-selection.png" height="200" alt="Copy on HP TouchPad"></td>
+    <td align="center"><img src="docs/screenshots/gnex-selection.png" height="200" alt="Copy on Galaxy Nexus"></td>
+    <td align="center"><img src="docs/screenshots/mindphone-selection.png" height="200" alt="Copy on mindphone"></td>
+    <td align="center"><img src="docs/screenshots/q25-selection.png" height="200" alt="Copy on Q25"></td>
+  </tr>
+  <tr>
+    <th align="left">Go to Page<br><sub>By number, or with a slider that shows the document's labels</sub></th>
+    <td align="center"><img src="docs/screenshots/tp-goto.png" height="200" alt="Go to Page on HP TouchPad"></td>
+    <td align="center"><img src="docs/screenshots/gnex-goto.png" height="200" alt="Go to Page on Galaxy Nexus"></td>
+    <td align="center"><img src="docs/screenshots/mindphone-goto.png" height="200" alt="Go to Page on mindphone"></td>
+    <td align="center"><img src="docs/screenshots/q25-goto.png" height="200" alt="Go to Page on Q25"></td>
+  </tr>
+  <tr>
+    <th align="left">Password<br><sub>Asked for, and again if it does not open</sub></th>
+    <td align="center"><img src="docs/screenshots/tp-password.png" height="200" alt="Password on HP TouchPad"></td>
+    <td align="center"><img src="docs/screenshots/gnex-password.png" height="200" alt="Password on Galaxy Nexus"></td>
+    <td align="center"><img src="docs/screenshots/mindphone-password.png" height="200" alt="Password on mindphone"></td>
+    <td align="center"><img src="docs/screenshots/q25-password.png" height="200" alt="Password on Q25"></td>
+  </tr>
+  <tr>
+    <th align="left">Night mode, turned<br><sub>Light on dark; turned a quarter</sub></th>
+    <td align="center"><img src="docs/screenshots/tp-turned-night.png" height="200" alt="Night mode, turned on HP TouchPad"></td>
+    <td align="center"><img src="docs/screenshots/gnex-turned-night.png" height="200" alt="Night mode, turned on Galaxy Nexus"></td>
+    <td align="center"><img src="docs/screenshots/mindphone-turned-night.png" height="200" alt="Night mode, turned on mindphone"></td>
+    <td align="center"><img src="docs/screenshots/q25-turned-night.png" height="200" alt="Night mode, turned on Q25"></td>
+  </tr>
+  <tr>
+    <th align="left">Document Info<br><sub>Title, author, dates, producer, protection</sub></th>
+    <td align="center"><img src="docs/screenshots/tp-info.png" height="200" alt="Document Info on HP TouchPad"></td>
+    <td align="center"><img src="docs/screenshots/gnex-info.png" height="200" alt="Document Info on Galaxy Nexus"></td>
+    <td align="center"><img src="docs/screenshots/mindphone-info.png" height="200" alt="Document Info on mindphone"></td>
+    <td align="center"><img src="docs/screenshots/q25-info.png" height="200" alt="Document Info on Q25"></td>
+  </tr>
+</table>
 
 Features
 --------
 
-- **Library:** every `*.pdf` under `/media/internal` (USB copies, downloads),
-  found on a worker thread and again whenever the app comes back to the
-  front. The first page of each as its picture (kept in the cache directory,
-  so a document is opened once for it). **Recent:** the last five read, with
-  how far. Sort by name (numbers by value), date or size; a search box once
-  there are six or more. Touch and hold for Open, Send by Email, Remove from
+### Finding a document
+
+- **Library:** every `*.pdf` under `/media/internal` (USB copies,
+  downloads), found on a worker thread and again whenever the app comes
+  back to the front, each with its first page as its picture (kept in the
+  cache directory, so a document is opened once for it).
+- **Recent:** the last five read, with how far.
+- Sort by name (numbers by value), date or size; a search box once there
+  are six or more. Touch and hold for Open, Send by Email, Remove from
   Recent.
 - **Opened from other apps:** appinfo.json's `mimeTypes` registers the app
   for `application/pdf`; `{"target": "<path or file: URL>"}` opens that
   document, in the reader already open.
-- **Reading:** the pages one under the other, scrolled as one; each page fits
-  the width, or the whole page fits the screen (the key at the right of the
-  command menu). **Pinch** or **Ctrl+wheel** to zoom about the fingers,
-  **double tap** to zoom in there and again to fit. Zoomed in past what a
-  whole page can be drawn at, the part on screen is drawn sharp over it.
-  Pages are drawn on two threads as they come into view, and a page
+
+### Reading
+
+- The pages one under the other, scrolled as one, centred; each page fits
+  the width, or the whole page fits the screen (the key at the right of
+  the command menu).
+- **Pinch** or **Ctrl+wheel** to zoom about the fingers, **double tap** to
+  zoom in there and again to fit. Zoomed in past what a whole page can be
+  drawn at, the part on screen is drawn sharp over it.
+- Pages are drawn on two threads as they come into view, and a page
   scrolled past stops drawing.
 - **Full screen:** a tap hides the header and the command menu (the legacy
   Full Screen Mode), another brings them back; scrolling hides them too.
   While they are away, a bubble says which page.
-- **Command menu:** contents, page before, which page (tap: **Go to Page**,
-  by number, or with a slider that shows the document's own labels, "xii"), page
-  after, fit width / fit page. **App menu** (and the header's "…"): Go to
-  Page, Find, Rotate Clockwise / Counterclockwise, Night Mode, Send by
-  Email, Document Info.
-- **Contents:** the document's outline, and every page small, from the left.
+- **Where the reader was** (page, how far down it, zoom, turn) is kept per
+  document and restored on opening it again.
+- **Night mode:** the pages inverted, light on dark. **Rotate** clockwise
+  or counterclockwise.
+
+### Getting around
+
+- **Command menu:** contents, page before, which page, page after, fit
+  width / fit page.
+- **Go to Page** (tap the page key): by number, or with a slider that shows
+  the document's own labels ("xii"). On a keypad the field takes digits.
+- **Contents:** the document's outline, and every page small, from the
+  left.
 - **Find:** every match highlighted, the current one stronger; "3 of 17",
   the one before and after, from the page being read on. Case and accents
   ignored, across line ends.
 - **Links:** to a page (with "Back to page …" to return), and to the web
   (asked first, then opened by the browser).
-- **Copy:** touch and hold a word; drag the handles over more; Copy. Not in
-  a document that forbids it.
-- **Passwords:** asked for, and asked again when wrong. Kept nowhere.
-- **Dialogs** (password, Go to Page, opening a web link) are LuneOS.Components'
-  own, kept above the on-screen keyboard.
-- **Where the reader was** - page, how far down it, zoom, turn - is kept per
-  document and restored on opening it again.
-- **Night mode:** the pages inverted, light on dark.
-- **Document Info:** title, author, subject, keywords, pages, dates, the
-  program and PDF version, protection, the file.
 - The back gesture closes what is open first (the selection, the contents,
   find), then goes back to the library. The header's Back does the same for
   devices without a gesture area.
+
+### And
+
+- **Copy:** touch and hold a word; drag the handles over more; Copy. Not in
+  a document that forbids it.
+- **Passwords:** asked for, and asked again when one does not open the
+  document. Kept nowhere. Typed in T9 on a keypad, the last letter counts
+  too.
+- **Dialogs** (password, Go to Page, opening a web link) are
+  LuneOS.Components' own, kept above the on-screen keyboard; the key that
+  accepts is green.
+- **App menu** (and the header's "…"): Go to Page, Find, Rotate, Night
+  Mode, Send by Email, Document Info.
+- **Document Info:** title, author, subject, keywords, pages, dates, the
+  program and PDF version, protection, the file.
 
 Building
 --------
 
 The app needs poppler with its Qt 6 frontend: poppler's `qt6`
-PACKAGECONFIG (meta-webos-ports enables it for this app). With the webOS
+PACKAGECONFIG (meta-webos-ports enables it for this app). It also needs a
+luneos-components with ArtworkImage (88cdc3e or later): on an image with
+an older one its pages cannot be made, and the window stays empty. With the webOS
 CMake modules (the recipe) it installs to the applications directory with
 its luna-service2 role and permissions; without them (a desktop build) under
 the build tree.
