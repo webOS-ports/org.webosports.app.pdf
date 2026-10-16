@@ -162,6 +162,21 @@ TestCase {
         // Going back is the back gesture's: no Back key in the header, and
         // so room for the app's icon on a phone too.
         verify(!findChild(v, "viewerHeader").showBack, "no Back key");
+        // Opaque, for the page scrolls under it.
+        var backdrop = findChild(v, "viewerHeaderBackdrop");
+        verify(backdrop.visible && backdrop.color.a === 1, "the header has a solid backdrop");
+        // What the header shows does not change with the page under it.
+        var headerItem = findChild(v, "viewerHeader");
+        var view = findChild(v, "documentView");
+        view.restoreAnchor({ page: 0, fx: 0.1, fy: 0.25, vx: headerItem.width * 0.3, vy: headerItem.height * 0.8 });
+        wait(200);
+        var overText = grabImage(headerItem);
+        view.restoreAnchor({ page: 0, fx: 0.5, fy: 0.6, vx: headerItem.width * 0.3, vy: headerItem.height * 0.8 });
+        wait(200);
+        var overBlank = grabImage(headerItem);
+        var px = Math.round(headerItem.width * 0.2), py = Math.round(headerItem.height * 0.8);
+        compare(String(overText.pixel(px, py)), String(overBlank.pixel(px, py)), "a word under the header does not show through");
+        view.restoreAnchor({ page: 0, fx: 0, fy: 0, vx: 0, vy: 0 });
 
         // A tap on the page (not a link) hides the bars; another brings them back.
         var view = findChild(v, "documentView");
@@ -462,7 +477,52 @@ TestCase {
         var word = findChild(view.flickable.itemAtIndex(0), "selectionRect");
         var wordBottom = word.mapToItem(v, 0, word.height).y;
         verify(selBar.mapToItem(v, 0, 0).y > wordBottom, "the copy bar does not cover the word");
+        // The handles as the OS draws them: the start's above the word,
+        // pointing down at its top left, the end's below, pointing up at its
+        // bottom right.
+        var startHandle = findChild(v, "selectionStartHandle");
+        var endHandle = findChild(v, "selectionEndHandle");
+        var topLeft = word.mapToItem(v, 0, 0);
+        var bottomRight = word.mapToItem(v, word.width, word.height);
+        var startImage = findChild(startHandle, "selectionHandleImage");
+        var endImage = findChild(endHandle, "selectionHandleImage");
+        // Turned over, the shield's point - the top of the picture - is at the bottom.
+        fuzzyCompare(startImage.mapToItem(v, startImage.width / 2, 0).y, topLeft.y, 1);
+        fuzzyCompare(startHandle.mapToItem(v, startHandle.width / 2, 0).x, topLeft.x, 1);
+        compare(startImage.rotation, 180);
+        verify(startHandle.mapToItem(v, 0, startHandle.height).y <= topLeft.y + 1, "the start's handle above the word");
+        fuzzyCompare(endImage.mapToItem(v, endImage.width / 2, 0).y, bottomRight.y, 1);
+        fuzzyCompare(endHandle.mapToItem(v, endHandle.width / 2, 0).x, bottomRight.x, 1);
+        compare(endImage.rotation, 0);
+        verify(endHandle.mapToItem(v, 0, 0).y >= bottomRight.y - 1, "the end's handle below the word");
         shot("selection");
+        // Dragged to the right, the end's handle takes more of the line.
+        var before = view.selection.width;
+        var from = endHandle.mapToItem(v, endHandle.width / 2, endHandle.height / 2);
+        mousePress(v, from.x, from.y);
+        for (var step = 1; step <= 6; ++step)
+            mouseMove(v, from.x + step * 15, from.y);
+        mouseRelease(v, from.x + 90, from.y);
+        verify(view.selection.width > before, "the selection grew to the right");
+        v.endSelection();
+
+        // Held low on the screen, the word and its handle are brought up
+        // out from under the copy bar.
+        // Page 2's "Chapter", where page i's is: page i cannot be brought that low.
+        var fy = (842 - 775) / size.height;
+        view.restoreAnchor({ page: 1, fx: 0, fy: fy, vx: 0, vy: v.height - Units.gu(4) });
+        wait(50);
+        var second = view.flickable.itemAtIndex(1);
+        verify(second.y - view.flickable.contentY + fy * second.height > selBar.mapToItem(v, 0, 0).y,
+               "the word starts under where the copy bar goes");
+        v.startSelection(1, 70 / size.width, fy);
+        compare(v.selectedText(), "Chapter");
+        wait(100);
+        endHandle = findChild(v, "selectionEndHandle");
+        word = findChild(view.flickable.itemAtIndex(1), "selectionRect");
+        var barTop = selBar.mapToItem(v, 0, 0).y;
+        verify(word.mapToItem(v, 0, word.height).y <= barTop, "the word above the copy bar");
+        verify(endHandle.mapToItem(v, 0, endHandle.height).y <= barTop + 1, "its handle above the copy bar");
         mouseClick(findChild(v, "copyButton"));
         verify(!view.selecting);
     }

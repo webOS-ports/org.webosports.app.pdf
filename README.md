@@ -196,8 +196,10 @@ Features
 
 ### And
 
-- **Copy:** touch and hold a word; drag the handles over more; Copy. Not in
-  a document that forbids it.
+- **Copy:** touch and hold a word; drag the handles over more; Copy. The
+  selection is the OS's: yellow, with the grey handles LuneOS's browser and
+  web apps have, and brought up out from under the copy bar. Not in a
+  document that forbids it.
 - **Passwords:** asked for, and asked again when one does not open the
   document. Kept nowhere. Typed in T9 on a keypad, the last letter counts
   too.

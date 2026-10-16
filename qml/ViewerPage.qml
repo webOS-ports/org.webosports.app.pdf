@@ -214,6 +214,22 @@ Page {
         view.selection = shown;
         view.selecting = true;
         chromeVisible = true;
+        Qt.callLater(keepSelectionInSight);
+    }
+
+    // The word held, and the handle under it, kept above the copy bar at the
+    // foot, which covered both when the word was low on the screen.
+    function keepSelectionInSight() {
+        var s = view.selection;
+        var item = s ? view.flickable.itemAtIndex(view.selectionPage) : null;
+        if (!item)
+            return;
+        var limit = selectionBar.y - Units.gu(4.5);
+        var bottom = item.y - view.flickable.contentY + (s.y + s.height) * item.height;
+        if (bottom <= limit)
+            return;
+        view.restoreAnchor({ page: view.selectionPage, fx: s.x, fy: s.y + s.height,
+                             vx: item.shownX - view.flickable.contentX + s.x * item.width, vy: limit });
     }
 
     function endSelection() {
@@ -425,6 +441,17 @@ Page {
             icon: appWindow.appIcon
             compact: appWindow.compact
 
+            // The header's picture is see-through below its top edge, made to
+            // lie on a page's background as it does on the library; here the
+            // document scrolls under it, and its words showed through.
+            Rectangle {
+                objectName: "viewerHeaderBackdrop"
+                parent: header
+                z: -2
+                anchors.fill: parent
+                color: Colors.pageGradientTop
+            }
+
             actionComponent: Row {
                 spacing: Units.gu(0.5)
                 IconButton {
@@ -462,23 +489,41 @@ Page {
 
     }
 
-    // Selection handles: the corners of the selection, dragged.
+    // Selection handles: the corners of the selection, dragged. Drawn as the
+    // rest of LuneOS draws them (its browser and web apps): legacy webOS's
+    // grey shield at 80%, the one at the start above the line and turned
+    // over, pointing down at it, the one at the end below, pointing up. The
+    // point is on the corner; the item around it is a finger's size.
     Repeater {
         model: view.selecting ? 2 : 0
-        delegate: Rectangle {
+        delegate: Item {
             id: handle
+            objectName: start ? "selectionStartHandle" : "selectionEndHandle"
             readonly property var item: view.selectionPage >= 0 ? view.flickable.itemAtIndex(view.selectionPage) : null
             readonly property var s: view.selection
             readonly property bool start: index === 0
-            width: Units.gu(3.5)
-            height: width
-            radius: width / 2
-            color: "#4a8fd8"
-            border.color: "#ffffff"
-            border.width: 2
+            // The corner the point is on, in this page's coordinates.
+            readonly property point tip: visible
+                ? Qt.point(item.shownX - view.flickable.contentX + (start ? s.x : s.x + s.width) * item.width,
+                           item.y - view.flickable.contentY + (start ? s.y : s.y + s.height) * item.height)
+                : Qt.point(0, 0)
+            width: Units.gu(5)
+            height: Units.gu(4.5)
             visible: item !== null && s !== null
-            x: visible ? item.shownX - view.flickable.contentX + (start ? s.x : s.x + s.width) * item.width - width / 2 : 0
-            y: visible ? item.y - view.flickable.contentY + (start ? s.y : s.y + s.height) * item.height - height / 2 : 0
+            x: tip.x - width / 2
+            y: start ? tip.y - height : tip.y
+
+            LC.ArtworkImage {
+                objectName: "selectionHandleImage"
+                anchors.horizontalCenter: parent.horizontalCenter
+                // At the corner: the bottom of the item for the start, the top for the end.
+                y: handle.start ? parent.height - height : 0
+                width: Units.gu(2.9)
+                height: width * 27.7 / 32
+                svg: Qt.resolvedUrl("images/selection-handle.svg")
+                rotation: handle.start ? 180 : 0
+                opacity: 0.8
+            }
 
             DragHandler {
                 target: null
@@ -510,6 +555,7 @@ Page {
     // Holding a word: the text, to copy - at the foot, clear of the words
     // being chosen, which are often near the top.
     Pane {
+        id: selectionBar
         objectName: "selectionBar"
         anchors.left: parent.left
         anchors.right: parent.right

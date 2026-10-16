@@ -169,9 +169,9 @@ Item {
         y: visible ? pageItem.selection.y * pageItem.height : 0
         width: visible ? pageItem.selection.width * pageItem.width : 0
         height: visible ? pageItem.selection.height * pageItem.height : 0
-        color: "#404a8fd8"
-        border.color: "#4a8fd8"
-        border.width: 2
+        // The selection's yellow, as LuneOS's fields and web apps have it
+        // (#FFEA58), let through enough to read the words under it.
+        color: "#8cffea58"
     }
 
     TapHandler {
