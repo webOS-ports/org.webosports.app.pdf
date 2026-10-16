@@ -1,0 +1,2 @@
+module PdfViewerApp
+plugin pdfviewer-qml
