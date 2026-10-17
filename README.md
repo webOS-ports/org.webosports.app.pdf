@@ -1,6 +1,10 @@
 PDF Viewer
 ==========
 
+Summary
+-------
+PDF viewer for LuneOS, drawing with poppler.
+
 Reads the PDF documents on the device, and any that other apps hand it
 (Files, Email, the browser's downloads), on every LuneOS form factor:
 tablet, tall phone, small phone and the square Q25.
