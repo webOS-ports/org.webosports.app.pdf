@@ -51,7 +51,7 @@ Page {
 
     readonly property alias document: pdf
     readonly property string displayTitle: pdf.title !== "" && pdf.title.length < 80 ? pdf.title
-                                         : Library.displayName(pdf.path)
+                                         : LC.FileLists.displayName(pdf.path)
     readonly property int pageCount: pdf.status === PdfDocument.Ready ? pdf.pageCount : 0
     readonly property int currentPage: view.currentPage
 
@@ -489,65 +489,43 @@ Page {
 
     }
 
-    // Selection handles: the corners of the selection, dragged. Drawn as the
-    // rest of LuneOS draws them (its browser and web apps): legacy webOS's
-    // grey shield at 80%, the one at the start above the line and turned
-    // over, pointing down at it, the one at the end below, pointing up. The
-    // point is on the corner; the item around it is a finger's size.
+    // Selection handles: the corners of the selection, dragged, drawn as the
+    // rest of LuneOS draws them (LuneOS.Components' SelectionHandle).
     Repeater {
         model: view.selecting ? 2 : 0
-        delegate: Item {
+        delegate: LC.SelectionHandle {
             id: handle
             objectName: start ? "selectionStartHandle" : "selectionEndHandle"
             readonly property var item: view.selectionPage >= 0 ? view.flickable.itemAtIndex(view.selectionPage) : null
             readonly property var s: view.selection
-            readonly property bool start: index === 0
-            // The corner the point is on, in this page's coordinates.
-            readonly property point tip: visible
-                ? Qt.point(item.shownX - view.flickable.contentX + (start ? s.x : s.x + s.width) * item.width,
-                           item.y - view.flickable.contentY + (start ? s.y : s.y + s.height) * item.height)
-                : Qt.point(0, 0)
-            width: Units.gu(5)
-            height: Units.gu(4.5)
+            // The corner it was on when the drag began, in the page's 0..1.
+            property real startX
+            property real startY
+            property real startTipX
+            property real startTipY
+            start: index === 0
             visible: item !== null && s !== null
-            x: tip.x - width / 2
-            y: start ? tip.y - height : tip.y
+            // The corner the point is on.
+            tipX: visible ? item.shownX - view.flickable.contentX + (start ? s.x : s.x + s.width) * item.width : 0
+            tipY: visible ? item.y - view.flickable.contentY + (start ? s.y : s.y + s.height) * item.height : 0
 
-            LC.ArtworkImage {
-                objectName: "selectionHandleImage"
-                anchors.horizontalCenter: parent.horizontalCenter
-                // At the corner: the bottom of the item for the start, the top for the end.
-                y: handle.start ? parent.height - height : 0
-                width: Units.gu(2.9)
-                height: width * 27.7 / 32
-                svg: Qt.resolvedUrl("images/selection-handle.svg")
-                rotation: handle.start ? 180 : 0
-                opacity: 0.8
+            onDragStarted: {
+                startX = start ? s.x : s.x + s.width;
+                startY = start ? s.y : s.y + s.height;
+                startTipX = tipX;
+                startTipY = tipY;
             }
-
-            DragHandler {
-                target: null
-                property real startX
-                property real startY
-                onActiveChanged: {
-                    if (active) {
-                        startX = handle.start ? handle.s.x : handle.s.x + handle.s.width;
-                        startY = handle.start ? handle.s.y : handle.s.y + handle.s.height;
-                    }
-                }
-                onTranslationChanged: {
-                    if (!active || !handle.item)
-                        return;
-                    var px = Math.max(0, Math.min(1, startX + translation.x / handle.item.width));
-                    var py = Math.max(0, Math.min(1, startY + translation.y / handle.item.height));
-                    var s = handle.s;
-                    var x1 = handle.start ? px : s.x;
-                    var y1 = handle.start ? py : s.y;
-                    var x2 = handle.start ? s.x + s.width : px;
-                    var y2 = handle.start ? s.y + s.height : py;
-                    view.selection = { x: Math.min(x1, x2), y: Math.min(y1, y2),
-                                       width: Math.abs(x2 - x1), height: Math.abs(y2 - y1) };
-                }
+            onDragged: function(x, y) {
+                if (!item)
+                    return;
+                var px = Math.max(0, Math.min(1, startX + (x - startTipX) / item.width));
+                var py = Math.max(0, Math.min(1, startY + (y - startTipY) / item.height));
+                var x1 = start ? px : s.x;
+                var y1 = start ? py : s.y;
+                var x2 = start ? s.x + s.width : px;
+                var y2 = start ? s.y + s.height : py;
+                view.selection = { x: Math.min(x1, x2), y: Math.min(y1, y2),
+                                   width: Math.abs(x2 - x1), height: Math.abs(y2 - y1) };
             }
         }
     }
@@ -646,7 +624,7 @@ Page {
     PasswordDialog {
         id: passwordDialog
         objectName: "passwordDialog"
-        fileName: Library.displayName(pdf.path)
+        fileName: LC.FileLists.displayName(pdf.path)
         // Tried and still locked: the password was wrong.
         wrong: false
         onPasswordEntered: function(password) {

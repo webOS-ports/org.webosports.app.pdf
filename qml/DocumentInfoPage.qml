@@ -24,7 +24,7 @@ import LuneOS.Forms 1.0
 
 import PdfViewerApp 1.0
 
-import "js/Library.js" as Library
+import LuneOS.Components 1.0 as LC
 
 /*
  * Document Info: what the document says about itself, and the file.
@@ -52,7 +52,7 @@ Page {
         { label: "PDF version", value: document.pdfVersion },
         { label: "Protected", value: document.encrypted ? (document.canCopy ? "Yes" : "Yes, no copying") : "No" },
         { label: "File", value: document.fileName },
-        { label: "Size", value: Library.formatSize(document.fileSize) },
+        { label: "Size", value: LC.FileLists.formatSize(document.fileSize) },
         { label: "Folder", value: document.path.substring(0, document.path.lastIndexOf("/")) }
     ].filter(function(r) { return r.value !== ""; }) : []
 

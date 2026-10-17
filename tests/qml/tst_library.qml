@@ -17,6 +17,8 @@
 import QtQuick
 import QtTest
 
+import LuneOS.Components 1.0
+
 import "../../qml/js/Library.js" as Library
 
 /*
@@ -36,37 +38,39 @@ TestCase {
         return list.map(function(f) { return f.name; });
     }
 
+    // The paths, names, sizes and dates the library shows come from
+    // LuneOS.Components' FileLists; what this app relies on of them:
     function test_localPath() {
-        compare(Library.localPath("/media/internal/a.pdf"), "/media/internal/a.pdf");
-        compare(Library.localPath("file:///media/internal/My%20Book.pdf"), "/media/internal/My Book.pdf");
-        compare(Library.localPath("file:///bad%zz.pdf"), "");
-        compare(Library.localPath("https://example.com/a.pdf"), "");
-        compare(Library.localPath(""), "");
-        compare(Library.localPath(undefined), "");
+        compare(FileLists.localPath("/media/internal/a.pdf"), "/media/internal/a.pdf");
+        compare(FileLists.localPath("file:///media/internal/My%20Book.pdf"), "/media/internal/My Book.pdf");
+        compare(FileLists.localPath("file:///bad%zz.pdf"), "");
+        compare(FileLists.localPath("https://example.com/a.pdf"), "");
+        compare(FileLists.localPath(""), "");
+        compare(FileLists.localPath(undefined), "");
     }
 
     function test_names() {
-        compare(Library.fileName("/a/b/Manual.PDF"), "Manual.PDF");
-        compare(Library.displayName("/a/b/Manual.PDF"), "Manual");
-        compare(Library.displayName("/a/b/notes.pdf.pdf"), "notes.pdf");
+        compare(FileLists.fileName("/a/b/Manual.PDF"), "Manual.PDF");
+        compare(FileLists.displayName("/a/b/Manual.PDF"), "Manual");
+        compare(FileLists.displayName("/a/b/notes.pdf.pdf"), "notes.pdf");
     }
 
     function test_formatSize() {
-        compare(Library.formatSize(0), "0 B");
-        compare(Library.formatSize(1023), "1023 B");
-        compare(Library.formatSize(1536), "2 KB");
-        compare(Library.formatSize(5 * 1024 * 1024 + 300 * 1024), "5.3 MB");
-        compare(Library.formatSize(20 * 1024 * 1024), "20 MB");
-        compare(Library.formatSize(3 * 1024 * 1024 * 1024), "3 GB");
+        compare(FileLists.formatSize(0), "0 B");
+        compare(FileLists.formatSize(1023), "1023 B");
+        compare(FileLists.formatSize(1536), "1.5 KB");
+        compare(FileLists.formatSize(5 * 1024 * 1024 + 300 * 1024), "5.3 MB");
+        compare(FileLists.formatSize(20 * 1024 * 1024), "20 MB");
+        compare(FileLists.formatSize(3 * 1024 * 1024 * 1024), "3 GB");
     }
 
-    function test_formatDate() {
+    function test_formatWhen() {
         var now = new Date(2026, 9, 16, 15, 0).getTime();
-        compare(Library.formatDate(new Date(2026, 9, 16, 9, 5).getTime(), now), "9:05");
-        compare(Library.formatDate(new Date(2026, 9, 16, 21, 5).getTime(), now, false), "9:05 PM");
-        compare(Library.formatDate(new Date(2026, 2, 3).getTime(), now), "Mar 3");
-        compare(Library.formatDate(new Date(2024, 11, 24).getTime(), now), "Dec 24, 2024");
-        compare(Library.formatDate(0, now), "");
+        compare(FileLists.formatWhen(new Date(2026, 9, 16, 9, 5).getTime(), now), "Today 09:05");
+        compare(FileLists.formatWhen(new Date(2026, 9, 16, 21, 5).getTime(), now, false), "Today 9:05 PM");
+        compare(FileLists.formatWhen(new Date(2026, 2, 3).getTime(), now), "3 Mar");
+        compare(FileLists.formatWhen(new Date(2024, 11, 24).getTime(), now), "24 Dec 2024");
+        compare(FileLists.formatWhen(0, now), "");
     }
 
     function test_filter() {
@@ -75,6 +79,7 @@ TestCase {
         compare(names(Library.filter(files, "old c")), ["c"], "every word, name or folder");
         compare(names(Library.filter(files, "downloads")), ["A Manual"]);
         compare(names(Library.filter(files, "zzz")), []);
+        compare(names(Library.filter([{ name: "Café menu", folder: "" }], "cafe")), ["Café menu"], "accents aside");
     }
 
     function test_sorted() {
@@ -87,13 +92,13 @@ TestCase {
     }
 
     function test_naturalCompare() {
-        verify(Library.naturalCompare("Part 2", "Part 10") < 0);
-        verify(Library.naturalCompare("part 2", "Part 1") > 0);
-        verify(Library.naturalCompare("a", "B") < 0);
-        compare(Library.naturalCompare("Same", "same"), 0);
-        verify(Library.naturalCompare("Part", "Part 1") < 0);
-        verify(Library.naturalCompare("", "a") < 0);
-        verify(Library.naturalCompare("v1.10", "v1.9") > 0);
+        verify(FileLists.naturalCompare("Part 2", "Part 10") < 0);
+        verify(FileLists.naturalCompare("part 2", "Part 1") > 0);
+        verify(FileLists.naturalCompare("a", "B") < 0);
+        compare(FileLists.naturalCompare("Same", "same"), 0);
+        verify(FileLists.naturalCompare("Part", "Part 1") < 0);
+        verify(FileLists.naturalCompare("", "a") < 0);
+        verify(FileLists.naturalCompare("v1.10", "v1.9") > 0);
     }
 
     function test_store() {
