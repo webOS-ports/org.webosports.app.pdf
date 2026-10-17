@@ -26,7 +26,7 @@ import LuneOS.Forms 1.0
 
 import PdfViewerApp 1.0
 
-import "js/Library.js" as Library
+import LuneOS.Components 1.0 as LC
 
 /*
  * PDF Viewer: the documents on the device, and a reader for them.
@@ -107,7 +107,7 @@ WebOSWindow {
     function sendByEmail(path) {
         launcher.launch("com.palm.app.email", {
             "newEmail": {
-                "summary": Library.displayName(path),
+                "summary": LC.FileLists.displayName(path),
                 "attachments": [{ "fullPath": path, "mimeType": "application/pdf" }]
             }
         }, undefined, function(error) { appWindow.notice = "Could not open Email: " + error; });
@@ -115,7 +115,7 @@ WebOSWindow {
 
     // Shows a document: in the reader that is open, or a new one.
     function openDocument(target) {
-        var path = Library.localPath(target);
+        var path = LC.FileLists.localPath(target);
         if (path === "") {
             notice = "Only documents on this device can be opened: " + target;
             return;

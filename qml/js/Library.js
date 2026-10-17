@@ -15,83 +15,24 @@
  */
 
 .pragma library
+.import LuneOS.Components 1.0 as LC
 
 /*
  * The library's lists, and where the reader was in each document: plain
  * functions over plain objects, so the tests need no app around them.
+ * Paths, names, sizes and dates are LuneOS.Components' FileLists, as in
+ * the other apps.
  */
 
 // How many documents "Recent" remembers, and shows.
 var maxRemembered = 50;
 var maxRecentShown = 5;
 
-// A launch target as a path: file: URLs decoded; "" for anything that is not
-// on this device (PdfDocument refuses those too).
-function localPath(target) {
-    var s = String(target || "").trim();
-    if (s.indexOf("file://") === 0) {
-        s = s.substring(7);
-        try {
-            s = decodeURIComponent(s);
-        } catch (e) {
-            return "";
-        }
-    }
-    return s.charAt(0) === "/" ? s : "";
-}
-
-function fileName(path) {
-    var s = String(path || "");
-    var slash = s.lastIndexOf("/");
-    return slash >= 0 ? s.substring(slash + 1) : s;
-}
-
-// "Manual.pdf" -> "Manual"; what the library shows.
-function displayName(path) {
-    var name = fileName(path);
-    return name.replace(/\.pdf$/i, "");
-}
-
-function formatSize(bytes) {
-    var b = Number(bytes) || 0;
-    if (b < 1024)
-        return b + " B";
-    var units = ["KB", "MB", "GB"];
-    var value = b;
-    var unit = -1;
-    do {
-        value /= 1024;
-        ++unit;
-    } while (value >= 1024 && unit < units.length - 1);
-    return (value >= 10 || unit === 0 ? Math.round(value) : Math.round(value * 10) / 10) + " " + units[unit];
-}
-
-// Today's documents by time, this year's by day and month, older by date.
-function formatDate(ms, nowMs, use24h) {
-    if (!ms)
-        return "";
-    var d = new Date(ms);
-    var now = new Date(nowMs || Date.now());
-    if (d.toDateString() === now.toDateString()) {
-        var h = d.getHours();
-        var m = (d.getMinutes() < 10 ? "0" : "") + d.getMinutes();
-        if (use24h === false)
-            return ((h + 11) % 12 + 1) + ":" + m + (h < 12 ? " AM" : " PM");
-        return h + ":" + m;
-    }
-    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    var day = months[d.getMonth()] + " " + d.getDate();
-    return d.getFullYear() === now.getFullYear() ? day : day + ", " + d.getFullYear();
-}
-
-// The files whose name or folder holds every word of the query.
+// The files whose name or folder holds every word of the query, case and
+// accents aside.
 function filter(files, query) {
-    var words = String(query || "").toLowerCase().split(/\s+/).filter(function(w) { return w !== ""; });
-    if (words.length === 0)
-        return files.slice();
     return files.filter(function(f) {
-        var hay = (String(f.name || "") + " " + String(f.folder || "")).toLowerCase();
-        return words.every(function(w) { return hay.indexOf(w) >= 0; });
+        return LC.FileLists.matches(String(f.name || "") + " " + String(f.folder || ""), query);
     });
 }
 
@@ -104,25 +45,8 @@ function sorted(files, order) {
     else if (order === "size")
         copy.sort(function(a, b) { return (b.size || 0) - (a.size || 0); });
     else
-        copy.sort(function(a, b) { return naturalCompare(a.name, b.name); });
+        copy.sort(function(a, b) { return LC.FileLists.naturalCompare(a.name, b.name); });
     return copy;
-}
-
-// Names as a reader orders them: case aside, and runs of digits by value.
-// (QML's localeCompare() takes no options: there is no Intl.)
-function naturalCompare(a, b) {
-    var x = String(a || "").toLowerCase().match(/\d+|\D+/g) || [];
-    var y = String(b || "").toLowerCase().match(/\d+|\D+/g) || [];
-    for (var i = 0; i < Math.min(x.length, y.length); ++i) {
-        if (x[i] === y[i])
-            continue;
-        var nx = /^\d/.test(x[i]);
-        var ny = /^\d/.test(y[i]);
-        if (nx && ny && Number(x[i]) !== Number(y[i]))
-            return Number(x[i]) - Number(y[i]);
-        return x[i].localeCompare(y[i]);
-    }
-    return x.length - y.length;
 }
 
 // The store is { "<path>": { page, offset, zoomMode, zoom, rotation,

@@ -200,7 +200,7 @@ TestCase {
         tryVerify(function() { return dialog.opened; }, 2000);
         var field = findChild(dialog, "pageField");
         // Digits, labels or not: on a keypad T9 would make "w" of a 9.
-        compare(dialog.inputOf(field).inputMethodHints, Qt.ImhDigitsOnly);
+        compare(field.textInput.inputMethodHints, Qt.ImhDigitsOnly);
         field.text = "5";
         compare(dialog.chosen, 6);
         shot("goto");

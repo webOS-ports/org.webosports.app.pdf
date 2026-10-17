@@ -28,8 +28,15 @@ import PdfViewerApp 1.0
  * label where the document prints its own ("xii") - or chosen with the
  * slider through the whole document.
  */
-KeyboardClearDialog {
+Dialog {
     id: dialog
+
+    // Above the keyboard, and set out as a heading over its message: the
+    // dialog's own title is smaller than the 12pt message under it.
+    keepClearOfKeyboard: true
+    visible: false
+    titlePixelSize: FontUtils.sizeToPixels("18pt")
+    messageAlignment: Text.AlignHCenter
 
     property PdfDocument document
     property int currentPage: 0
@@ -41,7 +48,7 @@ KeyboardClearDialog {
     signal pageChosen(int page)
 
     function accept() {
-        typed = typedText(field);
+        typed = field.typedText();
         if (chosen < 0)
             return;
         close();
@@ -56,26 +63,18 @@ KeyboardClearDialog {
     // Only to say what is wrong: the line to type in sits just under it.
     message: typed.trim() !== "" && chosen < 0 ? "There is no page “" + typed.trim() + "”." : ""
     dialogWidth: Units.gu(30)
-    fullHeight: Units.gu(31)
+    dialogHeight: Units.gu(31)
     // Without the slider (the number is typed), the keys side by side.
-    compactHeight: Units.gu(20.5)
+    compactDialogHeight: Units.gu(20.5)
     readonly property real keyWidth: compact ? Units.gu(12.75) : Units.gu(26)
 
     onAboutToShow: {
         slider.value = currentPage + 1;
         field.text = document ? document.pageLabel(currentPage) : "";
-        padField(field);
-        var input = inputOf(field);
-        if (input) {
-            // Numbers, even where the document has labels of its own ("xii"):
-            // on a phone keypad T9 would make letters of the digits, and a
-            // page's number always finds it. The slider shows the labels.
-            input.inputMethodHints = Qt.ImhDigitsOnly;
-            Qt.callLater(function() {
-                input.forceActiveFocus();
-                input.selectAll();
-            });
-        }
+        Qt.callLater(function() {
+            field.textInput.forceActiveFocus();
+            field.textInput.selectAll();
+        });
     }
 
     // DialogLineInput sits 2 units above the middle of its row: a row this
@@ -85,6 +84,10 @@ KeyboardClearDialog {
         DialogLineInput {
             id: field
             objectName: "pageField"
+            // Numbers, even where the document has labels of its own ("xii"):
+            // on a phone keypad T9 would make letters of the digits, and a
+            // page's number always finds it. The slider shows the labels.
+            inputMethodHints: Qt.ImhDigitsOnly
             onAccepted: dialog.accept()
             onTextChanged: {
                 dialog.typed = text;

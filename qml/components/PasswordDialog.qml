@@ -24,8 +24,15 @@ import LuneOS.Components 1.0
  * PromptDialog: a line to type in, then the green key and Cancel). Kept
  * nowhere: asked each time.
  */
-KeyboardClearDialog {
+Dialog {
     id: dialog
+
+    // Above the keyboard, and set out as a heading over its message: the
+    // dialog's own title is smaller than the 12pt message under it.
+    keepClearOfKeyboard: true
+    visible: false
+    titlePixelSize: FontUtils.sizeToPixels("18pt")
+    messageAlignment: Text.AlignHCenter
 
     property string fileName
     // Asked again after a wrong one.
@@ -36,7 +43,7 @@ KeyboardClearDialog {
 
     function accept() {
         close();
-        passwordEntered(typedText(field));
+        passwordEntered(field.typedText());
     }
 
     function reject() {
@@ -49,23 +56,14 @@ KeyboardClearDialog {
     message: wrong ? "Try the password for “" + fileName + "” again."
                    : "“" + fileName + "” is protected by a password."
     dialogWidth: Units.gu(30)
-    fullHeight: Units.gu(23.5)
+    dialogHeight: Units.gu(23.5)
     // The keys side by side: one row fewer.
-    compactHeight: Units.gu(20.5)
+    compactDialogHeight: Units.gu(20.5)
     readonly property real keyWidth: compact ? Units.gu(12.75) : Units.gu(26)
 
     onAboutToShow: {
         field.text = "";
-        padField(field);
-        var input = inputOf(field);
-        if (input) {
-            // A dot Prelude has (the default one is not in it, and nothing
-            // showed), and no capitals or guesses in a password.
-            input.passwordCharacter = "\u2022";
-            input.inputMethodHints = Qt.ImhHiddenText | Qt.ImhSensitiveData | Qt.ImhNoPredictiveText
-                    | Qt.ImhNoAutoUppercase | Qt.ImhPreferLowercase;
-            Qt.callLater(function() { input.forceActiveFocus(); });
-        }
+        Qt.callLater(function() { field.textInput.forceActiveFocus(); });
     }
 
     // DialogLineInput sits 2 units above the middle of its row, so a row
@@ -76,6 +74,11 @@ KeyboardClearDialog {
             id: field
             objectName: "passwordField"
             echoMode: TextInput.Password
+            // A dot Prelude has (the default one is not in it, and nothing
+            // showed), and no capitals or guesses in a password.
+            passwordCharacter: "\u2022"
+            inputMethodHints: Qt.ImhHiddenText | Qt.ImhSensitiveData | Qt.ImhNoPredictiveText
+                              | Qt.ImhNoAutoUppercase | Qt.ImhPreferLowercase
             onAccepted: dialog.accept()
         }
     }

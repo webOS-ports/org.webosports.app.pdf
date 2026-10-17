@@ -16,6 +16,7 @@
 
 import QtQuick
 import QtCore
+import LuneOS.Components 1.0
 
 import "js/Library.js" as Library
 
@@ -27,8 +28,8 @@ import "js/Library.js" as Library
 Settings {
     id: store
 
-    location: StandardPaths.writableLocation(StandardPaths.GenericConfigLocation)
-              + "/org.webosports.app.pdf/preferences.ini"
+    // In the app's own file, as every QML app has (LuneOS.Components' AppFiles).
+    location: AppFiles.preferencesFile("org.webosports.app.pdf")
     category: "reading"
 
     property string documents: "{}"

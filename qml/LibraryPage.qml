@@ -24,6 +24,7 @@ import LuneOS.Forms 1.0
 
 import "components"
 import "js/Library.js" as Library
+import LuneOS.Components 1.0 as LC
 
 /*
  * The documents on the device: the few read last, with how far, then all
@@ -54,7 +55,7 @@ Page {
                 result.push({
                     section: "Recent",
                     path: entry.path,
-                    name: Library.displayName(entry.path),
+                    name: LC.FileLists.displayName(entry.path),
                     details: Library.progressText(entry),
                     progress: entry.pageCount > 0 ? (entry.page + 1) / entry.pageCount : -1
                 });
@@ -69,7 +70,7 @@ Page {
                 section: section,
                 path: f.path,
                 name: f.name,
-                details: [f.folder, Library.formatSize(f.size), Library.formatDate(f.modified, Date.now())]
+                details: [f.folder, LC.FileLists.formatSize(f.size), LC.FileLists.formatWhen(f.modified, Date.now())]
                          .filter(function(s) { return s !== ""; }).join(" · "),
                 progress: -1
             });
