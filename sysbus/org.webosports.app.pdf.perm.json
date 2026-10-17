@@ -1,0 +1,4 @@
+{
+    "org.webosports.app.pdf": [ "application.launcher", "appmanager.management" ],
+    "org.webosports.app.pdf-*": [ "application.launcher", "appmanager.management" ]
+}
