@@ -181,8 +181,9 @@ Page {
 
     function followLink(link, fromPage) {
         if (link.uri !== undefined) {
-            linkDialog.uri = link.uri;
-            linkDialog.open();
+            var uri = link.uri;
+            linkDialog.ask({ title: "Open Link?", message: uri,
+                             onAccepted: function() { appWindow.openUrl(uri); } });
             return;
         }
         linkHistory = linkHistory.concat([view.position()]);
@@ -636,21 +637,11 @@ Page {
     }
 
     // A web link leaves the app: asked first, in the platform's dialog.
+    // followLink() asks with ask().
     LC.ConfirmDialog {
         id: linkDialog
         objectName: "linkDialog"
-        property string uri
-        readonly property bool opened: visible
-        function open() { visible = true; }
-        function reject() { visible = false; }
         visible: false
-        title: "Open Link?"
-        message: uri
-        onAccepted: {
-            visible = false;
-            appWindow.openUrl(uri);
-        }
-        onRejected: visible = false
     }
 
     // A word or two that goes by itself ("Copied"), above the command bar

@@ -275,8 +275,23 @@ TestCase {
         mouseClick(item, (web.x + web.width / 2) * item.width, (web.y + web.height / 2) * item.height);
         var linkDialog = findChild(v, "linkDialog");
         tryVerify(function() { return linkDialog.opened; }, 2000);
+        compare(linkDialog.title, "Open Link?");
+        compare(linkDialog.message, "https://webos-ports.org/");
+        var acceptKey = findChild(linkDialog, "confirmAcceptButton");
+        var rejectKey = findChild(linkDialog, "confirmRejectButton");
+        compare(acceptKey.text, "OK");
+        compare(rejectKey.text, "Cancel");
+        verify(rejectKey.parent.visible, "a Cancel key");
         shot("link-dialog");
-        linkDialog.reject();
+        mouseClick(rejectKey);
+        tryVerify(function() { return !linkDialog.opened; }, 2000, "Cancel closes it");
+        compare(v.currentPage, 0);
+        // Asked again, OK closes it too (and hands the link on).
+        mouseClick(item, (web.x + web.width / 2) * item.width, (web.y + web.height / 2) * item.height);
+        tryVerify(function() { return linkDialog.opened; }, 2000);
+        mouseClick(acceptKey);
+        tryVerify(function() { return !linkDialog.opened; }, 2000, "OK closes it");
+        compare(app.notice, "");
 
         // The contents: an outline entry goes to its page.
         var contents = findChild(v, "contentsPanel");
