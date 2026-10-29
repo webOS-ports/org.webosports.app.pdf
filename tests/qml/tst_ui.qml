@@ -275,6 +275,7 @@ TestCase {
         mouseClick(item, (web.x + web.width / 2) * item.width, (web.y + web.height / 2) * item.height);
         var linkDialog = findChild(v, "linkDialog");
         tryVerify(function() { return linkDialog.opened; }, 2000);
+        shot("link-dialog");
         linkDialog.reject();
 
         // The contents: an outline entry goes to its page.
@@ -525,6 +526,9 @@ TestCase {
         verify(endHandle.mapToItem(v, 0, endHandle.height).y <= barTop + 1, "its handle above the copy bar");
         mouseClick(findChild(v, "copyButton"));
         verify(!view.selecting);
+        // "Copied", for a moment.
+        wait(300);
+        shot("toast");
     }
 
     function test_document_info(data) {
