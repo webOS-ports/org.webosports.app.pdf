@@ -526,9 +526,15 @@ TestCase {
         verify(endHandle.mapToItem(v, 0, endHandle.height).y <= barTop + 1, "its handle above the copy bar");
         mouseClick(findChild(v, "copyButton"));
         verify(!view.selecting);
-        // "Copied", for a moment.
+        // "Copied", for a moment, above the command bar.
+        var toast = findChild(v, "toast");
+        compare(toast.text, "Copied");
+        verify(toast.parent.showing, "the toast shows");
+        var bar = findChild(v, "commandBar");
+        fuzzyCompare(toast.parent.mapToItem(v, 0, toast.parent.height).y, bar.mapToItem(v, 0, 0).y - Units.gu(2), 1);
         wait(300);
         shot("toast");
+        tryVerify(function() { return !toast.parent.visible; }, 3000, "the toast goes by itself");
     }
 
     function test_document_info(data) {

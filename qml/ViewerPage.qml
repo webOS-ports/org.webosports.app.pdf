@@ -653,35 +653,14 @@ Page {
         onRejected: visible = false
     }
 
-    // A word or two that goes by itself.
-    Label {
+    // A word or two that goes by itself ("Copied"), above the command bar
+    // rather than in the middle of the page being read.
+    LC.Toast {
         id: toast
+        anchors.centerIn: undefined
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: commandBar.top
         anchors.bottomMargin: Units.gu(2)
-        padding: Units.gu(1)
-        leftPadding: Units.gu(2)
-        rightPadding: Units.gu(2)
-        visible: opacity > 0
-        opacity: 0
-        color: "#ffffff"
-        font.pixelSize: FontUtils.sizeToPixels("medium")
-        background: Rectangle {
-            radius: height / 2
-            color: "#d0202020"
-        }
-        function show(message) {
-            text = message;
-            opacity = 1;
-            toastTimer.restart();
-        }
-        Behavior on opacity {
-            NumberAnimation { duration: 250 }
-        }
-        Timer {
-            id: toastTimer
-            interval: 1800
-            onTriggered: toast.opacity = 0
-        }
+        duration: 1800
     }
 }
