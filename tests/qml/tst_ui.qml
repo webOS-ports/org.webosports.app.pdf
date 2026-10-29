@@ -275,7 +275,23 @@ TestCase {
         mouseClick(item, (web.x + web.width / 2) * item.width, (web.y + web.height / 2) * item.height);
         var linkDialog = findChild(v, "linkDialog");
         tryVerify(function() { return linkDialog.opened; }, 2000);
-        linkDialog.reject();
+        compare(linkDialog.title, "Open Link?");
+        compare(linkDialog.message, "https://webos-ports.org/");
+        var acceptKey = findChild(linkDialog, "confirmAcceptButton");
+        var rejectKey = findChild(linkDialog, "confirmRejectButton");
+        compare(acceptKey.text, "OK");
+        compare(rejectKey.text, "Cancel");
+        verify(rejectKey.parent.visible, "a Cancel key");
+        shot("link-dialog");
+        mouseClick(rejectKey);
+        tryVerify(function() { return !linkDialog.opened; }, 2000, "Cancel closes it");
+        compare(v.currentPage, 0);
+        // Asked again, OK closes it too (and hands the link on).
+        mouseClick(item, (web.x + web.width / 2) * item.width, (web.y + web.height / 2) * item.height);
+        tryVerify(function() { return linkDialog.opened; }, 2000);
+        mouseClick(acceptKey);
+        tryVerify(function() { return !linkDialog.opened; }, 2000, "OK closes it");
+        compare(app.notice, "");
 
         // The contents: an outline entry goes to its page.
         var contents = findChild(v, "contentsPanel");
@@ -525,6 +541,19 @@ TestCase {
         verify(endHandle.mapToItem(v, 0, endHandle.height).y <= barTop + 1, "its handle above the copy bar");
         mouseClick(findChild(v, "copyButton"));
         verify(!view.selecting);
+        // "Copied", for a moment, above the command bar.
+        var toast = findChild(v, "toast");
+        compare(toast.text, "Copied");
+        verify(toast.parent.showing, "the toast shows");
+        var bar = findChild(v, "commandBar");
+        fuzzyCompare(toast.parent.mapToItem(v, 0, toast.parent.height).y, bar.mapToItem(v, 0, 0).y - Units.gu(2), 1);
+        wait(300);
+        // The reader's pill, faded in
+        compare(toast.parent.radius, toast.parent.height / 2, "a pill");
+        verify(Qt.colorEqual(toast.parent.color, "#d0202020"));
+        tryCompare(toast.parent, "opacity", 1, 1000);
+        shot("toast");
+        tryVerify(function() { return !toast.parent.visible; }, 3000, "the toast goes by itself");
     }
 
     function test_document_info(data) {

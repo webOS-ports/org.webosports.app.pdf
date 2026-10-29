@@ -221,7 +221,10 @@ Building
 The app needs poppler with its Qt 6 frontend: poppler's `qt6`
 PACKAGECONFIG (meta-webos-ports enables it for this app). It also needs a
 luneos-components with ArtworkImage (88cdc3e or later): on an image with
-an older one its pages cannot be made, and the window stays empty. With the webOS
+an older one its pages cannot be made, and the window stays empty. Its
+Toast (the reader's "Copied") and ConfirmDialog's `ask()` (the question
+before a web link is followed) come from luneos-components too, so it
+needs one that has those parts. With the webOS
 CMake modules (the recipe) it installs to the applications directory with
 its luna-service2 role and permissions; without them (a desktop build) under
 the build tree.
