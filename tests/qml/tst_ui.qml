@@ -548,6 +548,10 @@ TestCase {
         var bar = findChild(v, "commandBar");
         fuzzyCompare(toast.parent.mapToItem(v, 0, toast.parent.height).y, bar.mapToItem(v, 0, 0).y - Units.gu(2), 1);
         wait(300);
+        // The reader's pill, faded in
+        compare(toast.parent.radius, toast.parent.height / 2, "a pill");
+        verify(Qt.colorEqual(toast.parent.color, "#d0202020"));
+        tryCompare(toast.parent, "opacity", 1, 1000);
         shot("toast");
         tryVerify(function() { return !toast.parent.visible; }, 3000, "the toast goes by itself");
     }

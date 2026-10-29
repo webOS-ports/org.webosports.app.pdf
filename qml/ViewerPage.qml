@@ -653,5 +653,8 @@ Page {
         anchors.bottom: commandBar.top
         anchors.bottomMargin: Units.gu(2)
         duration: 1800
+        // The reader's pill, as it was
+        radius: height / 2
+        color: "#d0202020"
     }
 }
