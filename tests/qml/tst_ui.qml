@@ -524,18 +524,19 @@ TestCase {
 
         // Held low on the screen, the word and its handle are brought up
         // out from under the copy bar.
-        // Page 2's "Chapter", where page i's is: page i cannot be brought that low.
+        // The third page's "Chapter", where page i's is: on a screen as tall
+        // as the radon's neither page i nor page ii can be brought that low.
         var fy = (842 - 775) / size.height;
-        view.restoreAnchor({ page: 1, fx: 0, fy: fy, vx: 0, vy: v.height - Units.gu(4) });
+        view.restoreAnchor({ page: 2, fx: 0, fy: fy, vx: 0, vy: v.height - Units.gu(4) });
         wait(50);
-        var second = view.flickable.itemAtIndex(1);
+        var second = view.flickable.itemAtIndex(2);
         verify(second.y - view.flickable.contentY + fy * second.height > selBar.mapToItem(v, 0, 0).y,
                "the word starts under where the copy bar goes");
-        v.startSelection(1, 70 / size.width, fy);
+        v.startSelection(2, 70 / size.width, fy);
         compare(v.selectedText(), "Chapter");
         wait(100);
         endHandle = findChild(v, "selectionEndHandle");
-        word = findChild(view.flickable.itemAtIndex(1), "selectionRect");
+        word = findChild(view.flickable.itemAtIndex(2), "selectionRect");
         var barTop = selBar.mapToItem(v, 0, 0).y;
         verify(word.mapToItem(v, 0, word.height).y <= barTop, "the word above the copy bar");
         verify(endHandle.mapToItem(v, 0, endHandle.height).y <= barTop + 1, "its handle above the copy bar");

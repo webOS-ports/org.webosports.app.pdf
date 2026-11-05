@@ -11,7 +11,8 @@
 # plugins. Screenshots of each state go to build/test-output/ui/.
 #
 # tst_ui runs once for each screen in PROFILES (by default the TouchPad,
-# Galaxy Nexus, mindphone and Q25). The stand-ins read the profile, and
+# Galaxy Nexus, mindphone, Q25 and radon, a 720x1600 phone with a notch
+# and rounded corners). The stand-ins read the profile, and
 # with it the grid unit, once as they load - each JavaScript library keeps
 # its own copy, so Settings.setProfile() in a test moves Settings and not
 # Units or FontUtils - and qmltestrunner takes no --profile of its own. So
@@ -23,7 +24,7 @@ BUILD=${1:?usage: run-qml-tests.sh <plugin build dir> [luneos-components [args]]
 shift
 LC=${1:-../luneos-components}
 [ $# -gt 0 ] && shift
-PROFILES=${PROFILES:-tp gnex mindphone q25}
+PROFILES=${PROFILES:-tp gnex mindphone q25 radon}
 CONF=$(mktemp -d)
 trap 'rm -rf "$CONF"' EXIT
 mkdir -p build/test-output/ui
