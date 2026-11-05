@@ -62,9 +62,9 @@ search not wrapping round, a test fails each time.
   rectangles and points every way round, fitting, links under a finger,
   render sizes) and `qml/js/Library.js` (paths, sizes, dates, search, the
   natural order, the reading store, Recent).
-- `tst_ui.qml`: the app on the real plugin and the documents above, on four
+- `tst_ui.qml`: the app on the real plugin and the documents above, on five
   screens - `tp` 1024x768, `gnex` 720x1280, `mindphone` 480x800, `q25`
-  720x720: the library and its pictures, opening, full screen and back,
+  720x720, `radon` 720x1600 (a notch and rounded corners): the library and its pictures, opening, full screen and back,
   page keys, Go to Page by label, find (and a match never left under the
   find bar), links and back from them, the web link asking, the contents
   and the pages, turning, fit page, night, double tap zooming (and not
@@ -75,7 +75,7 @@ search not wrapping round, a test fails each time.
   19.5 grid units its 608-pixel card has left). Each state is saved to
   `build/test-output/ui/<profile>-<state>.png`.
 
-  `run-qml-tests.sh` runs `tst_ui.qml` once per screen (`PROFILES`, all four
+  `run-qml-tests.sh` runs `tst_ui.qml` once per screen (`PROFILES`, all five
   by default), each against a copy of luneos-components' `LunaNext.Common`
   stand-ins whose default profile is that screen. The stand-ins take the
   profile, and with it the grid unit, as they load, each JavaScript library

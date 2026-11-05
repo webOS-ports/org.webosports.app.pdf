@@ -249,8 +249,8 @@ Tests
 -----
 
 See [tests/README.md](tests/README.md): unit tests for the C++ (gtest),
-QML tests for the helpers and for the app on four screens (1024x768,
-720x1280, 480x800, 720x720), static analysis, sanitizers, valgrind and the
+QML tests for the helpers and for the app on five screens (1024x768,
+720x1280, 480x800, 720x720, 720x1600), static analysis, sanitizers, valgrind and the
 six builds (GCC and Clang for armv7, aarch64 and x86-64), and the run on
 a mindphone and an HP TouchPad.
 
