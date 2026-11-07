@@ -50,7 +50,7 @@ Page {
     property bool restored: false
 
     readonly property alias document: pdf
-    readonly property alias printer: printer
+    readonly property alias printDialog: printDialog
     readonly property string displayTitle: pdf.title !== "" && pdf.title.length < 80 ? pdf.title
                                          : LC.FileLists.displayName(pdf.path)
     readonly property int pageCount: pdf.status === PdfDocument.Ready ? pdf.pageCount : 0
@@ -266,7 +266,7 @@ Page {
 
     // Back closes what is open over the page first.
     function handleBack() {
-        if (printSheet.back())
+        if (printDialog.back())
             return true;
         if (view.selecting) {
             endSelection();
@@ -283,9 +283,10 @@ Page {
         return false;
     }
 
-    // The printers, then the document sent to the one picked.
+    // webOS's print dialog: a printer, its options, and the document as
+    // the job's one file, scaled to the paper.
     function printDocument() {
-        printer.printFile(pdf.path, printSheet);
+        printDialog.open(pdf.path);
     }
 
     // ---- The page ---------------------------------------------------------
@@ -674,16 +675,14 @@ Page {
         color: "#d0202020"
     }
 
-    LC.Printer {
-        id: printer
+    // The options webOS's browser offered for a page
+    LC.PrintDialog {
+        id: printDialog
+        objectName: "print"
         appName: "PDF"
+        duplexOption: true
+        colorOption: true
         call: appWindow.busCall
-        onMessage: function(text) { toast.show(text); }
-    }
-
-    LC.ActionSheet {
-        id: printSheet
-        objectName: "printSheet"
-        anchors.fill: parent
+        subscribe: appWindow.busSubscribe
     }
 }

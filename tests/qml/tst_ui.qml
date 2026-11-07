@@ -568,57 +568,85 @@ TestCase {
         tryCompare(app.pageStack.currentItem, "objectName", "viewerPage", 2000);
     }
 
-    // Print, from the header and the app menu: the printers in a sheet, the
-    // document sent to the one picked, a word when it went or could not.
+    // Print, from the header and the app menu: webOS's print dialog, the
+    // printer picked, and the document as the job's file.
     function test_print(data) {
         startApp(data.profile);
         var v = openGuide();
         var calls = [];
+        var events = [];
+        var pm = "luna://com.palm.printmgr/";
         var replies = {
-            "luna://com.palm.printmgr/printers/listActive":
-                { returnValue: true, activePrinters: [{ printerID: "p1", printerName: "Office Printer" }] },
-            "luna://com.palm.printmgr/jobs/allAtOnce": { returnValue: true, jobID: 1 }
+            "printers/getCurrent": { returnValue: true, printerID: "" },
+            "printers/list": { returnValue: true, subscribed: true },
+            "printers/getCapabilities": { returnValue: true, canDuplex: true, hasColor: true,
+                                          mediaSize: ["ISO_A4", "US_Letter"], mediaType: ["Plain"] },
+            "jobs/open": { returnValue: true, jobID: 4, subscribed: true },
+            "jobs/getStatus": { returnValue: true, subscribed: true }
         };
-        v.printer.call = function(uri, json, onReply, onError) {
+        function answer(uri, onReply) {
+            var r = replies[uri.substring(pm.length)] || { returnValue: true };
+            onReply({ payload: JSON.stringify(r) });
+        }
+        var dialog = v.printDialog;
+        dialog.hideProgressDelay = 0;
+        dialog.call = function(uri, json, onReply, onError) {
             calls.push({ uri: uri, params: JSON.parse(json) });
-            var r = replies[uri];
-            if (r.busError !== undefined)
-                onError(r.busError);
-            else
-                onReply({ payload: JSON.stringify(r) });
+            answer(uri, onReply);
         };
+        dialog.subscribe = function(uri, json, onReply, onError) {
+            calls.push({ uri: uri, params: JSON.parse(json) });
+            events.push({ uri: uri, onReply: onReply });
+            answer(uri, onReply);
+            return { cancel: function() {} };
+        };
+        function callsTo(method) {
+            return calls.filter(function(c) { return c.uri === pm + method; });
+        }
+
         var button = findChild(v, "printButton");
         verify(button.visible && button.enabled);
         mouseClick(button);
-        var sheet = findChild(v, "printSheet");
-        tryVerify(function() { return sheet.shown; }, 2000, "the printers offered");
-        compare(sheet.subtitle, "guide.pdf");
-        compare(sheet.choices.length, 1);
-        compare(sheet.choices[0].label, "Office Printer");
-        shot("print");
-        // Back closes the sheet, not the document.
+        var frame = findChild(v, "printDialog");
+        verify(frame.visible, "the print dialog");
+        events.filter(function(e) { return e.uri === pm + "printers/list"; })[0].onReply({ payload: JSON.stringify({
+            returnValue: true, eventType: "Add", printerID: "Office_Printer", printerName: "Office Printer" }) });
+        compare(dialog.title, "Select a Printer");
+        settled();
+        shot("print-printers");
+        // Back closes the dialog, not the document.
         verify(v.handleBack());
-        verify(!sheet.shown);
-        compare(calls.length, 1);
+        verify(!frame.visible);
+        compare(app.pageStack.currentItem, v);
 
         var entry = v.appMenuItems().filter(function(i) { return i.text === "Print…"; })[0];
         verify(entry && entry.enabled !== false, "Print… in the app menu");
         entry.action();
-        verify(sheet.shown);
-        sheet.choose(0);
-        var job = calls[calls.length - 1];
-        compare(job.uri, "luna://com.palm.printmgr/jobs/allAtOnce");
-        compare(job.params.printerID, "p1");
-        compare(job.params.appName, "PDF");
-        compare(job.params.pathNames, [dataDir + "/guide.pdf"]);
+        verify(frame.visible);
+        events.filter(function(e) { return e.uri === pm + "printers/list"; }).pop().onReply({ payload: JSON.stringify({
+            returnValue: true, eventType: "Add", printerID: "Office_Printer", printerName: "Office Printer" }) });
+        mouseClick(findChild(v, "printer_Office_Printer"));
+        compare(dialog.view, "printerOptions");
+        verify(findChild(v, "duplexSwitch").visible);
+        verify(findChild(v, "colorSwitch").visible);
+        settled();
+        shot("print-options");
+        mouseClick(findChild(frame, "printDialogPrint"));
+        verify(!frame.visible);
+        var opened = callsTo("jobs/open")[0];
+        compare(opened.params.appName, "PDF");
+        compare(opened.params.description, "guide.pdf");
+        compare(opened.params.printerID, "Office_Printer");
+        var params = callsTo("jobs/editPrintParams")[0].params;
+        compare(params.autoScale, true);
+        compare(params.duplex, "None");
+        compare(params.color, "Color");
+        compare(callsTo("jobs/addFile")[0].params, { jobID: 4, pathName: dataDir + "/guide.pdf",
+                                                     currentPage: 1, totalPages: 1 });
+        compare(callsTo("jobs/close").length, 1);
+        verify(!dialog.printing);
+        // The Print Manager says how it prints; the reader has no word of its own
         var toast = findChild(v, "toast");
-        compare(toast.text, "Sent to the printer");
-
-        replies["luna://com.palm.printmgr/printers/listActive"] = { busError: "no service" };
-        // The sheet takes taps until it has slid away.
-        tryVerify(function() { return !sheet.visible; }, 2000);
-        mouseClick(button);
-        verify(!sheet.shown);
-        compare(toast.text, "Printing is not available");
+        verify(!toast || toast.text.indexOf("print") < 0);
     }
 }

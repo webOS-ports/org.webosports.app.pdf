@@ -210,9 +210,12 @@ Features
 - **Dialogs** (password, Go to Page, opening a web link) are
   LuneOS.Components' own, kept above the on-screen keyboard; the key that
   accepts is green.
-- **Print:** the header's printer (or Print… in the app menu) offers the
-  printers luneos-print-adapter knows and sends the document to the one
-  picked. Without the print service, or without a printer, it says so.
+- **Print:** the header's printer (or Print… in the app menu) opens
+  webOS's print dialog, as on webOS 3.0.5: Select a Printer (or Add a
+  Printer), then copies, 2-sided and colour where the printer has them,
+  and Print. The document goes to luneos-print-adapter as the job's file;
+  "Preparing to print..." shows the job going, and the Print Manager
+  how it prints.
 - **App menu** (and the header's "…"): Go to Page, Find, Rotate, Night
   Mode, Send by Email, Print, Document Info.
 - **Document Info:** title, author, subject, keywords, pages, dates, the
@@ -227,7 +230,7 @@ luneos-components with ArtworkImage (88cdc3e or later): on an image with
 an older one its pages cannot be made, and the window stays empty. Its
 Toast (the reader's "Copied") and ConfirmDialog's `ask()` (the question
 before a web link is followed) come from luneos-components too, as does
-Printer (Print), so it needs one that has those parts. With the webOS
+PrintDialog (Print), so it needs one that has those parts. With the webOS
 CMake modules (the recipe) it installs to the applications directory with
 its luna-service2 role and permissions; without them (a desktop build) under
 the build tree.
