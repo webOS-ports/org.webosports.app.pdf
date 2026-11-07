@@ -567,4 +567,58 @@ TestCase {
         keyClick(Qt.Key_Escape);
         tryCompare(app.pageStack.currentItem, "objectName", "viewerPage", 2000);
     }
+
+    // Print, from the header and the app menu: the printers in a sheet, the
+    // document sent to the one picked, a word when it went or could not.
+    function test_print(data) {
+        startApp(data.profile);
+        var v = openGuide();
+        var calls = [];
+        var replies = {
+            "luna://com.palm.printmgr/printers/listActive":
+                { returnValue: true, activePrinters: [{ printerID: "p1", printerName: "Office Printer" }] },
+            "luna://com.palm.printmgr/jobs/allAtOnce": { returnValue: true, jobID: 1 }
+        };
+        v.printer.call = function(uri, json, onReply, onError) {
+            calls.push({ uri: uri, params: JSON.parse(json) });
+            var r = replies[uri];
+            if (r.busError !== undefined)
+                onError(r.busError);
+            else
+                onReply({ payload: JSON.stringify(r) });
+        };
+        var button = findChild(v, "printButton");
+        verify(button.visible && button.enabled);
+        mouseClick(button);
+        var sheet = findChild(v, "printSheet");
+        tryVerify(function() { return sheet.shown; }, 2000, "the printers offered");
+        compare(sheet.subtitle, "guide.pdf");
+        compare(sheet.choices.length, 1);
+        compare(sheet.choices[0].label, "Office Printer");
+        shot("print");
+        // Back closes the sheet, not the document.
+        verify(v.handleBack());
+        verify(!sheet.shown);
+        compare(calls.length, 1);
+
+        var entry = v.appMenuItems().filter(function(i) { return i.text === "Print…"; })[0];
+        verify(entry && entry.enabled !== false, "Print… in the app menu");
+        entry.action();
+        verify(sheet.shown);
+        sheet.choose(0);
+        var job = calls[calls.length - 1];
+        compare(job.uri, "luna://com.palm.printmgr/jobs/allAtOnce");
+        compare(job.params.printerID, "p1");
+        compare(job.params.appName, "PDF");
+        compare(job.params.pathNames, [dataDir + "/guide.pdf"]);
+        var toast = findChild(v, "toast");
+        compare(toast.text, "Sent to the printer");
+
+        replies["luna://com.palm.printmgr/printers/listActive"] = { busError: "no service" };
+        // The sheet takes taps until it has slid away.
+        tryVerify(function() { return !sheet.visible; }, 2000);
+        mouseClick(button);
+        verify(!sheet.shown);
+        compare(toast.text, "Printing is not available");
+    }
 }

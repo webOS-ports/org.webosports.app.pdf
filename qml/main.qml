@@ -96,6 +96,12 @@ WebOSWindow {
         clientName: "org.webosports.app.pdf"
     }
 
+    // function(uri, json, onReply, onError), for the parts that call the bus
+    // themselves (LC.Printer).
+    function busCall(uri, json, onReply, onError) {
+        service.call(uri, json, onReply, onError);
+    }
+
     // A web link from a document, in whatever handles it (the browser).
     function openUrl(url) {
         service.call("luna://com.palm.applicationManager/open", JSON.stringify({ "target": url }),

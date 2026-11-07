@@ -50,6 +50,7 @@ Page {
     property bool restored: false
 
     readonly property alias document: pdf
+    readonly property alias printer: printer
     readonly property string displayTitle: pdf.title !== "" && pdf.title.length < 80 ? pdf.title
                                          : LC.FileLists.displayName(pdf.path)
     readonly property int pageCount: pdf.status === PdfDocument.Ready ? pdf.pageCount : 0
@@ -258,12 +259,15 @@ Page {
               action: function() { appWindow.prefs.nightMode = !appWindow.prefs.nightMode; } },
             { text: "Send by Email", enabled: pdf.path !== "",
               action: function() { appWindow.sendByEmail(pdf.path); } },
+            { text: "Print…", enabled: ready && pdf.path !== "", action: page.printDocument },
             { text: "Document Info", enabled: ready, action: function() { appWindow.showDocumentInfo(pdf); } }
         ];
     }
 
     // Back closes what is open over the page first.
     function handleBack() {
+        if (printSheet.back())
+            return true;
         if (view.selecting) {
             endSelection();
             return true;
@@ -277,6 +281,11 @@ Page {
             return true;
         }
         return false;
+    }
+
+    // The printers, then the document sent to the one picked.
+    function printDocument() {
+        printer.printFile(pdf.path, printSheet);
     }
 
     // ---- The page ---------------------------------------------------------
@@ -461,6 +470,13 @@ Page {
                     plain: true
                     enabled: pdf.status === PdfDocument.Ready
                     onClicked: page.searchVisible ? page.closeSearch() : page.openSearch()
+                }
+                IconButton {
+                    objectName: "printButton"
+                    image: "print-dark"
+                    plain: true
+                    enabled: pdf.status === PdfDocument.Ready && pdf.path !== ""
+                    onClicked: page.printDocument()
                 }
                 IconButton {
                     objectName: "viewerMenuButton"
@@ -656,5 +672,18 @@ Page {
         // The reader's pill, as it was
         radius: height / 2
         color: "#d0202020"
+    }
+
+    LC.Printer {
+        id: printer
+        appName: "PDF"
+        call: appWindow.busCall
+        onMessage: function(text) { toast.show(text); }
+    }
+
+    LC.ActionSheet {
+        id: printSheet
+        objectName: "printSheet"
+        anchors.fill: parent
     }
 }

@@ -11,7 +11,7 @@
     "icon": "icon.png",
     "splashicon": "icon-256x256.png",
     "uiRevision": "2",
-    "requiredPermissions": [ "application.launcher", "appmanager.management" ],
+    "requiredPermissions": [ "application.launcher", "appmanager.management", "print.query", "print.operation" ],
     "mimeTypes": [
         { "mime": "application/pdf", "extension": "pdf" },
         { "mime": "application/x-pdf" }
