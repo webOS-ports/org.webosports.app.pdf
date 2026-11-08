@@ -50,6 +50,7 @@ Page {
     property bool restored: false
 
     readonly property alias document: pdf
+    readonly property alias printDialog: printDialog
     readonly property string displayTitle: pdf.title !== "" && pdf.title.length < 80 ? pdf.title
                                          : LC.FileLists.displayName(pdf.path)
     readonly property int pageCount: pdf.status === PdfDocument.Ready ? pdf.pageCount : 0
@@ -258,12 +259,15 @@ Page {
               action: function() { appWindow.prefs.nightMode = !appWindow.prefs.nightMode; } },
             { text: "Send by Email", enabled: pdf.path !== "",
               action: function() { appWindow.sendByEmail(pdf.path); } },
+            { text: "Print…", enabled: ready && pdf.path !== "", action: page.printDocument },
             { text: "Document Info", enabled: ready, action: function() { appWindow.showDocumentInfo(pdf); } }
         ];
     }
 
     // Back closes what is open over the page first.
     function handleBack() {
+        if (printDialog.back())
+            return true;
         if (view.selecting) {
             endSelection();
             return true;
@@ -277,6 +281,12 @@ Page {
             return true;
         }
         return false;
+    }
+
+    // webOS's print dialog: a printer, its options, and the document as
+    // the job's one file, scaled to the paper.
+    function printDocument() {
+        printDialog.open(pdf.path);
     }
 
     // ---- The page ---------------------------------------------------------
@@ -461,6 +471,13 @@ Page {
                     plain: true
                     enabled: pdf.status === PdfDocument.Ready
                     onClicked: page.searchVisible ? page.closeSearch() : page.openSearch()
+                }
+                IconButton {
+                    objectName: "printButton"
+                    image: "print-dark"
+                    plain: true
+                    enabled: pdf.status === PdfDocument.Ready && pdf.path !== ""
+                    onClicked: page.printDocument()
                 }
                 IconButton {
                     objectName: "viewerMenuButton"
@@ -656,5 +673,16 @@ Page {
         // The reader's pill, as it was
         radius: height / 2
         color: "#d0202020"
+    }
+
+    // The options webOS's browser offered for a page
+    LC.PrintDialog {
+        id: printDialog
+        objectName: "print"
+        appName: "PDF"
+        duplexOption: true
+        colorOption: true
+        call: appWindow.busCall
+        subscribe: appWindow.busSubscribe
     }
 }

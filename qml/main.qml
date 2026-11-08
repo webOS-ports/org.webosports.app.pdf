@@ -96,6 +96,16 @@ WebOSWindow {
         clientName: "org.webosports.app.pdf"
     }
 
+    // function(uri, json, onReply, onError), for the parts that call the bus
+    // themselves (LC.PrintDialog); and the same for a subscription, which
+    // gives back a call with cancel().
+    function busCall(uri, json, onReply, onError) {
+        service.call(uri, json, onReply, onError);
+    }
+    function busSubscribe(uri, json, onReply, onError) {
+        return service.subscribe(uri, json, onReply, onError);
+    }
+
     // A web link from a document, in whatever handles it (the browser).
     function openUrl(url) {
         service.call("luna://com.palm.applicationManager/open", JSON.stringify({ "target": url }),

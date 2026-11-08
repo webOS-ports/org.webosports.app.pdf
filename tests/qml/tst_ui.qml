@@ -567,4 +567,86 @@ TestCase {
         keyClick(Qt.Key_Escape);
         tryCompare(app.pageStack.currentItem, "objectName", "viewerPage", 2000);
     }
+
+    // Print, from the header and the app menu: webOS's print dialog, the
+    // printer picked, and the document as the job's file.
+    function test_print(data) {
+        startApp(data.profile);
+        var v = openGuide();
+        var calls = [];
+        var events = [];
+        var pm = "luna://com.palm.printmgr/";
+        var replies = {
+            "printers/getCurrent": { returnValue: true, printerID: "" },
+            "printers/list": { returnValue: true, subscribed: true },
+            "printers/getCapabilities": { returnValue: true, canDuplex: true, hasColor: true,
+                                          mediaSize: ["ISO_A4", "US_Letter"], mediaType: ["Plain"] },
+            "jobs/open": { returnValue: true, jobID: 4, subscribed: true },
+            "jobs/getStatus": { returnValue: true, subscribed: true }
+        };
+        function answer(uri, onReply) {
+            var r = replies[uri.substring(pm.length)] || { returnValue: true };
+            onReply({ payload: JSON.stringify(r) });
+        }
+        var dialog = v.printDialog;
+        dialog.hideProgressDelay = 0;
+        dialog.call = function(uri, json, onReply, onError) {
+            calls.push({ uri: uri, params: JSON.parse(json) });
+            answer(uri, onReply);
+        };
+        dialog.subscribe = function(uri, json, onReply, onError) {
+            calls.push({ uri: uri, params: JSON.parse(json) });
+            events.push({ uri: uri, onReply: onReply });
+            answer(uri, onReply);
+            return { cancel: function() {} };
+        };
+        function callsTo(method) {
+            return calls.filter(function(c) { return c.uri === pm + method; });
+        }
+
+        var button = findChild(v, "printButton");
+        verify(button.visible && button.enabled);
+        mouseClick(button);
+        var frame = findChild(v, "printDialog");
+        verify(frame.visible, "the print dialog");
+        events.filter(function(e) { return e.uri === pm + "printers/list"; })[0].onReply({ payload: JSON.stringify({
+            returnValue: true, eventType: "Add", printerID: "Office_Printer", printerName: "Office Printer" }) });
+        compare(dialog.title, "Select a Printer");
+        settled();
+        shot("print-printers");
+        // Back closes the dialog, not the document.
+        verify(v.handleBack());
+        verify(!frame.visible);
+        compare(app.pageStack.currentItem, v);
+
+        var entry = v.appMenuItems().filter(function(i) { return i.text === "Print…"; })[0];
+        verify(entry && entry.enabled !== false, "Print… in the app menu");
+        entry.action();
+        verify(frame.visible);
+        events.filter(function(e) { return e.uri === pm + "printers/list"; }).pop().onReply({ payload: JSON.stringify({
+            returnValue: true, eventType: "Add", printerID: "Office_Printer", printerName: "Office Printer" }) });
+        mouseClick(findChild(v, "printer_Office_Printer"));
+        compare(dialog.view, "printerOptions");
+        verify(findChild(v, "duplexSwitch").visible);
+        verify(findChild(v, "colorSwitch").visible);
+        settled();
+        shot("print-options");
+        mouseClick(findChild(frame, "printDialogPrint"));
+        verify(!frame.visible);
+        var opened = callsTo("jobs/open")[0];
+        compare(opened.params.appName, "PDF");
+        compare(opened.params.description, "guide.pdf");
+        compare(opened.params.printerID, "Office_Printer");
+        var params = callsTo("jobs/editPrintParams")[0].params;
+        compare(params.autoScale, true);
+        compare(params.duplex, "None");
+        compare(params.color, "Color");
+        compare(callsTo("jobs/addFile")[0].params, { jobID: 4, pathName: dataDir + "/guide.pdf",
+                                                     currentPage: 1, totalPages: 1 });
+        compare(callsTo("jobs/close").length, 1);
+        verify(!dialog.printing);
+        // The Print Manager says how it prints; the reader has no word of its own
+        var toast = findChild(v, "toast");
+        verify(!toast || toast.text.indexOf("print") < 0);
+    }
 }
